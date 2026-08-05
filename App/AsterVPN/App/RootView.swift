@@ -132,7 +132,9 @@ private struct AppTabView: View {
                 ConnectionView(
                     nodeStore: nodeStore,
                     authenticationPhase: authSession.phase,
-                    requestAuthentication: requestAuthentication
+                    retryGuestSession: {
+                        await authSession.startGuestSession()
+                    }
                 )
             }
             .tabItem {

@@ -5,7 +5,7 @@ struct ConnectionView: View {
     @EnvironmentObject private var vpnManager: VPNManager
     @ObservedObject var nodeStore: NodeStore
     let authenticationPhase: AuthSession.Phase
-    let requestAuthentication: () -> Void
+    let retryGuestSession: () async -> Void
 
     var body: some View {
         ScrollView {
@@ -39,8 +39,10 @@ struct ConnectionView: View {
                         Task {
                             await nodeStore.toggleConnection()
                         }
-                    } else {
-                        requestAuthentication()
+                    } else if authenticationPhase == .signedOut {
+                        Task {
+                            await retryGuestSession()
+                        }
                     }
                 } label: {
                     HStack {
@@ -79,21 +81,23 @@ struct ConnectionView: View {
                         Task {
                             await nodeStore.load(force: true)
                         }
-                    } else {
-                        requestAuthentication()
+                    } else if authenticationPhase == .signedOut {
+                        Task {
+                            await retryGuestSession()
+                        }
                     }
                 } label: {
                     if authenticationPhase == .restoring || nodeStore.isLoading {
                         ProgressView()
                     } else if authenticationPhase == .signedOut {
-                        Image(systemName: "person.crop.circle.badge.plus")
+                        Image(systemName: "arrow.clockwise")
                     } else {
                         Image(systemName: "arrow.clockwise")
                     }
                 }
                 .disabled(authenticationPhase == .restoring || nodeStore.isLoading)
                 .accessibilityLabel(
-                    authenticationPhase == .signedOut ? "登录或注册" : "刷新订阅和节点"
+                    authenticationPhase == .signedOut ? "重试游客体验" : "刷新订阅和节点"
                 )
             }
         }
@@ -104,8 +108,10 @@ struct ConnectionView: View {
         .refreshable {
             if authenticationPhase == .signedIn {
                 await nodeStore.load(force: true)
+            } else if authenticationPhase == .signedOut {
+                await retryGuestSession()
             } else {
-                requestAuthentication()
+                return
             }
         }
     }
@@ -141,9 +147,9 @@ struct ConnectionView: View {
     private var subscriptionCard: some View {
         if authenticationPhase != .signedIn {
             VStack(alignment: .leading, spacing: 8) {
-                Label("无需先注册", systemImage: "person.crop.circle.badge.checkmark")
+                Label("无需登录", systemImage: "person.crop.circle.badge.checkmark")
                     .font(.headline)
-                Text("你可以直接浏览 App；开始连接、获取节点或同步订阅时，再登录并关联账号。")
+                Text("游客会话尚未就绪。检查网络后点击“免费试用 10 分钟”即可重试，不会跳转登录注册。")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
@@ -233,7 +239,11 @@ struct ConnectionView: View {
                 .disabled(nodeStore.nodes.isEmpty)
             }
         } else {
-            Button(action: requestAuthentication) {
+            Button {
+                Task {
+                    await retryGuestSession()
+                }
+            } label: {
                 nodeCardLabel
             }
             .buttonStyle(.plain)
@@ -264,7 +274,7 @@ struct ConnectionView: View {
                             ? "首次连接后获取 2 条体验线路"
                             : authenticationPhase == .signedIn
                                 ? "开通有效订阅后可获取节点"
-                                : "连接时登录并获取可用节点"
+                                : "重试游客会话后获取体验线路"
                     )
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -289,7 +299,7 @@ struct ConnectionView: View {
         case .restoring:
             return "正在恢复账号…"
         case .signedOut:
-            return "登录后连接"
+            return "免费试用 10 分钟"
         case .signedIn:
             return vpnManager.actionTitle
         }
@@ -303,7 +313,7 @@ struct ConnectionView: View {
         case .restoring:
             return "正在检查已有账号…"
         case .signedOut:
-            return "无需先注册，连接时再关联账号"
+            return "无需注册，点击后准备游客体验"
         case .signedIn:
             return "选择节点后即可配置"
         }

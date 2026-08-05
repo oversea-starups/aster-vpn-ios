@@ -144,7 +144,7 @@ final class APIClientTests: XCTestCase {
         )
 
         do {
-            let _: AuthenticatedUser = try await AuthenticationAPI(client: client).login(
+            let _: AuthenticationResponse = try await AuthenticationAPI(client: client).login(
                 email: "invalid",
                 password: ""
             )

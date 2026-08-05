@@ -301,6 +301,13 @@ final class AuthSession: ObservableObject {
         noticeMessage = nil
     }
 
+    /// Retries the anonymous bootstrap after a transient network failure.
+    /// Core connection never redirects a signed-out installation to email
+    /// authentication; account association remains an explicit later action.
+    func startGuestSession() async {
+        await establishGuestSession()
+    }
+
     func handleProtectedRequestError(_ error: Error) {
         handleAuthenticatedRequestError(error)
     }
