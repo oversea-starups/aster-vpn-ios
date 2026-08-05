@@ -1,0 +1,159 @@
+name: AsterVPN
+
+options:
+  bundleIdPrefix: com.astervpn
+  createIntermediateGroups: true
+  deploymentTarget:
+    iOS: "16.0"
+
+settings:
+  base:
+    MARKETING_VERSION: 0.1.0
+    CURRENT_PROJECT_VERSION: 1
+    SWIFT_VERSION: 5.0
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: YES
+
+packages:
+  AsterLibbox:
+    url: https://github.com/oversea-starups/aster-vpn-ios.git
+    exactVersion: 1.13.16-aster.1
+
+targets:
+  AsterVPN:
+    type: application
+    platform: iOS
+    sources:
+      - path: AsterVPN
+        excludes:
+          - Resources/Info.plist
+          - Resources/AsterVPN.entitlements
+      - path: Shared
+    info:
+      path: AsterVPN/Resources/Info.plist
+      properties:
+        AsterAPIBaseURL: $(ASTER_API_BASE_URL)
+        AsterPublicSiteBaseURL: $(ASTER_PUBLIC_SITE_BASE_URL)
+        AsterPrivacyPolicyURL: $(ASTER_PRIVACY_POLICY_URL)
+        AsterTermsOfServiceURL: $(ASTER_TERMS_OF_SERVICE_URL)
+        AsterSupportURL: $(ASTER_SUPPORT_URL)
+        AsterBuildConfiguration: $(CONFIGURATION)
+        AsterPacketTunnelBundleIdentifier: $(ASTER_PACKET_TUNNEL_BUNDLE_ID)
+        AsterPacketTunnelTransportAvailable: $(ASTER_PACKET_TUNNEL_TRANSPORT_AVAILABLE)
+        AsterKeychainAccessGroup: $(ASTER_KEYCHAIN_ACCESS_GROUP)
+        CFBundleDisplayName: Aster VPN
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+    entitlements:
+      path: AsterVPN/Resources/AsterVPN.entitlements
+      properties:
+        com.apple.developer.default-data-protection: NSFileProtectionComplete
+        com.apple.developer.networking.networkextension:
+          - packet-tunnel-provider
+        com.apple.security.application-groups:
+          - $(ASTER_APP_GROUP_ID)
+        keychain-access-groups:
+          - $(ASTER_KEYCHAIN_ACCESS_GROUP)
+    configFiles:
+      Debug: Config/Debug.xcconfig
+      Release: Config/Release.xcconfig
+    dependencies:
+      - target: AsterPacketTunnel
+        embed: true
+    preBuildScripts:
+      - name: Validate Release Configuration
+        script: '/bin/sh "$SRCROOT/Scripts/validate-release-config.sh"'
+        inputFiles:
+          - $(SRCROOT)/Scripts/validate-release-config.sh
+          - $(SRCROOT)/AsterPacketTunnel/PacketTunnelProvider.swift
+        basedOnDependencyAnalysis: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.astervpn.Aster
+        PRODUCT_NAME: AsterVPN
+        PRODUCT_MODULE_NAME: AsterVPN
+        TARGETED_DEVICE_FAMILY: 1
+        CODE_SIGN_STYLE: Automatic
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+
+  AsterPacketTunnel:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: AsterPacketTunnel
+        excludes:
+          - Info.plist
+          - AsterPacketTunnel.entitlements
+      - path: Shared
+    info:
+      path: AsterPacketTunnel/Info.plist
+      properties:
+        CFBundleDisplayName: Aster VPN Tunnel
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        AsterKeychainAccessGroup: $(ASTER_KEYCHAIN_ACCESS_GROUP)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.networkextension.packet-tunnel
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).PacketTunnelProvider
+    entitlements:
+      path: AsterPacketTunnel/AsterPacketTunnel.entitlements
+      properties:
+        com.apple.developer.networking.networkextension:
+          - packet-tunnel-provider
+        com.apple.security.application-groups:
+          - $(ASTER_APP_GROUP_ID)
+        keychain-access-groups:
+          - $(ASTER_KEYCHAIN_ACCESS_GROUP)
+    configFiles:
+      Debug: Config/Debug.xcconfig
+      Release: Config/Release.xcconfig
+    dependencies:
+      - package: AsterLibbox
+        product: Libbox
+      - sdk: libresolv.tbd
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.astervpn.Aster.PacketTunnel
+        PRODUCT_NAME: AsterPacketTunnel
+        PRODUCT_MODULE_NAME: AsterPacketTunnel
+        SKIP_INSTALL: YES
+        CODE_SIGN_STYLE: Automatic
+
+  AsterVPNTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: AsterVPNTests
+    dependencies:
+      - target: AsterVPN
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.astervpn.AsterTests
+        GENERATE_INFOPLIST_FILE: YES
+
+schemes:
+  AsterVPN:
+    build:
+      targets:
+        AsterVPN: all
+        AsterPacketTunnel: all
+        AsterVPNTests: [test]
+    test:
+      gatherCoverageData: false
+      macroExpansion: AsterVPN
+      targets:
+        - AsterVPNTests
+    run:
+      config: Debug
+      executable: AsterVPN
+      macroExpansion: AsterVPN
+    profile:
+      config: Release
+      executable: AsterVPN
+    analyze:
+      config: Debug
+    archive:
+      config: Release

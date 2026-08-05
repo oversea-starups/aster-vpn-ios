@@ -1,0 +1,6 @@
+// Shared non-secret build settings. Keep credentials and signing material out of Git.
+ASTER_PACKET_TUNNEL_BUNDLE_ID = com.astervpn.Aster.PacketTunnel
+ASTER_APP_GROUP_ID = group.com.astervpn.shared
+ASTER_KEYCHAIN_ACCESS_GROUP = $(AppIdentifierPrefix)com.astervpn.shared
+// The reviewed sing-box transport is linked; real-device release smoke tests remain mandatory.
+ASTER_PACKET_TUNNEL_TRANSPORT_AVAILABLE = YES

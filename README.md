@@ -24,10 +24,15 @@ Expected checksum:
 aafddf839a8b0341b34bbc4a8e57d5f919181901f00146c01fe8558fbea1168c
 ```
 
-No node addresses, credentials, API keys, or user data are published here.
+`App/` contains the corresponding Aster VPN iOS application and Packet Tunnel
+source used with this transport. Regenerate the Xcode project from
+`App/project.yml`; generated projects, signing material, node addresses,
+credentials, API keys, and user data are not published here.
 
 ## License
 
-The transport and its Apple binding are distributed under GPL-3.0-or-later.
-See `LICENSE` and the upstream source/dependency notices. Aster's distributable
-iOS client source will be mirrored here before its first public binary release.
+The transport, its Apple binding, and the corresponding iOS client source are
+distributed under GPL-3.0-or-later. See `LICENSE` and the upstream
+source/dependency notices. No App Store binary should be distributed unless the
+published source matches that exact binary and all license obligations have
+been reviewed.

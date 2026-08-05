@@ -1,0 +1,4 @@
+#include "Base.xcconfig"
+
+// `$()` expands to an empty value and preserves the `//` in an xcconfig URL.
+ASTER_API_BASE_URL = http:/$()/127.0.0.1:3001

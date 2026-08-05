@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AsterAPIBaseURL</key>
+	<string>$(ASTER_API_BASE_URL)</string>
+	<key>AsterBuildConfiguration</key>
+	<string>$(CONFIGURATION)</string>
+	<key>AsterKeychainAccessGroup</key>
+	<string>$(ASTER_KEYCHAIN_ACCESS_GROUP)</string>
+	<key>AsterPacketTunnelBundleIdentifier</key>
+	<string>$(ASTER_PACKET_TUNNEL_BUNDLE_ID)</string>
+	<key>AsterPacketTunnelTransportAvailable</key>
+	<string>$(ASTER_PACKET_TUNNEL_TRANSPORT_AVAILABLE)</string>
+	<key>AsterPrivacyPolicyURL</key>
+	<string>$(ASTER_PRIVACY_POLICY_URL)</string>
+	<key>AsterPublicSiteBaseURL</key>
+	<string>$(ASTER_PUBLIC_SITE_BASE_URL)</string>
+	<key>AsterSupportURL</key>
+	<string>$(ASTER_SUPPORT_URL)</string>
+	<key>AsterTermsOfServiceURL</key>
+	<string>$(ASTER_TERMS_OF_SERVICE_URL)</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>Aster VPN</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>$(MARKETING_VERSION)</string>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>UILaunchScreen</key>
+	<dict/>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+</dict>
+</plist>
