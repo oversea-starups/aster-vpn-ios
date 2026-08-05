@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct AuthenticationView: View {
+    @Environment(\.dismiss) private var dismiss
+
     private enum Mode: String, CaseIterable, Identifiable {
         case login = "登录"
         case register = "注册"
@@ -9,6 +11,7 @@ struct AuthenticationView: View {
     }
 
     @ObservedObject var session: AuthSession
+    let allowsDismissal: Bool
     @State private var mode: Mode = .login
     @State private var email = ""
     @State private var password = ""
@@ -16,6 +19,11 @@ struct AuthenticationView: View {
     @State private var inviteCode = ""
     @State private var acceptedTerms = false
     @State private var showsPasswordReset = false
+
+    init(session: AuthSession, allowsDismissal: Bool = false) {
+        self.session = session
+        self.allowsDismissal = allowsDismissal
+    }
 
     var body: some View {
         NavigationStack {
@@ -119,6 +127,17 @@ struct AuthenticationView: View {
                 }
             }
             .navigationTitle("Aster VPN")
+            .toolbar {
+                if allowsDismissal {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("稍后") {
+                            session.clearMessages()
+                            dismiss()
+                        }
+                        .disabled(session.isBusy)
+                    }
+                }
+            }
             .onChange(of: mode) { _ in
                 session.clearMessages()
                 password = ""

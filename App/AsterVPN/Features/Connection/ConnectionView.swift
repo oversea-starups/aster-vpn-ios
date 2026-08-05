@@ -4,6 +4,8 @@ import SwiftUI
 struct ConnectionView: View {
     @EnvironmentObject private var vpnManager: VPNManager
     @ObservedObject var nodeStore: NodeStore
+    let authenticationPhase: AuthSession.Phase
+    let requestAuthentication: () -> Void
 
     var body: some View {
         ScrollView {
@@ -33,8 +35,12 @@ struct ConnectionView: View {
                 }
 
                 Button {
-                    Task {
-                        await nodeStore.toggleConnection()
+                    if authenticationPhase == .signedIn {
+                        Task {
+                            await nodeStore.toggleConnection()
+                        }
+                    } else {
+                        requestAuthentication()
                     }
                 } label: {
                     HStack {
@@ -42,7 +48,7 @@ struct ConnectionView: View {
                             ProgressView()
                                 .tint(.white)
                         }
-                        Text(vpnManager.isBusy ? "处理中…" : vpnManager.actionTitle)
+                        Text(connectionActionTitle)
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 8)
@@ -51,9 +57,11 @@ struct ConnectionView: View {
                 .controlSize(.large)
                 .disabled(
                     vpnManager.isBusy
+                        || authenticationPhase == .restoring
                         || nodeStore.isLoading
                         || (
-                            !nodeStore.hasUsableNode
+                            authenticationPhase == .signedIn
+                                && !nodeStore.hasUsableNode
                                 && !vpnManager.isConfigured
                                 && vpnManager.status != .connected
                         )
@@ -66,18 +74,26 @@ struct ConnectionView: View {
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {
-                    Task {
-                        await nodeStore.load(force: true)
+                    if authenticationPhase == .signedIn {
+                        Task {
+                            await nodeStore.load(force: true)
+                        }
+                    } else {
+                        requestAuthentication()
                     }
                 } label: {
-                    if nodeStore.isLoading {
+                    if authenticationPhase == .restoring || nodeStore.isLoading {
                         ProgressView()
+                    } else if authenticationPhase == .signedOut {
+                        Image(systemName: "person.crop.circle.badge.plus")
                     } else {
                         Image(systemName: "arrow.clockwise")
                     }
                 }
-                .disabled(nodeStore.isLoading)
-                .accessibilityLabel("刷新订阅和节点")
+                .disabled(authenticationPhase == .restoring || nodeStore.isLoading)
+                .accessibilityLabel(
+                    authenticationPhase == .signedOut ? "登录或注册" : "刷新订阅和节点"
+                )
             }
         }
         .task(id: nodeStore.sessionOwnerID) {
@@ -85,7 +101,11 @@ struct ConnectionView: View {
             await nodeStore.load()
         }
         .refreshable {
-            await nodeStore.load(force: true)
+            if authenticationPhase == .signedIn {
+                await nodeStore.load(force: true)
+            } else {
+                requestAuthentication()
+            }
         }
     }
 
@@ -107,7 +127,7 @@ struct ConnectionView: View {
             VStack(spacing: 4) {
                 Text(vpnManager.statusDescription)
                     .font(.title2.bold())
-                Text(vpnManager.configuredServerAddress ?? "选择节点后即可配置")
+                Text(connectionSubtitle)
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -118,7 +138,16 @@ struct ConnectionView: View {
 
     @ViewBuilder
     private var subscriptionCard: some View {
-        if let subscription = nodeStore.subscription {
+        if authenticationPhase != .signedIn {
+            VStack(alignment: .leading, spacing: 8) {
+                Label("无需先注册", systemImage: "person.crop.circle.badge.checkmark")
+                    .font(.headline)
+                Text("你可以直接浏览 App；开始连接、获取节点或同步订阅时，再登录并关联账号。")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+            .cardStyle()
+        } else if let subscription = nodeStore.subscription {
             VStack(alignment: .leading, spacing: 10) {
                 HStack {
                     Label(subscription.planName, systemImage: "checkmark.seal.fill")
@@ -160,42 +189,87 @@ struct ConnectionView: View {
         }
     }
 
+    @ViewBuilder
     private var nodeCard: some View {
-        NavigationLink {
-            NodePickerView(nodeStore: nodeStore)
-        } label: {
-            HStack(spacing: 14) {
-                Image(systemName: "server.rack")
-                    .font(.title2)
-                    .foregroundStyle(.indigo)
-                    .frame(width: 34)
+        if authenticationPhase == .signedIn {
+            NavigationLink {
+                NodePickerView(nodeStore: nodeStore)
+            } label: {
+                nodeCardLabel
+            }
+            .buttonStyle(.plain)
+            .disabled(nodeStore.nodes.isEmpty)
+        } else {
+            Button(action: requestAuthentication) {
+                nodeCardLabel
+            }
+            .buttonStyle(.plain)
+            .disabled(authenticationPhase == .restoring)
+        }
+    }
 
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(nodeStore.selectedNode?.name ?? "选择节点")
-                        .font(.headline)
-                        .foregroundStyle(.primary)
-                    if let node = nodeStore.selectedNode {
-                        Text(
-                            "\(node.region) · \(node.normalizedProtocol.uppercased())"
-                        )
+    private var nodeCardLabel: some View {
+        HStack(spacing: 14) {
+            Image(systemName: "server.rack")
+                .font(.title2)
+                .foregroundStyle(.indigo)
+                .frame(width: 34)
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(nodeStore.selectedNode?.name ?? "选择节点")
+                    .font(.headline)
+                    .foregroundStyle(.primary)
+                if let node = nodeStore.selectedNode {
+                    Text(
+                        "\(node.region) · \(node.normalizedProtocol.uppercased())"
+                    )
                         .font(.caption)
                         .foregroundStyle(.secondary)
-                    } else {
-                        Text("开通有效订阅后可获取节点")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
+                } else {
+                    Text(
+                        authenticationPhase == .signedIn
+                            ? "开通有效订阅后可获取节点"
+                            : "连接时登录并获取可用节点"
+                    )
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
                 }
-
-                Spacer()
-                Image(systemName: "chevron.right")
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(.tertiary)
             }
-            .cardStyle()
+
+            Spacer()
+            Image(systemName: "chevron.right")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.tertiary)
         }
-        .buttonStyle(.plain)
-        .disabled(nodeStore.nodes.isEmpty)
+        .cardStyle()
+    }
+
+    private var connectionActionTitle: String {
+        if vpnManager.isBusy {
+            return "处理中…"
+        }
+        switch authenticationPhase {
+        case .restoring:
+            return "正在恢复账号…"
+        case .signedOut:
+            return "登录后连接"
+        case .signedIn:
+            return vpnManager.actionTitle
+        }
+    }
+
+    private var connectionSubtitle: String {
+        if let address = vpnManager.configuredServerAddress {
+            return address
+        }
+        switch authenticationPhase {
+        case .restoring:
+            return "正在检查已有账号…"
+        case .signedOut:
+            return "无需先注册，连接时再关联账号"
+        case .signedIn:
+            return "选择节点后即可配置"
+        }
     }
 
     private var statusColor: Color {
