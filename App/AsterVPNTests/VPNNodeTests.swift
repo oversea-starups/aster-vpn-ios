@@ -33,7 +33,7 @@ final class VPNNodeTests: XCTestCase {
         XCTAssertNil(node.configurationIssue)
     }
 
-    func testRejectsMissingProtocolCredential() {
+    func testRejectsUnsupportedProtocol() {
         let node = VPNNode(
             id: "node-1",
             name: "US",
@@ -43,7 +43,7 @@ final class VPNNodeTests: XCTestCase {
             protocolName: "trojan"
         )
 
-        XCTAssertEqual(node.configurationIssue, "Trojan 节点缺少密码")
+        XCTAssertEqual(node.configurationIssue, "暂不支持 trojan 协议")
     }
 
     func testAcceptsAnyTLSWithPassword() {

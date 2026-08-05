@@ -10,7 +10,7 @@ final class TunnelConfigurationTests: XCTestCase {
                 region: "JP",
                 host: "vpn.example.com",
                 port: 443,
-                protocolName: "trojan",
+                protocolName: "anytls",
                 password: "test-password",
                 tls: true
             ),
@@ -23,7 +23,7 @@ final class TunnelConfigurationTests: XCTestCase {
                 region: "JP",
                 host: " ",
                 port: 443,
-                protocolName: "trojan",
+                protocolName: "anytls",
                 password: "test-password"
             ),
             ownerUserIdentifier: ""

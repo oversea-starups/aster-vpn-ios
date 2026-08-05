@@ -1,6 +1,6 @@
 #include "Base.xcconfig"
 
-// Public production endpoints. Transport remains independently fail-closed in Base.xcconfig.
+// Public production endpoints. Base.xcconfig links the reviewed transport dependency.
 ASTER_API_BASE_URL = https:/$()/aster-vpn-api.vercel.app/api
 ASTER_PUBLIC_SITE_BASE_URL = https:/$()/aster-vpn-ios.vercel.app
 ASTER_PRIVACY_POLICY_URL = https:/$()/oversea-starups.github.io/terms-privacy/aster-vpn/privacy.html

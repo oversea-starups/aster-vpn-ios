@@ -116,17 +116,13 @@ struct VPNNode: Codable, Hashable, Identifiable, Sendable {
         }
 
         switch normalizedProtocol {
-        case "ss", "shadowsocks":
-            guard method?.isEmpty == false, password?.isEmpty == false else {
-                return "Shadowsocks 节点缺少加密方式或密码"
-            }
         case "vmess", "vless":
             guard uuid?.isEmpty == false else {
                 return "\(normalizedProtocol.uppercased()) 节点缺少 UUID"
             }
-        case "trojan", "anytls":
+        case "anytls":
             guard password?.isEmpty == false else {
-                return "\(normalizedProtocol == "anytls" ? "AnyTLS" : "Trojan") 节点缺少密码"
+                return "AnyTLS 节点缺少密码"
             }
         default:
             return "暂不支持 \(protocolName) 协议"
