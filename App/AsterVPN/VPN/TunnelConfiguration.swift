@@ -1,20 +1,23 @@
 import Foundation
 
 struct TunnelConfiguration: Equatable, Sendable {
-    static let schemaVersion = 1
+    static let schemaVersion = 2
 
     let node: VPNNode
     let ownerUserIdentifier: String
     let credentialReference: String
+    let accessExpiresAt: Date?
 
     init(
         node: VPNNode,
         ownerUserIdentifier: String,
-        credentialReference: String = UUID().uuidString
+        credentialReference: String = UUID().uuidString,
+        accessExpiresAt: Date? = nil
     ) {
         self.node = node
         self.ownerUserIdentifier = ownerUserIdentifier
         self.credentialReference = credentialReference
+        self.accessExpiresAt = accessExpiresAt
     }
 
     var serverAddress: String {
@@ -26,13 +29,16 @@ struct TunnelConfiguration: Equatable, Sendable {
     }
 
     var providerConfiguration: [String: Any] {
-        let configuration: [String: Any] = [
+        var configuration: [String: Any] = [
             "schemaVersion": Self.schemaVersion,
             "serverAddress": serverAddress,
             "nodeIdentifier": nodeIdentifier,
             "ownerUserIdentifier": ownerUserIdentifier,
             "credentialReference": credentialReference,
         ]
+        if let accessExpiresAt {
+            configuration["accessExpiresAt"] = accessExpiresAt.timeIntervalSince1970
+        }
         return configuration
     }
 

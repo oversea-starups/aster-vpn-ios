@@ -4,16 +4,27 @@ import UIKit
 
 struct PaywallView: View {
     @ObservedObject private var coordinator: StoreKitPurchaseCoordinator
+    let isGuest: Bool
+    let requestAccountAssociation: () -> Void
 
     @MainActor
-    init(coordinator: StoreKitPurchaseCoordinator) {
+    init(
+        coordinator: StoreKitPurchaseCoordinator,
+        isGuest: Bool = false,
+        requestAccountAssociation: @escaping () -> Void = {}
+    ) {
         self.coordinator = coordinator
+        self.isGuest = isGuest
+        self.requestAccountAssociation = requestAccountAssociation
     }
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 header
+                if isGuest {
+                    guestPurchaseNotice
+                }
                 entitlementCard
 
                 if coordinator.phase == .loading && coordinator.offerings.isEmpty {
@@ -68,10 +79,29 @@ struct PaywallView: View {
         VStack(alignment: .leading, spacing: 8) {
             Text("选择适合你的方案")
                 .font(.title2.bold())
-            Text("付款由 Apple 安全处理。购买成功后，Aster VPN 服务器验证交易并开通权益。")
+            Text(
+                isGuest
+                    ? "无需注册即可购买。付款由 Apple 安全处理，购买后立即为当前游客身份开通权益。"
+                    : "付款由 Apple 安全处理。购买成功后，Aster VPN 服务器验证交易并开通权益。"
+            )
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
         }
+    }
+
+    private var guestPurchaseNotice: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Label("游客也可以订阅", systemImage: "person.crop.circle.badge.checkmark")
+                .font(.headline)
+            Text("订阅会保存在当前设备的安全游客身份下。关联邮箱账号后，可在其他设备登录并同步权益。")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+            Button("关联账号（可稍后）", action: requestAccountAssociation)
+                .font(.subheadline.weight(.semibold))
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(16)
+        .background(.indigo.opacity(0.1), in: RoundedRectangle(cornerRadius: 16))
     }
 
     @ViewBuilder

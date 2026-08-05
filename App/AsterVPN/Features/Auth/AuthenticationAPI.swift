@@ -23,39 +23,59 @@ struct ResetPasswordRequest: Encodable {
     let newPassword: String
 }
 
+struct CreateGuestRequest: Encodable {
+    let installationId: String
+}
+
 struct AuthenticationAPI {
     let client: APIClient
 
-    func login(email: String, password: String) async throws -> AuthenticatedUser {
+    func createGuest(installationID: UUID) async throws -> AuthenticationResponse {
         let response: AuthenticationResponse = try await client.send(
             .post,
-            path: "auth/login",
-            body: LoginRequest(email: email, password: password),
+            path: "auth/guest",
+            body: CreateGuestRequest(installationId: installationID.uuidString),
             requiresAuthorization: false
         )
         try await client.adopt(response.tokens)
-        return response.user
+        return response
+    }
+
+    func login(
+        email: String,
+        password: String,
+        claimingGuest: Bool = false
+    ) async throws -> AuthenticationResponse {
+        let response: AuthenticationResponse = try await client.send(
+            .post,
+            path: claimingGuest ? "auth/guest/login" : "auth/login",
+            body: LoginRequest(email: email, password: password),
+            requiresAuthorization: claimingGuest
+        )
+        try await client.adopt(response.tokens)
+        return response
     }
 
     func register(
         email: String,
         password: String,
         verificationCode: String,
-        inviteCode: String?
-    ) async throws -> AuthenticatedUser {
+        inviteCode: String?,
+        claimingGuest: Bool = false
+    ) async throws -> AuthenticationResponse {
         let response: AuthenticationResponse = try await client.send(
             .post,
-            path: "auth/register",
+            path: claimingGuest ? "auth/guest/register" : "auth/register",
             body: RegistrationRequest(
                 email: email,
                 password: password,
                 verifyCode: verificationCode,
                 inviteCode: inviteCode?.nilIfEmpty?.uppercased()
             ),
-            requiresAuthorization: false
+            requiresAuthorization: claimingGuest
         )
         try await client.adopt(response.tokens)
-        return response.user
+        return response
     }
 
     @discardableResult

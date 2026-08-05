@@ -6,6 +6,7 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
     private var commandServer: LibboxCommandServer?
     private var platformInterface: SingBoxPlatformInterface?
     private var activeConfiguration: String?
+    private var expirationTask: Task<Void, Never>?
 
     override func startTunnel(
         options: [String: NSObject]?,
@@ -13,8 +14,9 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
     ) {
         Task {
             do {
-                let configuration = try loadConfiguration()
-                try startCore(configuration: configuration)
+                let loaded = try loadConfiguration()
+                try startCore(configuration: loaded.configuration)
+                scheduleExpiration(at: loaded.accessExpiresAt)
                 completionHandler(nil)
             } catch {
                 stopCore()
@@ -41,6 +43,8 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
     }
 
     func stopCore() {
+        expirationTask?.cancel()
+        expirationTask = nil
         if let commandServer {
             try? commandServer.closeService()
             commandServer.close()
@@ -62,10 +66,13 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
         )
     }
 
-    private func loadConfiguration() throws -> String {
+    private func loadConfiguration() throws -> (
+        configuration: String,
+        accessExpiresAt: Date?
+    ) {
         guard let tunnelProtocol = protocolConfiguration as? NETunnelProviderProtocol,
               let providerConfiguration = tunnelProtocol.providerConfiguration,
-              providerConfiguration["schemaVersion"] as? Int == 1,
+              providerConfiguration["schemaVersion"] as? Int == 2,
               let serverAddress = providerConfiguration["serverAddress"] as? String,
               let nodeIdentifier = providerConfiguration["nodeIdentifier"] as? String,
               let ownerUserIdentifier = providerConfiguration["ownerUserIdentifier"] as? String,
@@ -93,7 +100,30 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
               node.serverAddress == serverAddress else {
             throw PacketTunnelError.invalidConfiguration
         }
-        return try SingBoxConfigurationBuilder.makeConfiguration(for: node)
+        let accessExpiresAt = (providerConfiguration["accessExpiresAt"] as? Double)
+            .map(Date.init(timeIntervalSince1970:))
+        if let accessExpiresAt, accessExpiresAt <= Date() {
+            throw PacketTunnelError.accessExpired
+        }
+        return (
+            try SingBoxConfigurationBuilder.makeConfiguration(for: node),
+            accessExpiresAt
+        )
+    }
+
+    private func scheduleExpiration(at date: Date?) {
+        expirationTask?.cancel()
+        guard let date else { return }
+        let nanoseconds = UInt64(max(0, date.timeIntervalSinceNow) * 1_000_000_000)
+        expirationTask = Task { [weak self] in
+            do {
+                try await Task.sleep(nanoseconds: nanoseconds)
+            } catch {
+                return
+            }
+            guard !Task.isCancelled else { return }
+            self?.cancelTunnelWithError(PacketTunnelError.accessExpired)
+        }
     }
 
     private func startCore(configuration: String) throws {
@@ -182,6 +212,7 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
 enum PacketTunnelError: LocalizedError {
     case invalidConfiguration
     case serviceUnavailable
+    case accessExpired
     case engine(String)
 
     var errorDescription: String? {
@@ -190,6 +221,8 @@ enum PacketTunnelError: LocalizedError {
             return "The packet tunnel configuration is invalid."
         case .serviceUnavailable:
             return "The packet tunnel service is not running."
+        case .accessExpired:
+            return "The VPN access period has expired."
         case let .engine(message):
             return "The VPN engine could not start: \(message)"
         }

@@ -18,6 +18,7 @@ final class AuthSession: ObservableObject {
     @Published private(set) var currentUser: AuthenticatedUser?
     @Published private(set) var profile: UserProfile?
     @Published private(set) var sessionGeneration = UUID()
+    @Published private(set) var storeKitAccountTokenAliases: Set<UUID> = []
     @Published private(set) var isBusy = false
     @Published var errorMessage: String?
     @Published var noticeMessage: String?
@@ -28,6 +29,7 @@ final class AuthSession: ObservableObject {
     private let sessionInvalidationHandler: @MainActor () -> Void
     private let sessionTerminationHandler: @MainActor () async throws -> Void
     private let defaults: UserDefaults
+    private let installationIDStore: any InstallationIDStoring
     private let cleanupPendingKey: String
     private var invalidationOperation: SessionInvalidationOperation?
     private var busyOperationID: UUID?
@@ -37,6 +39,7 @@ final class AuthSession: ObservableObject {
         sessionInvalidationHandler: @escaping @MainActor () -> Void = {},
         sessionTerminationHandler: @escaping @MainActor () async throws -> Void = {},
         defaults: UserDefaults = .standard,
+        installationIDStore: any InstallationIDStoring = KeychainInstallationIDStore(),
         cleanupPendingKey: String = "aster-session-cleanup-pending"
     ) {
         self.client = client
@@ -45,6 +48,7 @@ final class AuthSession: ObservableObject {
         self.sessionInvalidationHandler = sessionInvalidationHandler
         self.sessionTerminationHandler = sessionTerminationHandler
         self.defaults = defaults
+        self.installationIDStore = installationIDStore
         self.cleanupPendingKey = cleanupPendingKey
     }
 
@@ -71,12 +75,13 @@ final class AuthSession: ObservableObject {
         }
         if defaults.bool(forKey: cleanupPendingKey) {
             try? await terminateSession()
+            await establishGuestSession()
             return
         }
 
         do {
             guard try await client.hasStoredCredentials() else {
-                try? await terminateSession()
+                await establishGuestSession()
                 return
             }
 
@@ -90,9 +95,11 @@ final class AuthSession: ObservableObject {
                 // require a fresh login instead of entering a nil-owner
                 // "offline signed-in" state.
                 try? await terminateSession(presenting: error)
+                await establishGuestSession()
             }
         } catch {
             try? await terminateSession(presenting: error)
+            await establishGuestSession()
         }
     }
 
@@ -102,10 +109,12 @@ final class AuthSession: ObservableObject {
             errorMessage = "请输入有效的邮箱地址"
             return false
         }
+        let claimingGuest = currentUser?.isGuest == true
         return await runAuthentication {
             try await authenticationAPI.login(
                 email: normalize(email),
-                password: password
+                password: password,
+                claimingGuest: claimingGuest
             )
         }
     }
@@ -130,12 +139,14 @@ final class AuthSession: ObservableObject {
             return false
         }
 
+        let claimingGuest = currentUser?.isGuest == true
         return await runAuthentication {
             try await authenticationAPI.register(
                 email: normalize(email),
                 password: password,
                 verificationCode: verificationCode,
-                inviteCode: inviteCode
+                inviteCode: inviteCode,
+                claimingGuest: claimingGuest
             )
         }
     }
@@ -252,6 +263,7 @@ final class AuthSession: ObservableObject {
 
             do {
                 try await terminateSession()
+                await establishGuestSession()
             } catch {
                 errorMessage = "账号已删除，但本地会话清理失败：\(error.localizedDescription)"
             }
@@ -270,13 +282,14 @@ final class AuthSession: ObservableObject {
 
     @discardableResult
     func logout() async -> Bool {
-        guard beginBusyOperation() != nil else {
+        guard !isBusy, invalidationOperation == nil else {
             return false
         }
         clearMessages()
         do {
             try await terminateSession()
-            return true
+            await establishGuestSession()
+            return phase == .signedIn
         } catch {
             present(error)
             return false
@@ -293,9 +306,12 @@ final class AuthSession: ObservableObject {
     }
 
     private func runAuthentication(
-        operation: () async throws -> AuthenticatedUser
+        operation: () async throws -> AuthenticationResponse
     ) async -> Bool {
-        guard phase == .signedOut else {
+        let previousGuestID = currentUser?.isGuest == true
+            ? currentUser?.id
+            : nil
+        guard phase == .signedOut || previousGuestID != nil else {
             return false
         }
         if defaults.bool(forKey: cleanupPendingKey) {
@@ -310,13 +326,31 @@ final class AuthSession: ObservableObject {
         }
         clearMessages()
         do {
-            let user = try await operation()
+            let response = try await operation()
             guard busyOperationID == operationID else {
                 return false
             }
+
+            if previousGuestID != nil && response.user.id != previousGuestID {
+                sessionInvalidationHandler()
+                do {
+                    try await sessionTerminationHandler()
+                } catch {
+                    try? await authenticationAPI.logout()
+                    throw error
+                }
+            }
+
             let generation = UUID()
             sessionGeneration = generation
-            currentUser = user
+            currentUser = response.user
+            profile = nil
+            loadStoreKitAliases(for: response.user.id)
+            if let claimed = response.claimedAppAccountToken,
+               let token = UUID(uuidString: claimed) {
+                storeKitAccountTokenAliases.insert(token)
+                persistStoreKitAliases(for: response.user.id)
+            }
             phase = .signedIn
 
             // Authentication has succeeded even if this optional hydration
@@ -384,11 +418,19 @@ final class AuthSession: ObservableObject {
     private func apply(_ profile: UserProfile) {
         self.profile = profile
         currentUser = AuthenticatedUser(profile: profile)
+        loadStoreKitAliases(for: profile.id)
+        storeKitAccountTokenAliases.formUnion(
+            profile.appStoreAccountAliases.compactMap {
+                UUID(uuidString: $0.appAccountToken)
+            }
+        )
+        persistStoreKitAliases(for: profile.id)
     }
 
     private func clearAuthenticatedState() {
         currentUser = nil
         profile = nil
+        storeKitAccountTokenAliases = []
     }
 
     private func handleAuthenticatedRequestError(_ error: Error) {
@@ -557,6 +599,46 @@ final class AuthSession: ObservableObject {
 
     private func validatePassword(_ password: String) -> Bool {
         (8...64).contains(password.count)
+    }
+
+    private func establishGuestSession() async {
+        guard phase == .signedOut || phase == .restoring,
+              let operationID = beginBusyOperation() else {
+            return
+        }
+        clearMessages()
+        do {
+            let installationID = try await installationIDStore.loadOrCreate()
+            let response = try await authenticationAPI.createGuest(
+                installationID: installationID
+            )
+            guard busyOperationID == operationID else { return }
+            sessionGeneration = UUID()
+            currentUser = response.user
+            profile = nil
+            loadStoreKitAliases(for: response.user.id)
+            phase = .signedIn
+            finishBusyOperation(operationID)
+        } catch {
+            present(error)
+            phase = .signedOut
+            finishBusyOperation(operationID)
+        }
+    }
+
+    private func loadStoreKitAliases(for userID: String) {
+        let key = "aster-storekit-token-aliases.\(userID)"
+        storeKitAccountTokenAliases = Set(
+            (defaults.stringArray(forKey: key) ?? []).compactMap(UUID.init(uuidString:))
+        )
+    }
+
+    private func persistStoreKitAliases(for userID: String) {
+        let key = "aster-storekit-token-aliases.\(userID)"
+        defaults.set(
+            storeKitAccountTokenAliases.map(\.uuidString).sorted(),
+            forKey: key
+        )
     }
 }
 

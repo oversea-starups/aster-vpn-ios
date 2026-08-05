@@ -7,6 +7,10 @@ protocol CredentialStoring: Sendable {
     func clear() async throws
 }
 
+protocol InstallationIDStoring: Sendable {
+    func loadOrCreate() async throws -> UUID
+}
+
 enum CredentialStoreError: LocalizedError {
     case encodingFailed
     case unexpectedData
@@ -99,6 +103,60 @@ actor KeychainCredentialStore: CredentialStoring {
         guard status == errSecSuccess || status == errSecItemNotFound else {
             throw CredentialStoreError.keychain(status)
         }
+    }
+
+    private var baseQuery: [String: Any] {
+        [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: account,
+        ]
+    }
+}
+
+/// A non-secret, random installation identifier kept separately from session
+/// credentials so signing out cannot reset a one-time guest trial.
+actor KeychainInstallationIDStore: InstallationIDStoring {
+    private let service: String
+    private let account: String
+
+    init(
+        service: String = Bundle.main.bundleIdentifier ?? "com.astervpn.Aster",
+        account: String = "installation-identifier"
+    ) {
+        self.service = service
+        self.account = account
+    }
+
+    func loadOrCreate() throws -> UUID {
+        var query = baseQuery
+        query[kSecReturnData as String] = true
+        query[kSecMatchLimit as String] = kSecMatchLimitOne
+
+        var result: CFTypeRef?
+        let status = SecItemCopyMatching(query as CFDictionary, &result)
+        if status == errSecSuccess,
+           let data = result as? Data,
+           let value = String(data: data, encoding: .utf8),
+           let identifier = UUID(uuidString: value) {
+            return identifier
+        }
+        guard status == errSecItemNotFound else {
+            throw CredentialStoreError.keychain(status)
+        }
+
+        let identifier = UUID()
+        guard let data = identifier.uuidString.data(using: .utf8) else {
+            throw CredentialStoreError.encodingFailed
+        }
+        var item = baseQuery
+        item[kSecValueData as String] = data
+        item[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
+        let addStatus = SecItemAdd(item as CFDictionary, nil)
+        guard addStatus == errSecSuccess else {
+            throw CredentialStoreError.keychain(addStatus)
+        }
+        return identifier
     }
 
     private var baseQuery: [String: Any] {

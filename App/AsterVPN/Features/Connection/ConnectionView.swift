@@ -62,6 +62,7 @@ struct ConnectionView: View {
                         || (
                             authenticationPhase == .signedIn
                                 && !nodeStore.hasUsableNode
+                                && !nodeStore.canStartTrial
                                 && !vpnManager.isConfigured
                                 && vpnManager.status != .connected
                         )
@@ -147,6 +148,34 @@ struct ConnectionView: View {
                     .foregroundStyle(.secondary)
             }
             .cardStyle()
+        } else if let subscription = nodeStore.subscription,
+                  let trial = subscription.trial,
+                  !subscription.entitlementSources.contains(where: { $0.source == "app_store" }) {
+            VStack(alignment: .leading, spacing: 10) {
+                HStack {
+                    Label("游客免费体验", systemImage: "timer")
+                        .font(.headline)
+                    Spacer()
+                    Text("\(trial.nodeLimit) 条线路")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.indigo)
+                }
+
+                if trial.status == "trial_pending" {
+                    Text("首次连接后开始计时，可完整体验 \(trial.durationSeconds / 60) 分钟。")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                } else if let expiresAt = trial.expiresAt {
+                    Text("试用截止：\(formatDate(expiresAt))")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                } else {
+                    Text("本机游客试用已经结束，订阅后可继续使用全部线路。")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .cardStyle()
         } else if let subscription = nodeStore.subscription {
             VStack(alignment: .leading, spacing: 10) {
                 HStack {
@@ -192,13 +221,17 @@ struct ConnectionView: View {
     @ViewBuilder
     private var nodeCard: some View {
         if authenticationPhase == .signedIn {
-            NavigationLink {
-                NodePickerView(nodeStore: nodeStore)
-            } label: {
+            if nodeStore.canStartTrial {
                 nodeCardLabel
+            } else {
+                NavigationLink {
+                    NodePickerView(nodeStore: nodeStore)
+                } label: {
+                    nodeCardLabel
+                }
+                .buttonStyle(.plain)
+                .disabled(nodeStore.nodes.isEmpty)
             }
-            .buttonStyle(.plain)
-            .disabled(nodeStore.nodes.isEmpty)
         } else {
             Button(action: requestAuthentication) {
                 nodeCardLabel
@@ -227,9 +260,11 @@ struct ConnectionView: View {
                         .foregroundStyle(.secondary)
                 } else {
                     Text(
-                        authenticationPhase == .signedIn
-                            ? "开通有效订阅后可获取节点"
-                            : "连接时登录并获取可用节点"
+                        nodeStore.canStartTrial
+                            ? "首次连接后获取 2 条体验线路"
+                            : authenticationPhase == .signedIn
+                                ? "开通有效订阅后可获取节点"
+                                : "连接时登录并获取可用节点"
                     )
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -237,9 +272,11 @@ struct ConnectionView: View {
             }
 
             Spacer()
-            Image(systemName: "chevron.right")
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(.tertiary)
+            if !nodeStore.canStartTrial {
+                Image(systemName: "chevron.right")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.tertiary)
+            }
         }
         .cardStyle()
     }

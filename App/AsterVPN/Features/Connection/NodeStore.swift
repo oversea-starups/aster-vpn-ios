@@ -43,6 +43,13 @@ final class NodeStore: ObservableObject {
         selectedNode?.configurationIssue == nil
     }
 
+    var canStartTrial: Bool {
+        subscription?.trial?.status == "trial_pending"
+            && subscription?.entitlementSources.contains(
+                where: { $0.source == "app_store" }
+            ) != true
+    }
+
     func activate(for userID: String) {
         let normalizedUserID = userID.trimmingCharacters(
             in: .whitespacesAndNewlines
@@ -141,6 +148,11 @@ final class NodeStore: ObservableObject {
         ) {
             pendingForcedReload = false
             authenticationFailureHandler(authenticationError)
+        } else if canStartTrial {
+            // Pending trials intentionally receive no node credentials. The
+            // first connection atomically starts the clock before fetching
+            // the two trial nodes.
+            errorMessage = nil
         } else if let firstFailure = failures.first {
             present(firstFailure)
         }
@@ -188,6 +200,20 @@ final class NodeStore: ObservableObject {
             return
         }
 
+        if canStartTrial {
+            do {
+                subscription = try await startTrial()
+            } catch {
+                present(error)
+                return
+            }
+            await load(force: true)
+            guard self.sessionGeneration == generation,
+                  self.sessionOwnerID == sessionOwnerID else {
+                return
+            }
+        }
+
         guard let selectedNode else {
             errorMessage = "当前没有可用节点，请刷新或先开通订阅。"
             return
@@ -202,7 +228,8 @@ final class NodeStore: ObservableObject {
                 configuration: TunnelConfiguration(
                     node: selectedNode,
                     ownerUserIdentifier: sessionOwnerID,
-                    credentialReference: UUID().uuidString
+                    credentialReference: UUID().uuidString,
+                    accessExpiresAt: subscription.flatMap(accessExpiration)
                 ),
                 expectedAuthorizationGeneration: generation
             )
@@ -270,6 +297,27 @@ final class NodeStore: ObservableObject {
         } catch {
             return .failure(error)
         }
+    }
+
+    private func startTrial() async throws -> SubscriptionSummary {
+        try await client.send(
+            .post,
+            path: "subscribe/trial/start",
+            as: SubscriptionSummary.self
+        )
+    }
+
+    private func accessExpiration(_ subscription: SubscriptionSummary) -> Date? {
+        guard let value = subscription.expiredAt else { return nil }
+        if let date = ISO8601DateFormatter().date(from: value) {
+            return date
+        }
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [
+            .withInternetDateTime,
+            .withFractionalSeconds,
+        ]
+        return formatter.date(from: value)
     }
 
     private func selectionKey(for userID: String) -> String {

@@ -58,6 +58,7 @@ struct RootView: View {
                   let userID = authSession.currentUser?.id else {
                 return
             }
+            purchaseCoordinator.deactivate()
             nodeStore.activate(for: userID)
             await purchaseCoordinator.activate()
         }
@@ -77,6 +78,11 @@ struct RootView: View {
                 showsAuthentication = false
             }
         }
+        .onChange(of: authSession.currentUser?.isGuest) { isGuest in
+            if isGuest == false {
+                showsAuthentication = false
+            }
+        }
     }
 
     private func requestAuthentication() {
@@ -92,14 +98,24 @@ struct RootView: View {
                 showsAuthentication = true
             }
         case .signedIn:
-            break
+            guard authSession.currentUser?.isGuest == true else { return }
+            authSession.clearMessages()
+            if acceptedDataDisclosureVersion < Self.currentDataDisclosureVersion {
+                continuesToAuthenticationAfterDisclosure = false
+                showsDataDisclosure = true
+            } else {
+                showsAuthentication = true
+            }
         }
     }
 
     private func continueAuthenticationAfterDisclosureIfNeeded() {
         guard continuesToAuthenticationAfterDisclosure else { return }
         continuesToAuthenticationAfterDisclosure = false
-        guard authSession.phase == .signedOut else { return }
+        guard authSession.phase == .signedOut
+                || authSession.currentUser?.isGuest == true else {
+            return
+        }
         showsAuthentication = true
     }
 }
@@ -125,7 +141,11 @@ private struct AppTabView: View {
 
             NavigationStack {
                 if authSession.phase == .signedIn {
-                    PaywallView(coordinator: purchaseCoordinator)
+                    PaywallView(
+                        coordinator: purchaseCoordinator,
+                        isGuest: authSession.currentUser?.isGuest == true,
+                        requestAccountAssociation: requestAuthentication
+                    )
                 } else {
                     DeferredAuthenticationView(
                         navigationTitle: "订阅",
@@ -143,8 +163,19 @@ private struct AppTabView: View {
             }
 
             NavigationStack {
-                if authSession.phase == .signedIn {
+                if authSession.phase == .signedIn,
+                   authSession.currentUser?.isGuest != true {
                     AccountView(session: authSession)
+                } else if authSession.currentUser?.isGuest == true {
+                    DeferredAuthenticationView(
+                        navigationTitle: "账号",
+                        title: "当前为游客模式",
+                        detail: "试用和 App Store 订阅可以直接使用。关联邮箱账号后，可跨设备恢复权益并管理账号。",
+                        systemImage: "person.crop.circle.badge.plus",
+                        isRestoring: false,
+                        showsLegalLinks: true,
+                        requestAuthentication: requestAuthentication
+                    )
                 } else {
                     DeferredAuthenticationView(
                         navigationTitle: "账号",

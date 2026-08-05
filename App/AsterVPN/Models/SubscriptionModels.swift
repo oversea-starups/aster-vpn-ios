@@ -8,6 +8,8 @@ struct SubscriptionSummary: Decodable, Equatable, Sendable {
     let remainingTraffic: Int64
     let expiredAt: String?
     let entitlementSources: [SubscriptionSourceSummary]
+    let isGuest: Bool
+    let trial: TrialSummary?
 
     private enum CodingKeys: String, CodingKey {
         case planName
@@ -17,6 +19,8 @@ struct SubscriptionSummary: Decodable, Equatable, Sendable {
         case remainingTraffic
         case expiredAt
         case entitlementSources
+        case isGuest
+        case trial
     }
 
     init(from decoder: Decoder) throws {
@@ -33,6 +37,8 @@ struct SubscriptionSummary: Decodable, Equatable, Sendable {
             [SubscriptionSourceSummary].self,
             forKey: .entitlementSources
         ) ?? []
+        isGuest = try container.decodeIfPresent(Bool.self, forKey: .isGuest) ?? false
+        trial = try container.decodeIfPresent(TrialSummary.self, forKey: .trial)
     }
 
     private static func decodeByteCount(
@@ -51,6 +57,14 @@ struct SubscriptionSummary: Decodable, Equatable, Sendable {
         }
         return 0
     }
+}
+
+struct TrialSummary: Decodable, Equatable, Sendable {
+    let status: String
+    let startedAt: String?
+    let expiresAt: String?
+    let durationSeconds: Int
+    let nodeLimit: Int
 }
 
 struct SubscriptionSourceSummary: Decodable, Equatable, Sendable {

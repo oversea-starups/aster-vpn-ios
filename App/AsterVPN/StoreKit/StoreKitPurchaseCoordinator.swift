@@ -308,7 +308,8 @@ final class StoreKitPurchaseCoordinator: ObservableObject {
             throw AsterStorePurchaseError.unverifiedTransaction
         }
 
-        guard transaction.appAccountToken == account.userID else {
+        guard let transactionToken = transaction.appAccountToken,
+              account.acceptedAppAccountTokens.contains(transactionToken) else {
             throw AsterStorePurchaseError.transactionAccountMismatch
         }
         try await validate(account: account, generation: generation)

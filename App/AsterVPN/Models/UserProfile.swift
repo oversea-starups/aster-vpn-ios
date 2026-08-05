@@ -8,6 +8,8 @@ struct UserProfile: Decodable, Equatable, Sendable {
     let emailVerified: Bool
     let isActive: Bool
     let isAdmin: Bool
+    let isGuest: Bool
+    let appStoreAccountAliases: [AppStoreAccountAliasProfile]
 
     private enum CodingKeys: String, CodingKey {
         case id
@@ -17,6 +19,8 @@ struct UserProfile: Decodable, Equatable, Sendable {
         case emailVerified
         case isActive
         case isAdmin
+        case isGuest
+        case appStoreAccountAliases
     }
 
     init(
@@ -26,7 +30,9 @@ struct UserProfile: Decodable, Equatable, Sendable {
         avatar: String?,
         emailVerified: Bool,
         isActive: Bool,
-        isAdmin: Bool
+        isAdmin: Bool,
+        isGuest: Bool = false,
+        appStoreAccountAliases: [AppStoreAccountAliasProfile] = []
     ) {
         self.id = id
         self.email = email
@@ -35,6 +41,8 @@ struct UserProfile: Decodable, Equatable, Sendable {
         self.emailVerified = emailVerified
         self.isActive = isActive
         self.isAdmin = isAdmin
+        self.isGuest = isGuest
+        self.appStoreAccountAliases = appStoreAccountAliases
     }
 
     init(from decoder: Decoder) throws {
@@ -46,7 +54,16 @@ struct UserProfile: Decodable, Equatable, Sendable {
         emailVerified = try container.decodeIfPresent(Bool.self, forKey: .emailVerified) ?? false
         isActive = try container.decodeIfPresent(Bool.self, forKey: .isActive) ?? true
         isAdmin = try container.decodeIfPresent(Bool.self, forKey: .isAdmin) ?? false
+        isGuest = try container.decodeIfPresent(Bool.self, forKey: .isGuest) ?? false
+        appStoreAccountAliases = try container.decodeIfPresent(
+            [AppStoreAccountAliasProfile].self,
+            forKey: .appStoreAccountAliases
+        ) ?? []
     }
+}
+
+struct AppStoreAccountAliasProfile: Decodable, Equatable, Sendable {
+    let appAccountToken: String
 }
 
 struct AccountDeletionResult: Decodable, Equatable, Sendable {

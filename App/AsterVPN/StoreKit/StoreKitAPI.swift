@@ -3,10 +3,16 @@ import Foundation
 struct StoreKitAccountContext: Equatable, Sendable {
     let userID: UUID
     let sessionGeneration: UUID
+    let acceptedAppAccountTokens: Set<UUID>
 
-    init(userID: UUID, sessionGeneration: UUID) {
+    init(
+        userID: UUID,
+        sessionGeneration: UUID,
+        acceptedAppAccountTokens: Set<UUID> = []
+    ) {
         self.userID = userID
         self.sessionGeneration = sessionGeneration
+        self.acceptedAppAccountTokens = acceptedAppAccountTokens.union([userID])
     }
 }
 
@@ -37,7 +43,7 @@ enum AsterStorePurchaseError: Error, LocalizedError {
     var errorDescription: String? {
         switch self {
         case .authenticationRequired:
-            return "请先登录后再购买订阅。"
+            return "正在准备游客购买身份，请稍后再试。"
         case .noProductsConfigured:
             return "当前没有可购买的 App Store 订阅，请稍后再试。"
         case .backendAccountMismatch:
@@ -108,7 +114,8 @@ extension AuthSession: StoreKitAccountProviding {
         }
         return StoreKitAccountContext(
             userID: userID,
-            sessionGeneration: sessionGeneration
+            sessionGeneration: sessionGeneration,
+            acceptedAppAccountTokens: storeKitAccountTokenAliases
         )
     }
 }
