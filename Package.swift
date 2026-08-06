@@ -11,8 +11,8 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "Libbox",
-            url: "https://github.com/oversea-starups/aster-vpn-ios/releases/download/1.13.16-aster.1/Libbox.xcframework.zip",
-            checksum: "aafddf839a8b0341b34bbc4a8e57d5f919181901f00146c01fe8558fbea1168c"
+            url: "https://github.com/oversea-starups/aster-vpn-ios/releases/download/1.13.16-aster.2/Libbox.xcframework.zip",
+            checksum: "a2a0ba688e6b234666da6cda52a4bd7e15bd4620b23f4b14271c65a85bf0b77b"
         ),
     ]
 )
