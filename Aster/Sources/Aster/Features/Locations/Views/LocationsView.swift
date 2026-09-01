@@ -20,7 +20,7 @@ struct LocationsView: View {
             ZStack {
                 AsterTheme.background.ignoresSafeArea()
                 ScrollView {
-                    VStack(alignment: .leading, spacing: 20) {
+                    VStack(alignment: .leading, spacing: 24) {
                         sectionPicker
                         if selectedSection == .vip {
                             vipPlans
@@ -28,7 +28,9 @@ struct LocationsView: View {
                             locationsContent
                         }
                     }
-                    .padding(20)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 24)
+                    .padding(.bottom, 32)
                 }
                 .scrollIndicators(.hidden)
             }

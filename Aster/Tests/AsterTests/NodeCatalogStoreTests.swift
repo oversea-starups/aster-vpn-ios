@@ -104,7 +104,7 @@ final class NodeCatalogStoreTests: XCTestCase {
 
         let fetchCount = await fetcher.fetchCount
         XCTAssertEqual(fetchCount, 1)
-        XCTAssertEqual(store.nodes.first?.displayName, "Fresh")
+        XCTAssertEqual(store.nodes.first?.displayName, "Available location")
     }
 
     func testRecentCatalogSkipsAutomaticRefresh() async {

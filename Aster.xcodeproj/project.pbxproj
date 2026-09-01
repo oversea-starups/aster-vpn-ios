@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		020A044CD23ED6CA335B36C9 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3265B0717E7791763953ED97 /* AppConstants.swift */; };
+		0BFC6920970D92C48F031796 /* FirebaseAnalyticsCore in Frameworks */ = {isa = PBXBuildFile; productRef = 84D538EA9CEB6C21C86ABFA3 /* FirebaseAnalyticsCore */; };
 		102D2913BDED6498061FEC41 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 828277D1355C9CFEAE7CD85B /* PrivacyInfo.xcprivacy */; };
 		11E27A9444C0ABBA107FF4C2 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B4617E7D2B36E4C322D3A3 /* AccountView.swift */; };
 		141FABABFF946B60480E789F /* DebugDeviceImportBootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85951A3C0700BE58D8C5A0B /* DebugDeviceImportBootstrap.swift */; };
@@ -15,6 +16,7 @@
 		26AFCF5AABC9407F3B2CD47F /* ConnectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14471986EF3717E42FA1F53 /* ConnectionView.swift */; };
 		2E9363B274545B66509F833A /* PacketTunnel.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6D62455EB61919A91016A83D /* PacketTunnel.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		3558B3FB988348FBCB408809 /* TunnelProviderMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14568A089CABD42EE6894945 /* TunnelProviderMessage.swift */; };
+		36673C5E0E8FDE2125813080 /* FreeExperienceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA44BFADBEE922C04DCE758 /* FreeExperienceStore.swift */; };
 		39ED187EAA77FE74746AB5E7 /* VPNNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4787FA4008F71F1F50F9B93 /* VPNNode.swift */; };
 		406905F37888657CA77A3CA4 /* PacketTunnelPlatformInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019F9B1F9B0C6AA41E99A96B /* PacketTunnelPlatformInterface.swift */; };
 		577B2C7E291728A87CBEE126 /* AsterUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277FAF0601E4CF1B4520AE72 /* AsterUITests.swift */; };
@@ -33,6 +35,7 @@
 		9EAB285CBD1786C49C48FFD2 /* NodeCatalogPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BD3C93F56E4E05369A3A9B /* NodeCatalogPersistence.swift */; };
 		9FE94CB83BB4A8E22B0B408A /* AsterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F8512335A44BEAAA3F5292 /* AsterApp.swift */; };
 		A1BAE2BAE9419D9149F78A51 /* NodeSubscriptionClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ED03547E4A788ADB13416C8 /* NodeSubscriptionClient.swift */; };
+		AA3DFDF08E95AA94F685C9D4 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 0ECECDCDAB6407C344734EAE /* FirebaseCore */; };
 		AC0F1B2E3359732FD4C0DDAD /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3265B0717E7791763953ED97 /* AppConstants.swift */; };
 		AF16DC0F474553B4BD0213CB /* node_catalog.json in Resources */ = {isa = PBXBuildFile; fileRef = 596D0F5E16DE3867076D9F53 /* node_catalog.json */; };
 		B04623427BD3971C821DC48A /* TunnelProviderMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C4ECA08358469345A7C1D8 /* TunnelProviderMessageTests.swift */; };
@@ -49,6 +52,9 @@
 		E6758F209D8484D172C30052 /* AppConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490D01248336AA31FFBCF7C3 /* AppConfiguration.swift */; };
 		EEEC669F7347A4EA816ECB8E /* SubscriptionTier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796A0FD64092A2D96C0AA3E5 /* SubscriptionTier.swift */; };
 		F0952850442B71A4C6E2B861 /* PacketTunnelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8E4D76E45903038E6A9BFE /* PacketTunnelProvider.swift */; };
+		F5C9A9E26A06AC20DA8AAD42 /* AsterAnalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD4E4DA2990FC755F7E10B2 /* AsterAnalytics.swift */; };
+		FB0691D4D5B61E7649DB0E90 /* FreeExperienceStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2577F9EB2CBACE073C9F06E5 /* FreeExperienceStoreTests.swift */; };
+		FDA4DE68C55C5EA40A73C919 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8EE4027C7951423819B7ADA7 /* GoogleService-Info.plist */; };
 		FE98C06CD9B2C13EC37B11E5 /* Libbox.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 318DA523A3AD242DF45FF1AC /* Libbox.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
@@ -121,6 +127,7 @@
 		14C12B056DAC016E26F287DB /* SubscriptionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionStore.swift; sourceTree = "<group>"; };
 		211100A854B39EC7AA20D646 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
 		21E006C2A567191103BBD687 /* AsterUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = AsterUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2577F9EB2CBACE073C9F06E5 /* FreeExperienceStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeExperienceStoreTests.swift; sourceTree = "<group>"; };
 		277FAF0601E4CF1B4520AE72 /* AsterUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsterUITests.swift; sourceTree = "<group>"; };
 		318DA523A3AD242DF45FF1AC /* Libbox.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Libbox.xcframework; path = Aster/Frameworks/Libbox.xcframework; sourceTree = "<group>"; };
 		3265B0717E7791763953ED97 /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
@@ -135,8 +142,11 @@
 		6B8E4D76E45903038E6A9BFE /* PacketTunnelProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketTunnelProvider.swift; sourceTree = "<group>"; };
 		6D62455EB61919A91016A83D /* PacketTunnel.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = PacketTunnel.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		796A0FD64092A2D96C0AA3E5 /* SubscriptionTier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionTier.swift; sourceTree = "<group>"; };
+		7CD4E4DA2990FC755F7E10B2 /* AsterAnalytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsterAnalytics.swift; sourceTree = "<group>"; };
+		7DA44BFADBEE922C04DCE758 /* FreeExperienceStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeExperienceStore.swift; sourceTree = "<group>"; };
 		828277D1355C9CFEAE7CD85B /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		83262FA47F740C03E2583B5D /* AsterTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsterTabView.swift; sourceTree = "<group>"; };
+		8EE4027C7951423819B7ADA7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		91E5E2A58D63A2E30360DC48 /* NodeSubscriptionParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeSubscriptionParser.swift; sourceTree = "<group>"; };
 		941376CEB75AFF673BD25CF3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		AE8E0B34BD179B3C124BC7DD /* NodeCatalogStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeCatalogStore.swift; sourceTree = "<group>"; };
@@ -162,6 +172,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				8008B2420C5F19E919019CC2 /* Libbox.xcframework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA8D519B798B445A17EB2678 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA3DFDF08E95AA94F685C9D4 /* FirebaseCore in Frameworks */,
+				0BFC6920970D92C48F031796 /* FirebaseAnalyticsCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,6 +301,7 @@
 		57348A0346322A81BFBA7786 /* AsterTests */ = {
 			isa = PBXGroup;
 			children = (
+				2577F9EB2CBACE073C9F06E5 /* FreeExperienceStoreTests.swift */,
 				070156D5BBB5433628951F6B /* NodeCatalogStoreTests.swift */,
 				F4C2B4F1B8262FD4AA384618 /* NodeSubscriptionClientTests.swift */,
 				595DED849E42F7456CF78E1B /* NodeSubscriptionParserTests.swift */,
@@ -339,6 +359,8 @@
 		84444FFD61FE4248C4B1F010 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				7CD4E4DA2990FC755F7E10B2 /* AsterAnalytics.swift */,
+				7DA44BFADBEE922C04DCE758 /* FreeExperienceStore.swift */,
 				14C12B056DAC016E26F287DB /* SubscriptionStore.swift */,
 				BAD72DC9EE623B3B51DECBD5 /* VPNManager.swift */,
 			);
@@ -508,6 +530,7 @@
 			isa = PBXGroup;
 			children = (
 				35F2D11518BE3ACA2A2DFF69 /* Assets.xcassets */,
+				8EE4027C7951423819B7ADA7 /* GoogleService-Info.plist */,
 				596D0F5E16DE3867076D9F53 /* node_catalog.json */,
 				828277D1355C9CFEAE7CD85B /* PrivacyInfo.xcprivacy */,
 			);
@@ -575,6 +598,7 @@
 				8127AA53FF2C0562A560BEBC /* Validate Release Configuration */,
 				66F7E9B4BE075656486E9F63 /* Sources */,
 				195D567251F6F68B69454FC0 /* Resources */,
+				AA8D519B798B445A17EB2678 /* Frameworks */,
 				4D9A425D13F7C5F4C4B88A55 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
@@ -584,6 +608,8 @@
 			);
 			name = Aster;
 			packageProductDependencies = (
+				0ECECDCDAB6407C344734EAE /* FirebaseCore */,
+				84D538EA9CEB6C21C86ABFA3 /* FirebaseAnalyticsCore */,
 			);
 			productName = Aster;
 			productReference = CDF5B95C40E49420E3973C0D /* Aster.app */;
@@ -633,6 +659,9 @@
 			);
 			mainGroup = 8D4C14C33AD6A0093C0F2E92;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				D2F538340E13B7210F2B8AAB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = CC27F93FED78DB135292D4E1 /* Products */;
 			projectDirPath = "";
@@ -652,6 +681,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8F5D2F18F7C3C364F7163D39 /* Assets.xcassets in Resources */,
+				FDA4DE68C55C5EA40A73C919 /* GoogleService-Info.plist in Resources */,
 				102D2913BDED6498061FEC41 /* PrivacyInfo.xcprivacy in Resources */,
 				AF16DC0F474553B4BD0213CB /* node_catalog.json in Resources */,
 			);
@@ -689,12 +719,14 @@
 				11E27A9444C0ABBA107FF4C2 /* AccountView.swift in Sources */,
 				E6758F209D8484D172C30052 /* AppConfiguration.swift in Sources */,
 				020A044CD23ED6CA335B36C9 /* AppConstants.swift in Sources */,
+				F5C9A9E26A06AC20DA8AAD42 /* AsterAnalytics.swift in Sources */,
 				9FE94CB83BB4A8E22B0B408A /* AsterApp.swift in Sources */,
 				CE27140185CAB84E7C454690 /* AsterTabView.swift in Sources */,
 				E1D837B2FB78EE8513DF3974 /* AsterTheme.swift in Sources */,
 				26AFCF5AABC9407F3B2CD47F /* ConnectionView.swift in Sources */,
 				8D906E2E8B034B0C65B1848A /* ConnectionViewModel.swift in Sources */,
 				141FABABFF946B60480E789F /* DebugDeviceImportBootstrap.swift in Sources */,
+				36673C5E0E8FDE2125813080 /* FreeExperienceStore.swift in Sources */,
 				D05395AD6E455B42BA60AB65 /* LocationsView.swift in Sources */,
 				9EAB285CBD1786C49C48FFD2 /* NodeCatalogPersistence.swift in Sources */,
 				8D9C8BACE500062EDCD80632 /* NodeCatalogStore.swift in Sources */,
@@ -737,6 +769,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FB0691D4D5B61E7649DB0E90 /* FreeExperienceStoreTests.swift in Sources */,
 				866CCB8138965EB664D330C2 /* NodeCatalogStoreTests.swift in Sources */,
 				8CB05A86DC8CA57B1CD59E8A /* NodeSubscriptionClientTests.swift in Sources */,
 				1C9F1681AB37A69837A41FE6 /* NodeSubscriptionParserTests.swift in Sources */,
@@ -878,6 +911,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.astervpn.Aster;
 				PRODUCT_NAME = Aster;
 				SDKROOT = iphoneos;
@@ -929,6 +966,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.astervpn.Aster;
 				PRODUCT_NAME = Aster;
 				SDKROOT = iphoneos;
@@ -1120,6 +1161,30 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D2F538340E13B7210F2B8AAB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = exactVersion;
+				version = 12.18.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		0ECECDCDAB6407C344734EAE /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D2F538340E13B7210F2B8AAB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		84D538EA9CEB6C21C86ABFA3 /* FirebaseAnalyticsCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D2F538340E13B7210F2B8AAB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsCore;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 803B8273E7560208A8C34C3C /* Project object */;
 }

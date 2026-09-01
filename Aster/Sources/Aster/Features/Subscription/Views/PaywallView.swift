@@ -11,7 +11,7 @@ struct PaywallView: View {
             ZStack {
                 AsterTheme.background.ignoresSafeArea()
                 ScrollView {
-                    VStack(spacing: 22) {
+                    VStack(spacing: 28) {
                         Image(systemName: "checkmark.shield.fill")
                             .font(.system(size: 58))
                             .foregroundStyle(AsterTheme.mint)
@@ -61,7 +61,9 @@ struct PaywallView: View {
 
                         legal
                     }
-                    .padding(24)
+                    .padding(.horizontal, 24)
+                    .padding(.top, 28)
+                    .padding(.bottom, 36)
                 }
             }
             .preferredColorScheme(.dark)
@@ -77,6 +79,10 @@ struct PaywallView: View {
                 if !productIDs.contains(selectedProductID), let first = productIDs.first {
                     selectedProductID = first
                 }
+            }
+            .task {
+                await store.reloadProductsIfNeeded()
+                AsterAnalytics.log(AsterAnalytics.Event.paywallView, parameters: ["source": "open"])
             }
         }
     }

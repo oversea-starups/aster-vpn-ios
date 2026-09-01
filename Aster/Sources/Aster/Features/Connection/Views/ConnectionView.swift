@@ -29,10 +29,14 @@ struct ConnectionView: View {
     }
 
     private func homeLayout(compact: Bool) -> some View {
-        VStack(spacing: compact ? 10 : 14) {
+        VStack(spacing: compact ? 16 : 24) {
             brandHeader
             statusHero(compact: compact)
             locationCard
+
+            if viewModel.canUseFreeExperience || viewModel.freeExperienceRemainingSeconds > 0 {
+                freeExperienceCard
+            }
 
             if let message = viewModel.userMessage {
                 messageCard(message)
@@ -41,7 +45,7 @@ struct ConnectionView: View {
             accessHubCard(compact: compact)
         }
         .padding(.horizontal, compact ? 16 : 20)
-        .padding(.vertical, compact ? 8 : 10)
+        .padding(.vertical, compact ? 16 : 24)
         .frame(maxWidth: .infinity, alignment: .top)
     }
 
@@ -66,7 +70,7 @@ struct ConnectionView: View {
                     .background(AsterTheme.mint, in: Capsule())
             }
         }
-        .padding(.top, 4)
+        .padding(.top, 8)
     }
 
     private func statusHero(compact: Bool) -> some View {
@@ -235,6 +239,25 @@ struct ConnectionView: View {
             }
         }
         .asterCard()
+    }
+
+    private var freeExperienceCard: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "sparkles")
+                .foregroundStyle(AsterTheme.mint)
+            VStack(alignment: .leading, spacing: 3) {
+                Text(viewModel.freeExperienceRemainingSeconds < 600 ? "Free session in progress" : "Try Aster free once")
+                    .font(.subheadline.weight(.semibold))
+                Text(viewModel.freeExperienceRemainingSeconds < 600
+                     ? "(viewModel.formattedFreeExperienceRemaining) remaining"
+                     : "Get 10 minutes of protection after your first connection.")
+                    .font(.caption)
+                    .foregroundStyle(.white)
+            }
+            Spacer(minLength: 8)
+        }
+        .asterCard()
+        .accessibilityIdentifier("freeExperienceCard")
     }
 
     private var statusColor: Color {

@@ -18,6 +18,7 @@ final class SubscriptionStore: ObservableObject {
     private let productIDs: Set<String>
     private var updatesTask: Task<Void, Never>?
     private var entitlementReadinessTask: Task<Void, Never>?
+    private var lastProductLoadDate: Date?
 
     init(productIDs: Set<String> = Set(AppConfiguration.subscriptionProductIDs)) {
         self.productIDs = productIDs
@@ -49,8 +50,10 @@ final class SubscriptionStore: ObservableObject {
     }
 
     func loadProducts() async {
+        guard !isLoading else { return }
         isLoading = true
         defer { isLoading = false }
+        lastProductLoadDate = Date()
 
         do {
             let loaded = try await Product.products(for: productIDs)
@@ -81,9 +84,17 @@ final class SubscriptionStore: ObservableObject {
         }
     }
 
+    func reloadProductsIfNeeded(maxAge: TimeInterval = 60) async {
+        guard products.isEmpty || lastProductLoadDate.map({ Date().timeIntervalSince($0) >= maxAge }) ?? true else {
+            return
+        }
+        await loadProducts()
+    }
+
     func purchase(_ product: Product) async -> Bool {
         isLoading = true
         userMessage = nil
+        AsterAnalytics.log(AsterAnalytics.Event.purchaseStart, parameters: ["product_id": product.id])
         defer { isLoading = false }
 
         do {
@@ -96,6 +107,10 @@ final class SubscriptionStore: ObservableObject {
                 }
                 await transaction.finish()
                 await refreshEntitlements()
+                AsterAnalytics.log(
+                AsterAnalytics.Event.purchaseSuccess,
+                    parameters: ["product_id": product.id, "price": NSDecimalNumber(decimal: product.price).doubleValue]
+                )
                 return isPro
             case .pending:
                 userMessage = "Your purchase is pending approval."
@@ -120,6 +135,9 @@ final class SubscriptionStore: ObservableObject {
         do {
             try await AppStore.sync()
             await refreshEntitlements()
+            if isPro {
+                AsterAnalytics.log(AsterAnalytics.Event.restoreSuccess)
+            }
             if !isPro {
                 userMessage = "No active Aster subscription was found for this Apple ID."
             }

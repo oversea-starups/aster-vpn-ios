@@ -27,13 +27,13 @@ struct AccountView: View {
     }
 
     private func accountLayout(compact: Bool) -> some View {
-        VStack(alignment: .leading, spacing: compact ? 12 : 18) {
+        VStack(alignment: .leading, spacing: compact ? 18 : 26) {
             planCard
             accountActions
             legalActions
         }
         .padding(.horizontal, compact ? 16 : 20)
-        .padding(.vertical, compact ? 12 : 12)
+        .padding(.vertical, compact ? 18 : 24)
         .frame(maxWidth: .infinity, alignment: .top)
     }
 

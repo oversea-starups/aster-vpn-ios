@@ -64,6 +64,7 @@ final class ConnectionViewModel: ObservableObject {
     @Published private(set) var isEntitlementReady = false
     @Published private(set) var selectedLocationName = "Choose a region"
     @Published private(set) var hasSelectedLocation = false
+    @Published private(set) var freeExperienceRemainingSeconds = 0
     @Published private(set) var userMessage: String?
     @Published var showsPaywall = false
     @Published var showsLocations = false
@@ -71,29 +72,35 @@ final class ConnectionViewModel: ObservableObject {
     private let vpnManager: VPNManager
     private let subscriptionStore: SubscriptionStore
     private let nodeCatalog: NodeCatalogStore
+    private let freeExperience: FreeExperienceStore
     private var vpnStatus: NEVPNStatus = .invalid
     private var isDataPlaneReady = false
     private var actionMessage: String?
     private var vpnMessage: String?
     private var locationMessage: String?
+    private var pendingFreeExperience = false
     private var cancellables = Set<AnyCancellable>()
 
     convenience init() {
         self.init(
             vpnManager: VPNManager.shared,
             subscriptionStore: SubscriptionStore.shared,
-            nodeCatalog: NodeCatalogStore.shared
+            nodeCatalog: NodeCatalogStore.shared,
+            freeExperience: FreeExperienceStore.shared
         )
     }
 
     init(
         vpnManager: VPNManager,
         subscriptionStore: SubscriptionStore,
-        nodeCatalog: NodeCatalogStore
+        nodeCatalog: NodeCatalogStore,
+        freeExperience: FreeExperienceStore
     ) {
         self.vpnManager = vpnManager
         self.subscriptionStore = subscriptionStore
         self.nodeCatalog = nodeCatalog
+        self.freeExperience = freeExperience
+        freeExperienceRemainingSeconds = freeExperience.remainingSeconds
 
         vpnManager.$status
             .sink { [weak self] status in
@@ -146,11 +153,28 @@ final class ConnectionViewModel: ObservableObject {
                 self?.updateUserMessage()
             }
             .store(in: &cancellables)
+
+        freeExperience.$remainingSeconds
+            .sink { [weak self] remaining in
+                guard let self else { return }
+                self.freeExperienceRemainingSeconds = remaining
+                if remaining == 0, self.freeExperience.hasBeenClaimed, !self.isPro,
+                   self.presentationState == .protected {
+                    AsterAnalytics.log(AsterAnalytics.Event.demoEnd, parameters: ["reason": "timeout"])
+                    self.vpnManager.disconnect()
+                    self.showsPaywall = true
+                }
+            }
+            .store(in: &cancellables)
     }
 
     func toggleConnection() {
         actionMessage = nil
         updateUserMessage()
+        AsterAnalytics.log(
+            AsterAnalytics.Event.connectTap,
+            parameters: ["source": "home", "location": selectedLocationName, "is_pro": isPro]
+        )
         switch presentationState {
         case .protected, .connecting, .verifying, .disconnecting, .reconnecting:
             vpnManager.disconnect()
@@ -164,10 +188,11 @@ final class ConnectionViewModel: ObservableObject {
                 showsLocations = true
                 return
             }
-            guard isPro else {
+            guard isPro || freeExperience.canStartOrContinue else {
                 showsPaywall = true
                 return
             }
+            if !isPro { pendingFreeExperience = true }
             vpnManager.connect()
         }
     }
@@ -193,6 +218,16 @@ final class ConnectionViewModel: ObservableObject {
         presentationState == .disconnected || presentationState == .unavailable
     }
 
+    var canUseFreeExperience: Bool {
+        !isPro && freeExperience.canStartOrContinue
+    }
+
+    var formattedFreeExperienceRemaining: String {
+        let minutes = freeExperienceRemainingSeconds / 60
+        let seconds = freeExperienceRemainingSeconds % 60
+        return String(format: "%d:%02d", minutes, seconds)
+    }
+
     private func updatePresentationState() {
         switch vpnStatus {
         case .invalid: presentationState = .unavailable
@@ -202,6 +237,17 @@ final class ConnectionViewModel: ObservableObject {
         case .disconnecting: presentationState = .disconnecting
         case .reasserting: presentationState = .reconnecting
         @unknown default: presentationState = .unavailable
+        }
+
+        if presentationState == .protected, pendingFreeExperience, !isPro {
+            pendingFreeExperience = false
+            _ = freeExperience.startWhenReady()
+            AsterAnalytics.log(AsterAnalytics.Event.demoStart, parameters: ["location": selectedLocationName])
+        } else if presentationState == .protected {
+            AsterAnalytics.log(
+                AsterAnalytics.Event.connectSuccess,
+                parameters: ["location": selectedLocationName, "is_demo": !isPro]
+            )
         }
     }
 

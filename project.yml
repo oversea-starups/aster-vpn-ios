@@ -7,6 +7,11 @@ options:
   groupSortPosition: top
   generateEmptyDirectories: true
 
+packages:
+  Firebase:
+    url: https://github.com/firebase/firebase-ios-sdk
+    exactVersion: 12.18.0
+
 targets:
   Aster:
     type: application
@@ -17,6 +22,7 @@ targets:
       - path: Aster/Resources/Assets.xcassets
       - path: Aster/Resources/PrivacyInfo.xcprivacy
       - path: Aster/Resources/node_catalog.json
+      - path: Aster/Resources/GoogleService-Info.plist
     configFiles:
       Debug: Aster/Config/Debug.xcconfig
       Release: Aster/Config/Release.xcconfig
@@ -29,6 +35,10 @@ targets:
           - group.com.astervpn.shared
     dependencies:
       - target: PacketTunnel
+      - package: Firebase
+        product: FirebaseCore
+      - package: Firebase
+        product: FirebaseAnalyticsCore
     preBuildScripts:
       - path: scripts/validate_release_configuration.sh
         name: Validate Release Configuration
@@ -42,6 +52,7 @@ targets:
         GENERATE_INFOPLIST_FILE: NO
         INFOPLIST_FILE: Aster/Resources/Info.plist
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        OTHER_LDFLAGS: ["$(inherited)", "-ObjC"]
 
   PacketTunnel:
     type: app-extension

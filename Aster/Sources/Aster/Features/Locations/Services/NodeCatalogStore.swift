@@ -183,7 +183,9 @@ final class NodeCatalogStore: ObservableObject {
             nodes = snapshot.nodes
             lastUpdated = snapshot.updatedAt
         } catch {
-            restoreMessage = "The built-in VPN locations couldn't be verified."
+            if restoreMessage == nil {
+                restoreMessage = "The built-in VPN locations couldn't be verified."
+            }
         }
     }
 

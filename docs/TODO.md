@@ -41,9 +41,15 @@
   - **Done when:** 在 Sandbox 覆盖有资格/无资格、购买、取消、恢复和过期路径，确认价格、试用文案和续订条款均由 StoreKit/ASC 返回并按地区显示；上线后按 cohort 比较试用转化、首付率、续订率和退款率。
 
 - [ ] **完成本地化多语言翻译与适配**
+  - **Current:** ASC 已配置 15 个 listing locales（含 `ja`、`ko`、`de-DE`、`fr-FR`、`es-MX`、`it`、`pt-BR`、`nl-NL`、`pl`、`ru`、`tr`、`vi`）；二进制 UI 多语言由另一会话处理，截图和原生审校仍未完成。
   - **Scope:** 以英文为基线，覆盖 `zh-Hans`、`zh-Hant`、`ja`、`es`、`de`、`fr`；Home、Locations、Account、Paywall、系统授权前后提示、错误与恢复购买文案必须自然、用户向、无技术内部术语。
   - **Done when:** 所有用户可见字符串进入 `Localizable.strings`/String Catalog；法律 URL、价格、日期和订阅条款按地区核对；最小屏、最大 Dynamic Type、VoiceOver、文本膨胀和截图逐语言验收。
   - **Owner:** iOS/Product/Localization
+
+- [ ] **按 ASO 数据迭代名称、关键词与价格**
+  - **Current:** 2026-09-01 已写入 3 个现有 ASC locales 的用户意图文案；没有搜索量/排名数据，因此排序是可验证假设。美国区价格已设置为月 `$8.99`、年 `$59.99`。
+  - **Plan:** 先建立 7–14 天转化基线，再一次只测试一个变量；后续价格变更需结合首次连接率、paywall→购买、退款和续订数据。
+  - **Evidence/Spec:** `docs/00_agentic/ASO-2026-09.md`；App Store Connect readback 2026-09-01。
 
 - [ ] **归档旧 AdMob SSV（仅在确认无内部实验依赖后）**
   - **Current:** verifier 本地 12/12、audit 0、container smoke 通过。
@@ -58,7 +64,7 @@
   - **P1 可信状态反馈：**显示 `Connecting → Protected` 的阶段变化、最近一次连接地区和可恢复错误；不展示未经真实数据支持的速度、延迟或“最快”承诺。
   - **P1 温和留存：**仅在用户主动断开、连接失败或连续多次成功连接后提供下一步建议（重连、切换地区、升级）；不使用推送骚扰或 VPN 连接中的插屏。
   - **P1 可度量漏斗：**记录匿名的首次启动、首次点击 Connect、系统授权结果、连接 ready、paywall 查看、购买/恢复结果和 D1/D7 回访；不记录浏览内容、完整节点凭据或流量内容。
-  - **MRR 决策（2026-09-01）：**当前版本不增加每日签到或可累计免费时长。它会稀释 Pro 的无限价值、制造刷取与试用资格冲突，并增加免费余额状态机；先使用 StoreKit 原生试用/优惠与“首次成功连接后展示 Pro 价值”的路径。只有当 cohort 数据证明激活率是主要瓶颈时，才测试一次性、封顶的体验时长，并与 StoreKit trial eligibility 明确互斥。
+  - **MRR 决策（2026-09-01）：**当前版本不增加每日签到或可累计免费时长。首发采用一次性、封顶 10 分钟的首次连接体验，再引导 StoreKit 原生订阅/优惠；该体验与 StoreKit trial eligibility 分开记录，避免形成可刷取的免费余额状态机。是否扩大体验范围必须由 cohort 数据证明激活率是主要瓶颈后再评估。
   - **Done when:** 先建立 1 周基线，再一次只改一个变量；以首次 ready 连接率、首次连接耗时、paywall→购买率、D1/D7 留存和退款率共同评估，不只看点击率。
 
 - [ ] **补真实 traffic-ready 证据**
@@ -86,11 +92,11 @@
 - [ ] **生产 Locations 验证** — Blocked by: revocable endpoint 未提供；Unblock when: endpoint 与受控节点可用；Owner: Backend/operations。
 - [ ] **签名真机矩阵** — Blocked by: 修复包已签名，但 Thomson’s iPhone 的 CoreDevice tunnel 当前 unavailable；测试广告、VPN 权限、线路连接和网络出口仍需设备端交互，production-like endpoint 也未提供。Unblock when: 解锁并重新建立 USB/device tunnel、安装修复包、完成交互回归并提供受控测试 endpoint；Owner: iOS/operations。
   - Archive gate: `./scripts/validate_signed_archive.sh /absolute/path/to/Aster.xcarchive`；必须在 TestFlight 前通过并保存输出。
-- [ ] **StoreKit sandbox** — Blocked by: ASC products 未配置；Unblock when: product IDs/group/offers 可用；Owner: Product/ASC。
+- [ ] **StoreKit sandbox** — 产品已在线创建；当前需要在真机 Sandbox Apple ID 下验证真实产品加载、购买、恢复和试用生命周期；Owner: Product/ASC + iOS。
 - [ ] **最新 UI/arm64 XCTest runtime** — Blocked by: 当前 Mac CoreSimulator UI query/screenshot/shutdown failure，且 x86_64 XCTest 无法安全初始化 bundled Go runtime；Unblock when: healthy arm64 CI/Xcode host 与签名设备；Owner: Build environment。
 - [ ] **Libbox release compliance** — Blocked by: build provenance 已记录，但 clean reproducibility、matching-source archive、notices/privacy provenance 和法律结论缺失；Owner: Product/legal。
 
 ## Deferred / Won't Do
 
 - **流媒体解锁、广告拦截、杀毒、复杂分流、家庭共享、企业多租户** — Decision: ADR-0001。
-- **一次性 60 秒 Demo** — 已被可累计 rewarded time 取代；Decision: ADR-0007。
+- **长期免费、每日签到和可累计余额** — 不做；首发仅保留一次性 10 分钟体验，避免与 Apple 原生试用叠加并控制成本。
