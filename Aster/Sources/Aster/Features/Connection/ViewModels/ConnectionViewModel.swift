@@ -40,7 +40,7 @@ enum ConnectionPresentationState: Equatable {
         case .protected: return "checkmark.shield.fill"
         case .connecting, .verifying, .disconnecting, .reconnecting: return "arrow.triangle.2.circlepath"
         case .unavailable: return "exclamationmark.shield.fill"
-        case .disconnected: return "shield"
+        case .disconnected: return "power"
         }
     }
 
