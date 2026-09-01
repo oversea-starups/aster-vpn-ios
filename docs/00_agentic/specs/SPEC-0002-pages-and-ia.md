@@ -13,6 +13,7 @@
 - 状态：Connecting / Connected / Disconnected
 - 信息：当前地区、连接状态
 - 转化顺序：状态与连接价值 → Aster Pro 主 CTA
+- 首页垂直顺序：连接状态/按钮 → 当前地区 → Pro 升级区域；VPN 系统授权延迟至用户首次点击连接。
 
 ### 2) Locations Tab
 - 顶部使用两个分段 Tab：`VIP`（默认）与 `Locations`；不额外显示 “Home” 或 “Available locations” 等重复标题。

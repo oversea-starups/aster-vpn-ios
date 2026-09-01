@@ -32,15 +32,13 @@ struct ConnectionView: View {
         VStack(spacing: compact ? 10 : 14) {
             brandHeader
             statusHero(compact: compact)
-            // Keep the upgrade reason close to the primary connection outcome.
-            // Location switching remains immediately available as the secondary action.
-            accessHubCard(compact: compact)
-
             locationCard
 
             if let message = viewModel.userMessage {
                 messageCard(message)
             }
+
+            accessHubCard(compact: compact)
         }
         .padding(.horizontal, compact ? 16 : 20)
         .padding(.vertical, compact ? 8 : 10)

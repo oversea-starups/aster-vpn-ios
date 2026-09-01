@@ -14,9 +14,13 @@ final class VPNManager: ObservableObject {
     private var manager: NETunnelProviderManager?
     private var statusObserver: VPNUncheckedSendableBox<NSObjectProtocol>?
     private var readinessTask: Task<Void, Never>?
+    private var hasLoadedManager = false
+    private var isLoadingManager = false
+    private var pendingConnect = false
 
     private init() {
-        loadManager()
+        // Loading/saving a NETunnelProviderManager can trigger Apple's VPN
+        // permission flow. Defer it until the user explicitly taps Connect.
     }
 
     deinit {
@@ -31,7 +35,8 @@ final class VPNManager: ObservableObject {
         resetDataPlaneReadiness()
 
         guard let manager, isReady else {
-            userMessage = "VPN is still getting ready. Please try again in a moment."
+            pendingConnect = true
+            loadManagerIfNeeded()
             return
         }
 
@@ -57,10 +62,14 @@ final class VPNManager: ObservableObject {
     func reload() {
         userMessage = nil
         isReady = false
-        loadManager()
+        manager = nil
+        hasLoadedManager = false
+        loadManagerIfNeeded()
     }
 
-    private func loadManager() {
+    private func loadManagerIfNeeded() {
+        guard !hasLoadedManager, !isLoadingManager else { return }
+        isLoadingManager = true
         NETunnelProviderManager.loadAllFromPreferences { [weak self] managers, error in
             let result = VPNUncheckedSendableBox((managers, error))
             Task { @MainActor in
@@ -69,11 +78,13 @@ final class VPNManager: ObservableObject {
                 if let error {
                     self.status = .invalid
                     self.userMessage = Self.userMessage(for: error)
+                    self.finishManagerLoad()
                     return
                 }
 
                 if let existing = managers?.first {
                     self.install(existing)
+                    self.finishManagerLoad()
                 } else {
                     self.createManager()
                 }
@@ -97,6 +108,7 @@ final class VPNManager: ObservableObject {
                 if let error {
                     self.status = .invalid
                     self.userMessage = Self.userMessage(for: error)
+                    self.finishManagerLoad()
                     return
                 }
                 newManager.loadFromPreferences { loadError in
@@ -107,10 +119,19 @@ final class VPNManager: ObservableObject {
                         } else {
                             self.install(newManager)
                         }
+                        self.finishManagerLoad()
                     }
                 }
             }
         }
+    }
+
+    private func finishManagerLoad() {
+        isLoadingManager = false
+        hasLoadedManager = true
+        guard pendingConnect else { return }
+        pendingConnect = false
+        connect()
     }
 
     private func install(_ manager: NETunnelProviderManager) {
