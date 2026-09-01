@@ -12,11 +12,11 @@
 - Go runtime embedded in the linked device binary: `go1.25.5`
 - gomobile module: `github.com/sagernet/gomobile v0.1.12`
 - Targets: `ios,iossimulator`; minimum iOS `15.0`
-- Product tags: `with_utls`; the Apple build also applies `ios` and `with_low_memory`.
-- Deliberately excluded as outside Aster's product scope: Tailscale/SSH, USBIP, OpenVPN/OpenConnect, Clash API, QUIC, WireGuard and naive outbound.
+- Product tags: `with_utls` and the internal `with_clash_api` bootstrap module; the Apple build also applies `ios` and `with_low_memory`. The Clash API is not exposed or bound to a user-facing listener.
+- Deliberately excluded as outside Aster's product scope: Tailscale/SSH, USBIP, OpenVPN/OpenConnect, QUIC, WireGuard and naive outbound. `with_clash_api` is the sole exception: it is retained only for Libbox's internal bootstrap/reload path and no Clash control listener or user-facing API is exposed.
 - Device archive SHA-256: `7aea9ec03b31b0fc45f4533ede934c54b4030b435faeceefc3e139eca2ff677a`
 - Simulator archive SHA-256: `dd33886edab107eb841a5c18f2724ed1b358ec03ea6c608fda25a1670b205f6f`
-- Linked device metadata reports `-tags=with_utls,ios,with_low_memory`; simulator slices additionally report `iossimulator`.
+- Linked device metadata reports `-tags=with_utls,with_clash_api,ios,with_low_memory`; simulator slices additionally report `iossimulator`.
 
 The minimal tag selection is required both for uTLS fingerprint compatibility and to keep optional platform interfaces and Network Extension resource cost out of the shipping slice. The generated interface revision adds optional bridge, shell, neighbor-monitor and notification hooks; Aster explicitly reports those optional features unavailable and does not expose them to users.
 

@@ -85,9 +85,9 @@ PRIVACY_POLICY_URL="$privacy_url" \
 NODE_SUBSCRIPTION_URL="$subscription_url" \
   "$repository_root/scripts/validate_release_configuration.sh"
 
-/usr/bin/nm -gU "$extension_path/Frameworks/Libbox.framework/Libbox" 2>/dev/null \
+/usr/bin/nm -gU "$extension_path/PacketTunnel" 2>/dev/null \
   | /usr/bin/grep -q '_LibboxGetTunnelFileDescriptor$' || {
-    echo "error: archived Libbox does not export LibboxGetTunnelFileDescriptor."
+    echo "error: archived PacketTunnel does not export its public utun file-descriptor bridge."
     exit 1
   }
 

@@ -43,11 +43,9 @@ if grep -Eq 'value\(forKeyPath|socket\.fileDescriptor|NSSelectorFromString' "$pl
   exit 1
 fi
 
-for libbox_binary in \
-  "$repository_root/Aster/Frameworks/Libbox.xcframework/ios-arm64/Libbox.framework/Libbox" \
-  "$repository_root/Aster/Frameworks/Libbox.xcframework/ios-arm64_x86_64-simulator/Libbox.framework/Libbox"
-do
-  /usr/bin/nm -gU "$libbox_binary" 2>/dev/null | grep -q '_LibboxGetTunnelFileDescriptor$' || { echo "error: LibboxGetTunnelFileDescriptor is not exported by $libbox_binary"; exit 1; }
-done
+fd_bridge="$repository_root/Aster/Sources/PacketTunnel/LibboxTunnelFileDescriptor.m"
+grep -Fq 'int32_t LibboxGetTunnelFileDescriptor(void)' "$fd_bridge" || {
+  echo "error: PacketTunnel target is missing the public utun file-descriptor bridge"; exit 1;
+}
 
 echo "Release configuration validation tests passed."

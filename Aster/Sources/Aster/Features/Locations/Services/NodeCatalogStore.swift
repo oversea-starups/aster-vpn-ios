@@ -47,6 +47,25 @@ final class NodeCatalogStore: ObservableObject {
         return nodes.first(where: { $0.id == selectedNodeID })
     }
 
+    /// Re-writes the selected, validated configuration before a tunnel starts.
+    /// This is intentionally idempotent and repairs devices where the catalog
+    /// was restored from the bundle but the App Group file was interrupted.
+    @discardableResult
+    func ensureSelectedConfiguration() -> Bool {
+        guard let selected = selectedNode else { return false }
+        if let current = try? loadSelectedConfiguration().validated(),
+           selected.matchesConnection(current) {
+            return true
+        }
+        do {
+            try saveSelectedConfiguration(selected.configuration)
+            return true
+        } catch {
+            userMessage = "Aster couldn't prepare this VPN location. Please try another one."
+            return false
+        }
+    }
+
     var hasUpdateSource: Bool {
         subscriptionURL != nil
     }
@@ -160,7 +179,7 @@ final class NodeCatalogStore: ObservableObject {
                 nodes.insert(validated, at: 0)
                 selectedNodeID = validated.id
             }
-        } else if let first = nodes.first {
+        } else if let first = preferredDefaultNode {
             selectedNodeID = first.id
             try? saveSelectedConfiguration(first.configuration)
         }
@@ -168,6 +187,13 @@ final class NodeCatalogStore: ObservableObject {
         if let restoreMessage {
             userMessage = restoreMessage
         }
+    }
+
+    /// Prefer the AnyTLS locations shipped in the current catalog. The legacy
+    /// VMess entries are retained for manual selection, but their endpoints
+    /// are not a reliable first-run path on current networks.
+    private var preferredDefaultNode: VPNNode? {
+        nodes.first(where: { $0.configuration.protocolKind == .anytls }) ?? nodes.first
     }
 
     private func restoreBundledCatalogIfAvailable() {

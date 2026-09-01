@@ -14,9 +14,12 @@ final class VPNManager: ObservableObject {
     private var manager: NETunnelProviderManager?
     private var statusObserver: VPNUncheckedSendableBox<NSObjectProtocol>?
     private var readinessTask: Task<Void, Never>?
+    private var connectionTimeoutTask: Task<Void, Never>?
     private var hasLoadedManager = false
     private var isLoadingManager = false
     private var pendingConnect = false
+    private var connectionAttemptInFlight = false
+    private var disconnectRequested = false
 
     private init() {
         // Loading/saving a NETunnelProviderManager can trigger Apple's VPN
@@ -25,6 +28,7 @@ final class VPNManager: ObservableObject {
 
     deinit {
         readinessTask?.cancel()
+        connectionTimeoutTask?.cancel()
         if let statusObserver {
             NotificationCenter.default.removeObserver(statusObserver.value)
         }
@@ -33,6 +37,8 @@ final class VPNManager: ObservableObject {
     func connect() {
         userMessage = nil
         resetDataPlaneReadiness()
+        disconnectRequested = false
+        connectionAttemptInFlight = true
 
         guard let manager, isReady else {
             pendingConnect = true
@@ -43,14 +49,21 @@ final class VPNManager: ObservableObject {
         do {
             _ = try TunnelConfigManager.loadConfig()
             try manager.connection.startVPNTunnel()
+            scheduleConnectionTimeout()
         } catch let error as TunnelConfigError {
+            connectionAttemptInFlight = false
             userMessage = error.localizedDescription
         } catch {
+            connectionAttemptInFlight = false
             userMessage = Self.userMessage(for: error)
         }
     }
 
     func disconnect() {
+        disconnectRequested = true
+        connectionAttemptInFlight = false
+        connectionTimeoutTask?.cancel()
+        connectionTimeoutTask = nil
         resetDataPlaneReadiness()
         manager?.connection.stopVPNTunnel()
     }
@@ -82,7 +95,10 @@ final class VPNManager: ObservableObject {
                     return
                 }
 
-                if let existing = managers?.first {
+                let expectedProviderID = "com.astervpn.Aster.PacketTunnel"
+                if let existing = managers?.first(where: {
+                    ($0.protocolConfiguration as? NETunnelProviderProtocol)?.providerBundleIdentifier == expectedProviderID
+                }) {
                     self.install(existing)
                     self.finishManagerLoad()
                 } else {
@@ -157,15 +173,44 @@ final class VPNManager: ObservableObject {
     }
 
     private func handleStatusChange(_ newStatus: NEVPNStatus) {
+        let previousStatus = status
         status = newStatus
-        if newStatus == .connected {
+        switch newStatus {
+        case .connected:
+            connectionAttemptInFlight = false
+            disconnectRequested = false
+            connectionTimeoutTask?.cancel()
+            connectionTimeoutTask = nil
             beginDataPlaneReadinessProbe()
-        } else {
+        case .disconnected:
+            connectionTimeoutTask?.cancel()
+            connectionTimeoutTask = nil
+            resetDataPlaneReadiness()
+            if connectionAttemptInFlight && !disconnectRequested {
+                userMessage = Self.connectionFailedMessage
+            }
+            connectionAttemptInFlight = false
+            disconnectRequested = false
+        default:
             resetDataPlaneReadiness()
         }
 
         if newStatus == .invalid {
             userMessage = "VPN permission or configuration is unavailable."
+        } else if previousStatus == .connecting && newStatus == .reasserting {
+            scheduleConnectionTimeout()
+        }
+    }
+
+    private func scheduleConnectionTimeout() {
+        connectionTimeoutTask?.cancel()
+        connectionTimeoutTask = Task { [weak self] in
+            try? await Task.sleep(for: .seconds(25))
+            guard let self, !Task.isCancelled, self.connectionAttemptInFlight else { return }
+            guard self.status == .connecting || self.status == .reasserting else { return }
+            self.connectionAttemptInFlight = false
+            self.userMessage = "Aster couldn't connect within 25 seconds. Please try another location."
+            self.manager?.connection.stopVPNTunnel()
         }
     }
 
@@ -220,13 +265,19 @@ final class VPNManager: ObservableObject {
         }
     }
 
-    private static func userMessage(for error: Error) -> String {
+    private static func userMessage(for error: Error?) -> String {
+        guard let error else {
+            return "Aster couldn't establish the secure connection. Please try another location."
+        }
         let nsError = error as NSError
         if nsError.domain == NEVPNErrorDomain {
             return "Aster couldn't update VPN permission. Please open Settings and try again."
         }
         return "Aster couldn't start the secure connection. Please try again."
     }
+
+    private static let connectionFailedMessage =
+        "Aster couldn't establish the secure connection. Please try another location."
 }
 
 private final class VPNUncheckedSendableBox<Value>: @unchecked Sendable {

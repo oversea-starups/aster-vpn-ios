@@ -1,0 +1,23 @@
+{
+  "canvas": {
+    "width": 1600,
+    "height": 900
+  },
+  "outputDirectory": "/Users/jerry/overseas/aster-vpn-ios/App/AppStore/creative/final/en-US",
+  "pages": [
+    {
+      "source": "/Users/jerry/overseas/aster-vpn-ios/App/AppStore/creative/raw/en-US/home-signed.png",
+      "output": "promo-hero-en-US.png",
+      "eyebrow": "ASTER VPN",
+      "headline": "Public Wi-Fi.\nOne clear tap.",
+      "body": "Try one 10-minute VPN connection free, then choose a plan.",
+      "badge": "FREE FIRST CONNECTION",
+      "background": "#0A1832",
+      "accent": "#57D9B0",
+      "accentSecondary": "#4CC8F0",
+      "ink": "#FFFFFF",
+      "deviceWidth": 350,
+      "deviceTop": 35
+    }
+  ]
+}

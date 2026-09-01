@@ -21,7 +21,7 @@
   - **Specs:** SPEC-0058、SPEC-0059、SPEC-0062。
 
 - [ ] **完成签名真机连接与线路切换矩阵**
-  - **Current:** 真机点击日志已确认失败不是地区化线路字段丢失：先由 `startOrReloadService(nil options)` 引发 Go panic，再由旧 archive 缺少 uTLS 拒绝真实 fingerprint 配置。现已加入 preflight/非空 options，并以 pinned commit 重建 `with_utls,ios,with_low_memory` Libbox；App 与完整 arm64 test bundle build、48 MB package nested codesign 均通过。修复包尚未安装，因为 Thomson’s iPhone 当前虽被识别但 CoreDevice tunnel unavailable。前一版的 49 条线路 bootstrap 已验证，修复后的连接、试用计时和网络出口未验证。
+  - **Current:** 真机日志已定位并修复三层兼容问题：`startOrReloadService(nil options)` 的 Go panic、旧 archive 缺少 uTLS，以及精简构建缺少 Libbox 内部所需的 `with_clash_api`。已加入 preflight/非空 options、以 pinned commit 重建 `with_utls,with_clash_api,ios,with_low_memory` Libbox，并将 Provider 启动移出 XPC 主线程；连接图标改为静态状态图标，连接超时收敛到可重试状态，连接前幂等修复 App Group 配置，首次默认优先 AnyTLS 线路。另补回旧版已验证的 remote DNS、53 端口 hijack、IPv6 TUN、MTU/gVisor 和默认接口自动探测。2026-09-01 修复包已重新编译、签名、安装并在 Thomson iPhone 上实测：日志出现 `Libbox command server started`、`Tunnel file descriptor delivered`、`status changed to connected` 和 `NESMVPNSessionStateRunning`，未再出现 Clash API 缺失错误；真实远端握手、DNS/HTTPS 出口、免费时长在新包上的行为与多线路矩阵仍待继续验证。
   - **Dependency:** 在 Thomson’s iPhone 完成 VPN 系统权限与真实线路交互；多线路测试还需要安全的生产前 endpoint。
   - **Done when:** 先在用户原设备/线路回归公共 fd resolver；再用两台支持版本 iPhone 覆盖 Wi-Fi/蜂窝、连接/断开、DNS/出口变化、三条线路、后台/前台、网络切换、缓存回退、余额耗尽、Pro 不扣时；日志不含凭据。
   - **Specs:** SPEC-0001、SPEC-0054、SPEC-0056、SPEC-0060、SPEC-0062。
@@ -41,7 +41,7 @@
   - **Done when:** 在 Sandbox 覆盖有资格/无资格、购买、取消、恢复和过期路径，确认价格、试用文案和续订条款均由 StoreKit/ASC 返回并按地区显示；上线后按 cohort 比较试用转化、首付率、续订率和退款率。
 
 - [ ] **完成本地化多语言翻译与适配**
-  - **Current:** ASC 已配置 15 个 listing locales（含 `ja`、`ko`、`de-DE`、`fr-FR`、`es-MX`、`it`、`pt-BR`、`nl-NL`、`pl`、`ru`、`tr`、`vi`）；二进制 UI 多语言由另一会话处理，截图和原生审校仍未完成。
+  - **Current:** ASC 已配置 15 个 listing locales（含 `ja`、`ko`、`de-DE`、`fr-FR`、`es-MX`、`it`、`pt-BR`、`nl-NL`、`pl`、`ru`、`tr`、`vi`）；`en-US` 已上传 3 张 1320×2868 截图，二进制 UI 多语言、其他语言截图和原生审校仍未完成。
   - **Scope:** 以英文为基线，覆盖 `zh-Hans`、`zh-Hant`、`ja`、`es`、`de`、`fr`；Home、Locations、Account、Paywall、系统授权前后提示、错误与恢复购买文案必须自然、用户向、无技术内部术语。
   - **Done when:** 所有用户可见字符串进入 `Localizable.strings`/String Catalog；法律 URL、价格、日期和订阅条款按地区核对；最小屏、最大 Dynamic Type、VoiceOver、文本膨胀和截图逐语言验收。
   - **Owner:** iOS/Product/Localization
@@ -90,7 +90,7 @@
 
 - [x] **AdMob App Store 方案** — Resolved by StoreKit-only Release decision; remaining work is archival cleanup only.
 - [ ] **生产 Locations 验证** — Blocked by: revocable endpoint 未提供；Unblock when: endpoint 与受控节点可用；Owner: Backend/operations。
-- [ ] **签名真机矩阵** — Blocked by: 修复包已签名，但 Thomson’s iPhone 的 CoreDevice tunnel 当前 unavailable；VPN 权限、线路连接和网络出口仍需设备端交互，production-like endpoint 也未提供。Unblock when: 解锁并重新建立 USB/device tunnel、安装修复包、完成交互回归并提供受控测试 endpoint；Owner: iOS/operations。
+- [ ] **签名真机矩阵** — Blocked by: 修复包已在 Thomson iPhone 上完成 VPN 系统授权并成功进入 connected/running，当前仍缺少出口 IP、DNS 泄漏、蜂窝/网络切换、后台恢复和多线路矩阵证据，production-like endpoint 也未提供。Unblock when: 完成真实线路握手、DNS/HTTPS/出口与网络切换回归，并提供受控测试 endpoint；Owner: iOS/operations。
   - Archive gate: `./scripts/validate_signed_archive.sh /absolute/path/to/Aster.xcarchive`；必须在 TestFlight 前通过并保存输出。
 - [ ] **StoreKit sandbox** — 产品已在线创建；当前需要在真机 Sandbox Apple ID 下验证真实产品加载、购买、恢复和试用生命周期；Owner: Product/ASC + iOS。
 - [ ] **最新 UI/arm64 XCTest runtime** — Blocked by: 当前 Mac CoreSimulator UI query/screenshot/shutdown failure，且 x86_64 XCTest 无法安全初始化 bundled Go runtime；Unblock when: healthy arm64 CI/Xcode host 与签名设备；Owner: Build environment。

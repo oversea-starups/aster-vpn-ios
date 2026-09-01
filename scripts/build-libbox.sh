@@ -20,7 +20,7 @@ PATH="$(go env GOPATH)/bin:$PATH" "$(go env GOPATH)/bin/gomobile" bind \
   -target ios,iossimulator \
   -libname=box \
   -iosversion=16.0 \
-  -tags with_gvisor,with_utls,with_low_memory,grpcnotrace \
+  -tags with_gvisor,with_utls,with_clash_api,with_low_memory,grpcnotrace \
   ./experimental/libbox
 
 ditto -c -k --sequesterRsrc --keepParent \

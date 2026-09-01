@@ -38,7 +38,7 @@
 - **Solution:** 把 `LibboxPlatformInterfaceProtocol` 实现传给 command server；由 Libbox TunOptions 驱动 address/routes/DNS/MTU settings，应用完成后返回 packet-flow file descriptor，并用 `NWPathMonitor` 报告默认接口变化。
 - **Compatibility:** current sing-box TUN schema 使用 `address` array；`inet4_address` 已移除。用 bundled Libbox `checkConfig` 做 executable compatibility regression。
 - **Boundary:** 该 bridge 只把 Apple TUN 与 core 正确接通，仍需真机远端握手、DNS 和出口 proof。
-- **Public fd boundary:** bridge 已移除 `socket.fileDescriptor` KVC/动态 selector，只调用 generated/exported `LibboxGetTunnelFileDescriptor()`；release guard 检查源码、头文件和两个 binary slice，PacketTunnel compile/link 已通过。用户先前的真机成功记录早于此变更，所以相同线路回归仍是 release blocker。
+- **Public fd boundary:** bridge 已移除 `socket.fileDescriptor` KVC/动态 selector，只调用 generated public declaration 的 `LibboxGetTunnelFileDescriptor()`；PacketTunnel target 内的公开系统 API utun resolver 提供最终符号，release guard 检查源码、头文件和签名扩展，PacketTunnel compile/link 与真机 `openTun` 已通过。用户先前的真机成功记录已由 2026-09-01 修复包更新，但出口/DNS/多线路回归仍是 release blocker。
 - **Evidence:** `PacketTunnelPlatformInterface.swift`、`PacketTunnelProvider.swift`、`SingBoxConfigurationBuilder.swift`、SPEC-0060。
 
 ### Simulator 与真机验证边界

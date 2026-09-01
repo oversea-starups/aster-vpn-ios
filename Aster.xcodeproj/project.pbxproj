@@ -19,6 +19,7 @@
 		36673C5E0E8FDE2125813080 /* FreeExperienceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA44BFADBEE922C04DCE758 /* FreeExperienceStore.swift */; };
 		39ED187EAA77FE74746AB5E7 /* VPNNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4787FA4008F71F1F50F9B93 /* VPNNode.swift */; };
 		406905F37888657CA77A3CA4 /* PacketTunnelPlatformInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019F9B1F9B0C6AA41E99A96B /* PacketTunnelPlatformInterface.swift */; };
+		4A7D9B3C1E6F8A20D5C4B7E1 /* LibboxTunnelFileDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F2C8A1D7B4E9036C1A5D8F2 /* LibboxTunnelFileDescriptor.m */; };
 		577B2C7E291728A87CBEE126 /* AsterUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277FAF0601E4CF1B4520AE72 /* AsterUITests.swift */; };
 		57DDCC6EA1DB119468CBDE33 /* SingBoxConfigurationBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF748C525CF17B618C37C69A /* SingBoxConfigurationBuilder.swift */; };
 		71BC6F7E9E1341402F3BF168 /* NodeSubscriptionParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E5E2A58D63A2E30360DC48 /* NodeSubscriptionParser.swift */; };
@@ -130,6 +131,7 @@
 		2577F9EB2CBACE073C9F06E5 /* FreeExperienceStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeExperienceStoreTests.swift; sourceTree = "<group>"; };
 		277FAF0601E4CF1B4520AE72 /* AsterUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsterUITests.swift; sourceTree = "<group>"; };
 		318DA523A3AD242DF45FF1AC /* Libbox.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Libbox.xcframework; path = Aster/Frameworks/Libbox.xcframework; sourceTree = "<group>"; };
+		5F2C8A1D7B4E9036C1A5D8F2 /* LibboxTunnelFileDescriptor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LibboxTunnelFileDescriptor.m; sourceTree = "<group>"; };
 		3265B0717E7791763953ED97 /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
 		35F2D11518BE3ACA2A2DFF69 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		37F8512335A44BEAAA3F5292 /* AsterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsterApp.swift; sourceTree = "<group>"; };
@@ -140,11 +142,11 @@
 		595DED849E42F7456CF78E1B /* NodeSubscriptionParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeSubscriptionParserTests.swift; sourceTree = "<group>"; };
 		596D0F5E16DE3867076D9F53 /* node_catalog.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = node_catalog.json; sourceTree = "<group>"; };
 		6B8E4D76E45903038E6A9BFE /* PacketTunnelProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketTunnelProvider.swift; sourceTree = "<group>"; };
-		6D62455EB61919A91016A83D /* PacketTunnel.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = PacketTunnel.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		6D62455EB61919A91016A83D /* PacketTunnel.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PacketTunnel.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		796A0FD64092A2D96C0AA3E5 /* SubscriptionTier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionTier.swift; sourceTree = "<group>"; };
 		7CD4E4DA2990FC755F7E10B2 /* AsterAnalytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsterAnalytics.swift; sourceTree = "<group>"; };
 		7DA44BFADBEE922C04DCE758 /* FreeExperienceStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeExperienceStore.swift; sourceTree = "<group>"; };
-		828277D1355C9CFEAE7CD85B /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		828277D1355C9CFEAE7CD85B /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		83262FA47F740C03E2583B5D /* AsterTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsterTabView.swift; sourceTree = "<group>"; };
 		8EE4027C7951423819B7ADA7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		91E5E2A58D63A2E30360DC48 /* NodeSubscriptionParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeSubscriptionParser.swift; sourceTree = "<group>"; };
@@ -153,12 +155,12 @@
 		B4787FA4008F71F1F50F9B93 /* VPNNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNNode.swift; sourceTree = "<group>"; };
 		BAD72DC9EE623B3B51DECBD5 /* VPNManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNManager.swift; sourceTree = "<group>"; };
 		C11CF738CED603802C4400C8 /* ConnectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionViewModel.swift; sourceTree = "<group>"; };
-		CDF5B95C40E49420E3973C0D /* Aster.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Aster.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CDF5B95C40E49420E3973C0D /* Aster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Aster.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D14471986EF3717E42FA1F53 /* ConnectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionView.swift; sourceTree = "<group>"; };
 		D85951A3C0700BE58D8C5A0B /* DebugDeviceImportBootstrap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugDeviceImportBootstrap.swift; sourceTree = "<group>"; };
 		DA3FC482B24535A005369015 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		E3C4ECA08358469345A7C1D8 /* TunnelProviderMessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TunnelProviderMessageTests.swift; sourceTree = "<group>"; };
-		E92B11D5DBB88607660CAD4E /* AsterTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = AsterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E92B11D5DBB88607660CAD4E /* AsterTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper; path = AsterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF1622B7E45D16533B35705A /* LocationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsView.swift; sourceTree = "<group>"; };
 		F4C2B4F1B8262FD4AA384618 /* NodeSubscriptionClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeSubscriptionClientTests.swift; sourceTree = "<group>"; };
 		F86FDF0682B26C61B4C3BA99 /* TunnelConfigurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TunnelConfigurationTests.swift; sourceTree = "<group>"; };
@@ -502,6 +504,7 @@
 			children = (
 				941376CEB75AFF673BD25CF3 /* Info.plist */,
 				019F9B1F9B0C6AA41E99A96B /* PacketTunnelPlatformInterface.swift */,
+				5F2C8A1D7B4E9036C1A5D8F2 /* LibboxTunnelFileDescriptor.m */,
 				6B8E4D76E45903038E6A9BFE /* PacketTunnelProvider.swift */,
 			);
 			name = PacketTunnel;
@@ -642,9 +645,6 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
-					54586CC0DD147B6213263959 = {
-						DevelopmentTeam = "";
-					};
 					E93B746D0679D7AC19BB8772 = {
 						TestTargetID = 54586CC0DD147B6213263959;
 					};
@@ -748,6 +748,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AC0F1B2E3359732FD4C0DDAD /* AppConstants.swift in Sources */,
+				4A7D9B3C1E6F8A20D5C4B7E1 /* LibboxTunnelFileDescriptor.m in Sources */,
 				406905F37888657CA77A3CA4 /* PacketTunnelPlatformInterface.swift in Sources */,
 				F0952850442B71A4C6E2B861 /* PacketTunnelProvider.swift in Sources */,
 				B7CCAE4C71AC60101135AEAC /* SingBoxConfigurationBuilder.swift in Sources */,
@@ -846,6 +847,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = Aster/Config/PacketTunnel.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 66B9A952T9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/Aster/Frameworks",
 					"\"Aster/Frameworks\"",
@@ -901,9 +903,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Aster/Config/Aster.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 66B9A952T9;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Aster/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -917,6 +920,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.astervpn.Aster;
 				PRODUCT_NAME = Aster;
+				PROVISIONING_PROFILE_SPECIFIER = "Aster Device Debug";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -925,7 +929,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = Aster/Config/PacketTunnel.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 66B9A952T9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/Aster/Frameworks",
 					"\"Aster/Frameworks\"",
@@ -944,6 +951,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.astervpn.Aster.PacketTunnel;
 				PRODUCT_NAME = PacketTunnel;
+				PROVISIONING_PROFILE_SPECIFIER = "Aster PacketTunnel Device Debug";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -958,7 +966,7 @@
 				CODE_SIGN_ENTITLEMENTS = Aster/Config/Aster.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 66B9A952T9;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Aster/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

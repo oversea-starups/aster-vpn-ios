@@ -148,7 +148,7 @@
 
 ## ADR-0016: Packet Tunnel 只使用公开 Libbox fd resolver
 
-- **Decision:** `PacketTunnelPlatformInterface.openTun` 在 Apple network settings 应用成功后，只调用生成头文件公开声明的 `LibboxGetTunnelFileDescriptor()`；不得通过 KVC、selector 或 `NEPacketTunnelFlow` 私有属性取得 socket fd。
+- **Decision:** `PacketTunnelPlatformInterface.openTun` 在 Apple network settings 应用成功后，只调用生成头文件公开声明的 `LibboxGetTunnelFileDescriptor()`；该符号由 PacketTunnel target 内基于公开 Darwin utun socket ABI 的 resolver 提供。不得通过 KVC、selector 或 `NEPacketTunnelFlow` 私有属性取得 socket fd。
 - **Reason:** App Store Guideline 2.5.1 要求 public API，同时 bundled Libbox 的 device/simulator slices 均声明并导出该 binding。当前 upstream Darwin 实现通过系统 socket API 发现 utun fd，不需要 introspect Packet Flow。
 - **Guardrails:** Release validation 扫描 `value(forKeyPath:)`、`socket.fileDescriptor` 和动态 selector，并检查两个 framework slice 的头文件和导出 symbol。resolver 返回负值时 tunnel fail closed。
 - **Evidence boundary:** 私有访问源代码已清零，PacketTunnel target 已严格编译链接通过；用户先前的成功连接早于此变更，因此真实 iPhone 上的连接、DNS、出口和 lifecycle 仍须回归。Bundled binary 的精确 upstream revision/可复现构建仍是独立供应链 blocker。

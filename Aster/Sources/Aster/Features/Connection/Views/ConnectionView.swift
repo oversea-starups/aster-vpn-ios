@@ -2,7 +2,6 @@ import SwiftUI
 
 struct ConnectionView: View {
     @StateObject private var viewModel = ConnectionViewModel()
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         NavigationStack {
@@ -34,7 +33,10 @@ struct ConnectionView: View {
             statusHero(compact: compact)
             locationCard
 
-            if viewModel.canUseFreeExperience || viewModel.freeExperienceRemainingSeconds > 0 {
+            // Keep the free-access status visible for every non-Pro user. A
+            // one-time allowance can be exhausted, but hiding the card makes
+            // the account state look broken and removes the path to upgrade.
+            if !viewModel.isPro {
                 freeExperienceCard
             }
 
@@ -111,13 +113,6 @@ struct ConnectionView: View {
                 Image(systemName: viewModel.presentationState.symbolName)
                     .font(.system(size: compact ? 32 : 40, weight: .semibold))
                     .foregroundStyle(AsterTheme.navy)
-                    .rotationEffect(
-                        .degrees(viewModel.presentationState.isTransitioning && !reduceMotion ? 360 : 0)
-                    )
-                    .animation(
-                        reduceMotion ? nil : .linear(duration: 1.1).repeatForever(autoreverses: false),
-                        value: viewModel.presentationState.isTransitioning
-                    )
             }
             .accessibilityHidden(true)
             .contentShape(Circle())
@@ -246,11 +241,9 @@ struct ConnectionView: View {
             Image(systemName: "sparkles")
                 .foregroundStyle(AsterTheme.mint)
             VStack(alignment: .leading, spacing: 3) {
-                Text(viewModel.freeExperienceRemainingSeconds < 600 ? "Free session in progress" : "Try Aster free once")
+                Text(freeExperienceTitle)
                     .font(.subheadline.weight(.semibold))
-                Text(viewModel.freeExperienceRemainingSeconds < 600
-                     ? "(viewModel.formattedFreeExperienceRemaining) remaining"
-                     : "Get 10 minutes of protection after your first connection.")
+                Text(freeExperienceDetail)
                     .font(.caption)
                     .foregroundStyle(.white)
             }
@@ -258,6 +251,23 @@ struct ConnectionView: View {
         }
         .asterCard()
         .accessibilityIdentifier("freeExperienceCard")
+    }
+
+    private var freeExperienceTitle: String {
+        if viewModel.freeExperienceRemainingSeconds > 0 {
+            return "Free protection"
+        }
+        return viewModel.freeExperienceHasBeenClaimed ? "Free time used" : "10 minutes included"
+    }
+
+    private var freeExperienceDetail: String {
+        if viewModel.freeExperienceRemainingSeconds > 0 {
+            return "\(viewModel.formattedFreeExperienceRemaining) remaining"
+        }
+        if viewModel.freeExperienceHasBeenClaimed {
+            return "Upgrade to Pro for unlimited protection."
+        }
+        return "Your first connection includes 10 minutes of protection."
     }
 
     private var statusColor: Color {

@@ -192,6 +192,10 @@ final class ConnectionViewModel: ObservableObject {
                 showsPaywall = true
                 return
             }
+            guard nodeCatalog.ensureSelectedConfiguration() else {
+                updateUserMessage()
+                return
+            }
             if !isPro { pendingFreeExperience = true }
             vpnManager.connect()
         }
@@ -220,6 +224,10 @@ final class ConnectionViewModel: ObservableObject {
 
     var canUseFreeExperience: Bool {
         !isPro && freeExperience.canStartOrContinue
+    }
+
+    var freeExperienceHasBeenClaimed: Bool {
+        freeExperience.hasBeenClaimed
     }
 
     var formattedFreeExperienceRemaining: String {

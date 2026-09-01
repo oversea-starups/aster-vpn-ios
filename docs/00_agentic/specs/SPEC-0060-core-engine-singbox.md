@@ -74,7 +74,7 @@ Libbox 的 TUN inbound 不是“无需额外处理”。在 Apple Network Extens
 - 不通过代码混淆规避审核；Network Extension 行为、VPN 用途、第三方 core 与隐私实践必须在 Review Notes/法律材料中如实披露。
 - Packet Tunnel 的实际内存峰值、重连、Wi-Fi/蜂窝切换和前后台恢复必须用目标真机测量，不能把未经验证的固定内存数字当作平台保证。
 - 当前 bundled XCFramework 已记录 source commit、Go/gomobile 版本、tags 和两个 archive checksum，见 `docs/00_agentic/LIBBOX_PROVENANCE.md`。官方 upstream 为 GPLv3-or-later；独立复现、匹配源留存、LICENSE/NOTICE/对应源码义务和法律审查仍未完成。
-- `PacketTunnelPlatformInterface` 已移除 `socket.fileDescriptor` KVC/动态 selector，只调用 generated/exported `LibboxGetTunnelFileDescriptor()`。2026-09-01 真机诊断又确认旧 archive 缺少 `with_utls`，现已替换为 pinned uTLS/low-memory build，并适配多 DNS iterator 与新增的可选 platform hooks。App、Extension 和 arm64 test bundle 编译链接通过；相同线路的签名真机连接、DNS/HTTPS/出口与资源回归仍是发布前硬阻塞。
+- `PacketTunnelPlatformInterface` 已移除 `socket.fileDescriptor` KVC/动态 selector，只调用 generated public declaration 的 `LibboxGetTunnelFileDescriptor()`；该符号由 PacketTunnel target 内的公开系统 API utun bridge 提供，Libbox framework 保持纯核心引擎。2026-09-01 真机诊断又确认旧 archive 缺少 `with_utls`，现已替换为 pinned uTLS/low-memory build，并启用仅供内部启动/重载使用的 `with_clash_api`（不暴露外部监听）。App、Extension 和 arm64 test bundle 编译链接通过；相同线路的签名真机连接、DNS/HTTPS/出口与资源回归仍是发布前硬阻塞。
 
 ## 5. Release verification
 

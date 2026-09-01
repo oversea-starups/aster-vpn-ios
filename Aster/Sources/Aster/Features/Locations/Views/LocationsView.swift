@@ -5,7 +5,9 @@ struct LocationsView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject private var store = NodeCatalogStore.shared
     @StateObject private var subscriptionStore = SubscriptionStore.shared
-    @State private var selectedSection: LocationsSection = .vip
+    // The page is entered to choose a region; keep the actual location list
+    // as the default instead of forcing a subscription upsell first.
+    @State private var selectedSection: LocationsSection = .locations
     @State private var selectedProductID: String? = AppConfiguration.yearlyProductID
     let canSwitchLocation: Bool
     let showsCloseButton: Bool

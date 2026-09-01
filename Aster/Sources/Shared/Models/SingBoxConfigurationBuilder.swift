@@ -69,18 +69,46 @@ public enum SingBoxConfigurationBuilder {
             outbound["transport"] = transport
         }
 
+        #if DEBUG
+        let logLevel = "debug"
+        #else
+        let logLevel = "error"
+        #endif
+
         let root: [String: Any] = [
-            "log": ["level": "error"],
+            "log": ["level": logLevel],
+            // Resolve names inside the tunnel. Without an explicit DNS route,
+            // iOS can resolve a hostname outside the proxy while the tun
+            // stack is coming up, then hand sing-box an unreachable address.
+            // Hijacking port 53 keeps DNS and application traffic on the same
+            // outbound path and mirrors the known-good Clash Meta layout.
+            "dns": [
+                "servers": [[
+                    "type": "udp",
+                    "tag": "remote-dns",
+                    "server": "1.1.1.1"
+                ]],
+                "strategy": "prefer_ipv4"
+            ],
             "inbounds": [[
                 "type": "tun",
                 "tag": "tun-in",
                 "interface_name": "utun",
-                "address": ["172.19.0.1/30"],
+                "address": ["172.19.0.1/30", "fdfe:dcba:9876::1/126"],
+                "mtu": 9000,
+                "stack": "gvisor",
                 "auto_route": true,
                 "strict_route": true
             ]],
             "outbounds": [outbound],
-            "route": ["final": "proxy"]
+            "route": [
+                "auto_detect_interface": true,
+                "final": "proxy",
+                "rules": [[
+                    "port": 53,
+                    "action": "hijack-dns"
+                ]]
+            ] as [String: Any]
         ]
 
         let data = try JSONSerialization.data(withJSONObject: root, options: [.sortedKeys])

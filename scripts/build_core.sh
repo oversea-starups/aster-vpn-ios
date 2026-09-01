@@ -6,8 +6,8 @@ repository_root="$(cd "$(dirname "$0")/.." && pwd)"
 source_revision="650ef881c8fb216259e4ebcfbd74234554c39612"
 gomobile_version="v0.1.12"
 go_toolchain="go1.25.5"
-expected_device_hash="7aea9ec03b31b0fc45f4533ede934c54b4030b435faeceefc3e139eca2ff677a"
-expected_simulator_hash="dd33886edab107eb841a5c18f2724ed1b358ec03ea6c608fda25a1670b205f6f"
+expected_device_hash="92e997f1b5740c5e7c34d5fb272b167668aa7da714371ff30eccbd22cbc74313"
+expected_simulator_hash="c0bd23646fa71e0acd20ad657468fcbc41eff19eaeb8d8707664fb9c218f861c"
 build_root="$(mktemp -d /private/tmp/aster-libbox-build.XXXXXX)"
 source_root="$build_root/sing-box"
 isolated_gopath="$build_root/gopath"
@@ -52,12 +52,8 @@ if [[ "$device_hash" != "$expected_device_hash" || "$simulator_hash" != "$expect
 fi
 
 for binary in "$device_binary" "$simulator_binary"; do
-  strings "$binary" | grep -E -- '-tags=with_utls,ios(,iossimulator)?,with_low_memory' >/dev/null || {
-    echo "error: required uTLS/low-memory build tags are missing from $binary" >&2
-    exit 1
-  }
-  nm -gU "$binary" 2>/dev/null | grep '_LibboxGetTunnelFileDescriptor$' >/dev/null || {
-    echo "error: public tunnel file-descriptor bridge is missing from $binary" >&2
+  strings "$binary" | grep -E -- '-tags=with_utls,with_clash_api,ios(,iossimulator)?,with_low_memory' >/dev/null || {
+    echo "error: required uTLS/Clash bootstrap/low-memory build tags are missing from $binary" >&2
     exit 1
   }
 done

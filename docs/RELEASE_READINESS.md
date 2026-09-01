@@ -38,7 +38,7 @@ Sources: [Apple App Review Guidelines](https://developer.apple.com/app-store/rev
 
 ### 2. Private Packet Flow access is removed; device regression remains
 
-`PacketTunnelPlatformInterface` no longer reads or dynamically selects any `NEPacketTunnelFlow` implementation detail. It uses only the generated and exported `LibboxGetTunnelFileDescriptor()` binding; Release guards inspect both framework slices and reject the former private-access patterns. The post-change PacketTunnel target compiles and links, but the owner's successful device test predates this change. Re-run it on-device and pin the bundled framework's matching source revision before submission.
+`PacketTunnelPlatformInterface` no longer reads or dynamically selects any `NEPacketTunnelFlow` implementation detail. It calls the generated public declaration of `LibboxGetTunnelFileDescriptor()`; the PacketTunnel target supplies the small public-system-API utun bridge, while the bundled Libbox framework provides the core engine and internal Clash bootstrap only. Release guards reject the former private-access patterns and verify the bridge in the signed extension executable. The post-change PacketTunnel target compiles and links, but the owner's successful device test predates this change. Re-run it on-device and pin the bundled framework's matching source revision before submission.
 
 ### 3. Bundled location source is now the release source of truth
 

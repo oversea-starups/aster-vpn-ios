@@ -1,0 +1,51 @@
+{
+  "canvas": {
+    "width": 1320,
+    "height": 2868
+  },
+  "outputDirectory": "/Users/jerry/overseas/aster-vpn-ios/App/AppStore/creative/final/en-US",
+  "pages": [
+    {
+      "source": "/Users/jerry/overseas/aster-vpn-ios/App/AppStore/creative/raw/en-US/home-signed.png",
+      "output": "01-protect-wifi.png",
+      "eyebrow": "VPN FOR PUBLIC WI-FI",
+      "headline": "One tap to protect\npublic Wi-Fi.",
+      "body": "A clear connection status, with no complicated setup.",
+      "badge": "SIMPLE BY DESIGN",
+      "background": "#F4F0E8",
+      "accent": "#C8FF5A",
+      "accentSecondary": "#A78BFA",
+      "ink": "#111111",
+      "deviceWidth": 960,
+      "deviceTop": 790
+    },
+    {
+      "source": "/Users/jerry/overseas/aster-vpn-ios/App/AppStore/creative/raw/en-US/home-signed.png",
+      "output": "02-free-trial.png",
+      "eyebrow": "START WITH A REAL TRY",
+      "headline": "Try 10 minutes\nfree.",
+      "body": "Connect once before choosing a plan for continued protection.",
+      "badge": "ONE-TIME TRIAL",
+      "background": "#EAF6F2",
+      "accent": "#57D9B0",
+      "accentSecondary": "#A78BFA",
+      "ink": "#111111",
+      "deviceWidth": 960,
+      "deviceTop": 790
+    },
+    {
+      "source": "/Users/jerry/overseas/aster-vpn-ios/App/AppStore/creative/raw/en-US/home-signed.png",
+      "output": "03-choose-region.png",
+      "eyebrow": "YOUR CONNECTION, YOUR CHOICE",
+      "headline": "Choose a region.\nConnect with confidence.",
+      "body": "See the available VPN locations and switch when you need to.",
+      "badge": "REGION CONTROL",
+      "background": "#EEF0FF",
+      "accent": "#65C7E8",
+      "accentSecondary": "#A78BFA",
+      "ink": "#111111",
+      "deviceWidth": 960,
+      "deviceTop": 790
+    }
+  ]
+}

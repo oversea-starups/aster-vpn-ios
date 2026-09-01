@@ -2,7 +2,7 @@ diff --git a/cmd/internal/build_libbox/main.go b/cmd/internal/build_libbox/main.
 index 5b2d9e2..ff1e80e 100644
 --- a/cmd/internal/build_libbox/main.go
 +++ b/cmd/internal/build_libbox/main.go
-@@ -63,10 +63,12 @@ func init() {
+@@ -63,10 +63,13 @@ func init() {
  	sharedFlags = append(sharedFlags, "-ldflags", build_shared.LinkerFlags(currentTag, false))
  	debugFlags = append(debugFlags, "-ldflags", build_shared.LinkerFlags(currentTag, true))
  
@@ -13,9 +13,10 @@ index 5b2d9e2..ff1e80e 100644
 +	// Aster's Network Extension only needs the standard proxy protocols and
 +	// uTLS fingerprints used by imported Clash Meta nodes. Keep the mobile
 +	// binding surface intentionally small: optional Tailscale, SSH, USBIP,
-+	// OpenVPN/OpenConnect, Clash API, QUIC, WireGuard and naive modules are
-+	// outside the product scope and add platform-interface requirements.
-+	sharedTags = append(sharedTags, "with_utls")
++	// OpenVPN/OpenConnect, QUIC, WireGuard and naive modules are outside the
++	// product scope. The Clash API module is retained only because libbox's
++	// internal service bootstrap requires it; no user-facing API is exposed.
++	sharedTags = append(sharedTags, "with_utls", "with_clash_api")
  	notMemcTags = append(notMemcTags, "with_low_memory")
  	debugTags = append(debugTags, "debug")
  }

@@ -12,6 +12,7 @@
 | `docs/ARCHITECTURE.md` | Current implemented architecture |
 | `docs/DECISIONS.md` | Active decisions and rationale |
 | `docs/KNOWLEDGE.md` | Stable engineering knowledge and SOPs |
+| `docs/00_agentic/ASO-2026-09.md` | ASC 真实状态、ASO 文案、多语言边界与定价方案 |
 | `docs/00_agentic/AGENTIC_CODING_GUIDE.md` | Agent execution and verification protocol |
 
 ## Source Code

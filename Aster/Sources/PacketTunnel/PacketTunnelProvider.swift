@@ -18,48 +18,67 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
         options: [String: NSObject]?,
         completionHandler: @escaping (Error?) -> Void
     ) {
-        dataPlaneReady = false
-        PacketTunnelLog.logger.notice("startTunnel entered")
+        // Libbox setup can synchronously wait on Go runtime initialization and
+        // network callbacks. Keep it off the extension's XPC/main thread so
+        // iOS does not terminate the provider while handling the start command.
+        Task { [weak self] in
+            guard let self else { return }
+            self.dataPlaneReady = false
+            PacketTunnelLog.logger.notice("startTunnel entered")
 
-        do {
-            let configuration = try TunnelConfigManager.loadConfig()
-            PacketTunnelLog.logger.notice("Tunnel configuration loaded")
-            let singBoxJSON = try SingBoxConfigurationBuilder.makeJSON(from: configuration)
-            PacketTunnelLog.logger.notice("Sing-box configuration built")
-            try prepareLibbox()
-            PacketTunnelLog.logger.notice("Libbox setup completed")
-            try validateLibboxConfiguration(singBoxJSON, configuration: configuration)
-            PacketTunnelLog.logger.notice("Libbox configuration validated")
+            var loadedConfiguration: TunnelConfiguration?
+            do {
+                let configuration = try TunnelConfigManager.loadConfig()
+                loadedConfiguration = configuration
+                PacketTunnelLog.logger.notice(
+                    "Selected location protocol=\(configuration.protocolKind.rawValue, privacy: .public) port=\(configuration.serverPort, privacy: .public) tls=\(configuration.tlsEnabled, privacy: .public)"
+                )
+                PacketTunnelLog.logger.notice("Tunnel configuration loaded")
+                let singBoxJSON = try SingBoxConfigurationBuilder.makeJSON(from: configuration)
+                PacketTunnelLog.logger.notice("Sing-box configuration built")
+                try self.prepareLibbox()
+                PacketTunnelLog.logger.notice("Libbox setup completed")
+                try self.validateLibboxConfiguration(singBoxJSON, configuration: configuration)
+                PacketTunnelLog.logger.notice("Libbox configuration validated")
 
-            var creationError: NSError?
-            let service = LibboxNewCommandServer(nil, platformInterface, &creationError)
-            if let creationError {
-                throw creationError
+                var creationError: NSError?
+                let service = LibboxNewCommandServer(nil, self.platformInterface, &creationError)
+                if let creationError {
+                    throw creationError
+                }
+                guard let service else {
+                    throw PacketTunnelError.serviceUnavailable
+                }
+                self.boxService = service
+                PacketTunnelLog.logger.notice("Libbox command server created")
+                try service.start()
+                PacketTunnelLog.logger.notice("Libbox command server started")
+                // Current Libbox dereferences OverrideOptions while translating it
+                // to the daemon model. Passing nil terminates the Go runtime instead
+                // of returning an NSError, so always provide an explicit instance.
+                let overrideOptions = LibboxOverrideOptions()
+                overrideOptions.autoRedirect = false
+                try service.startOrReloadService(singBoxJSON, options: overrideOptions)
+                PacketTunnelLog.logger.notice("Libbox service started")
+                self.dataPlaneReady = true
+                completionHandler(nil)
+            } catch {
+                let rawMessage = (error as NSError).localizedDescription
+                let diagnostic = if let loadedConfiguration {
+                    self.redactedDiagnostic(rawMessage, configuration: loadedConfiguration)
+                } else {
+                    String(rawMessage.prefix(1_024))
+                }
+                PacketTunnelLog.logger.error(
+                    "Tunnel startup failed: \(diagnostic, privacy: .public)"
+                )
+                try? self.boxService?.closeService()
+                self.boxService?.close()
+                self.boxService = nil
+                self.platformInterface.reset()
+                self.dataPlaneReady = false
+                completionHandler(error)
             }
-            guard let service else {
-                throw PacketTunnelError.serviceUnavailable
-            }
-            boxService = service
-            PacketTunnelLog.logger.notice("Libbox command server created")
-            try service.start()
-            PacketTunnelLog.logger.notice("Libbox command server started")
-            // Current Libbox dereferences OverrideOptions while translating it
-            // to the daemon model. Passing nil terminates the Go runtime instead
-            // of returning an NSError, so always provide an explicit instance.
-            let overrideOptions = LibboxOverrideOptions()
-            overrideOptions.autoRedirect = false
-            try service.startOrReloadService(singBoxJSON, options: overrideOptions)
-            PacketTunnelLog.logger.notice("Libbox service started")
-            dataPlaneReady = true
-            completionHandler(nil)
-        } catch {
-            PacketTunnelLog.logger.error("Tunnel startup failed at a recoverable boundary")
-            try? boxService?.closeService()
-            boxService?.close()
-            boxService = nil
-            platformInterface.reset()
-            dataPlaneReady = false
-            completionHandler(error)
         }
     }
 
@@ -67,7 +86,7 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
         with reason: NEProviderStopReason,
         completionHandler: @escaping () -> Void
     ) {
-        PacketTunnelLog.logger.notice("stopTunnel entered")
+        PacketTunnelLog.logger.notice("stopTunnel entered (reason: \(reason.rawValue, privacy: .public))")
         dataPlaneReady = false
         try? boxService?.closeService()
         boxService?.close()
@@ -111,8 +130,13 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
         options.basePath = baseURL.path
         options.workingPath = workingURL.path
         options.tempPath = FileManager.default.temporaryDirectory.path
+        #if DEBUG
+        options.logMaxLines = 256
+        options.debug = true
+        #else
         options.logMaxLines = 0
         options.debug = false
+        #endif
 
         var setupError: NSError?
         guard LibboxSetup(options, &setupError) else {
