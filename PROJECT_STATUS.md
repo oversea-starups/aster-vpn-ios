@@ -17,6 +17,7 @@
 - **Traffic path correction (2026-09-01):** 对比旧版可用的 sing-box 配置，补回 `remote-dns`、53 端口 `hijack-dns`、`prefer_ipv4`、IPv6 TUN 地址、MTU 9000、gVisor stack 和默认接口自动探测。此前仅能证明系统 VPN 为 connected，不能证明 DNS/HTTPS 出口；本修复版已完成 arm64 device build、安装并启动，真实出口仍需用户在该包上重连后验证。
 - **Free-access status correction (2026-09-01):** 非 Pro 用户始终保留免费体验状态卡；卡片按“可用倒计时 / 尚未使用 / 已用完”显示真实数字和状态，不再因一次性体验耗尽而整块消失，也不伪造广告奖励。
 - **StoreKit product loading correction (2026-09-01):** ASC 实际订阅 ID 已核对为 `com.astervpn.Aster.premium.monthly` 与 `com.astervpn.Aster.premium.annual`；AppConfiguration 已从旧的、不存在的 `com.aster.vpn.*` ID 切换，真机 Debug 包已重编译、安装并启动。Paywall 的产品 readback 仍需在真机 Apple ID/Sandbox 中完成一次。
+- **StoreKit diagnostics (2026-09-01):** Debug builds now log the requested/returned product IDs and non-sensitive StoreKit error domain/code, so an empty Paywall can be distinguished from an ASC/Sandbox availability issue without exposing credentials or changing release copy.
 - **Locations entry correction (2026-09-01):** Locations 页面现在默认显示真实线路列表，而不是 VIP 订阅页；VIP 仍可通过顶部切换进入。该改动已随 17:42 真机包安装并启动。
 
 ### 2026-09-01 route disappearance incident

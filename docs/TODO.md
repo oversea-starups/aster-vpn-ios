@@ -92,7 +92,7 @@
 - [ ] **生产 Locations 验证** — Blocked by: revocable endpoint 未提供；Unblock when: endpoint 与受控节点可用；Owner: Backend/operations。
 - [ ] **签名真机矩阵** — Blocked by: 修复包已在 Thomson iPhone 上完成 VPN 系统授权并成功进入 connected/running，当前仍缺少出口 IP、DNS 泄漏、蜂窝/网络切换、后台恢复和多线路矩阵证据，production-like endpoint 也未提供。Unblock when: 完成真实线路握手、DNS/HTTPS/出口与网络切换回归，并提供受控测试 endpoint；Owner: iOS/operations。
   - Archive gate: `./scripts/validate_signed_archive.sh /absolute/path/to/Aster.xcarchive`；必须在 TestFlight 前通过并保存输出。
-- [ ] **StoreKit sandbox** — 产品已在线创建；当前需要在真机 Sandbox Apple ID 下验证真实产品加载、购买、恢复和试用生命周期；Owner: Product/ASC + iOS。
+- [ ] **StoreKit sandbox** — 产品已在线创建；当前需要在真机 Sandbox Apple ID 下验证真实产品加载、购买、恢复和试用生命周期。Debug 包会记录请求/返回商品 ID 及非敏感错误域/码，便于区分代码问题与 ASC/Sandbox 状态；Owner: Product/ASC + iOS。
 - [ ] **最新 UI/arm64 XCTest runtime** — Blocked by: 当前 Mac CoreSimulator UI query/screenshot/shutdown failure，且 x86_64 XCTest 无法安全初始化 bundled Go runtime；Unblock when: healthy arm64 CI/Xcode host 与签名设备；Owner: Build environment。
 - [ ] **Libbox release compliance** — Blocked by: build provenance 已记录，但 clean reproducibility、matching-source archive、notices/privacy provenance 和法律结论缺失；Owner: Product/legal。
 

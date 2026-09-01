@@ -1,9 +1,15 @@
 import Foundation
+import OSLog
 import StoreKit
 
 @MainActor
 final class SubscriptionStore: ObservableObject {
     static let shared = SubscriptionStore()
+
+    private let logger = Logger(
+        subsystem: "com.astervpn.Aster",
+        category: "StoreKit"
+    )
 
     @Published private(set) var products: [Product] = []
     @Published private(set) var freeTrialEligibleProductIDs: Set<String> = []
@@ -55,8 +61,19 @@ final class SubscriptionStore: ObservableObject {
         defer { isLoading = false }
         lastProductLoadDate = Date()
 
+        #if DEBUG
+        logger.debug("Loading subscription products: \(self.productIDs.sorted().joined(separator: ","), privacy: .public)")
+        #endif
+
         do {
             let loaded = try await Product.products(for: productIDs)
+            #if DEBUG
+            let loadedIDs = Set(loaded.map(\.id))
+            let missingIDs = productIDs.subtracting(loadedIDs).sorted().joined(separator: ",")
+            logger.notice(
+                "StoreKit returned \(loaded.count, privacy: .public) products; missing=\(missingIDs, privacy: .public)"
+            )
+            #endif
             let sortedProducts = loaded.sorted { lhs, rhs in
                 if lhs.id == AppConfiguration.yearlyProductID { return true }
                 if rhs.id == AppConfiguration.yearlyProductID { return false }
@@ -78,6 +95,12 @@ final class SubscriptionStore: ObservableObject {
             freeTrialEligibleProductIDs = eligibleProductIDs
             userMessage = loaded.isEmpty ? "Subscriptions aren't available right now." : nil
         } catch {
+            #if DEBUG
+            let nsError = error as NSError
+            logger.error(
+                "StoreKit product load failed domain=\(nsError.domain, privacy: .public) code=\(nsError.code, privacy: .public)"
+            )
+            #endif
             products = []
             freeTrialEligibleProductIDs = []
             userMessage = "Subscriptions aren't available right now. Please try again later."
