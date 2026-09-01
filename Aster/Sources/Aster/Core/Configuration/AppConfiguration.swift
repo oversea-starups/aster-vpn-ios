@@ -9,8 +9,10 @@ struct AppConfiguration {
         Bundle.main.object(forInfoDictionaryKey: "AsterNodeSubscriptionURL") as? String
     )
 
-    static let monthlyProductID = "com.aster.vpn.monthly"
-    static let yearlyProductID = "com.aster.vpn.yearly"
+    // These identifiers must match the auto-renewable subscriptions in ASC.
+    // Keep the annual product as the yearly choice in the UI.
+    static let monthlyProductID = "com.astervpn.Aster.premium.monthly"
+    static let yearlyProductID = "com.astervpn.Aster.premium.annual"
     static let subscriptionProductIDs = [yearlyProductID, monthlyProductID]
 
     // Billing cadence is a StoreKit product concern; both current products

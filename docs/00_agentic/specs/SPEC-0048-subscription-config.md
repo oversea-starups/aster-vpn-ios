@@ -1,12 +1,12 @@
 # SPEC-0048 — 订阅配置模板
 
 ## 产品 ID
-- com.aster.vpn.monthly
-- com.aster.vpn.yearly
+- com.astervpn.Aster.premium.monthly
+- com.astervpn.Aster.premium.annual
 
 ## 价格（US）
-- Monthly: $9.99
-- Yearly: $29.99
+- Monthly: $8.99
+- Yearly: $59.99
 
 ## 试用
 - 年付 3 天试用
