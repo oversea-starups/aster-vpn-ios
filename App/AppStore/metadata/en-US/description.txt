@@ -1,0 +1,20 @@
+Connect to an available VPN location in one tap and see the status clearly.
+
+Aster VPN is designed for straightforward everyday network privacy on iPhone. Choose a server, connect or disconnect, and manage your subscription without digging through complicated settings.
+
+What you can do
+• Connect and disconnect from one clear screen
+• Choose from the server locations available to your account
+• See connection, entitlement, and subscription status
+• Purchase or restore an auto-renewing subscription through Apple
+• Review data-use information before you sign in, purchase, or connect
+• Delete your account from inside the app
+
+How it works
+1. Create or sign in to your Aster account.
+2. Choose an available plan and server location.
+3. Tap connect and monitor the connection state.
+
+An account and an active entitlement are required to use VPN servers. Subscription prices and periods are shown before purchase. Subscriptions renew automatically unless canceled at least 24 hours before the current period ends. You can manage or cancel them in your Apple Account settings.
+
+Aster VPN does not include advertising or third-party analytics SDKs. The service processes account, transaction, aggregate traffic usage, and operational data needed to provide and secure the service. Read the in-app disclosure and Privacy Policy for details.
