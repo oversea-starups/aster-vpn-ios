@@ -1,6 +1,6 @@
 # Aster VPN Roadmap
 
-> Last reviewed: 2026-08-31  
+> Last reviewed: 2026-09-01
 > 路线图表达阶段结果；具体任务、依赖和 DoD 以 [TODO.md](TODO.md) 为准。
 
 ## Phase 1 — Buildable Foundation (Build-verified)
@@ -19,7 +19,7 @@
 - [ ] Real-node device happy path on Wi-Fi and cellular。
 - [ ] Explicit failed/timeout/retry state machine。
 - [x] Core automated test baseline for reward policy/ledger and tunnel config。
-- [x] Fixed Home/Account layouts, circular connection control, three-tab shell and privacy disclosure sheet。
+- [x] Fixed Home/Account layouts, circular connection control and three-tab shell；隐私/法律入口保留在 Account/Settings 与 Paywall，不在启动时弹出自定义说明页。
 
 ## Phase 3 — Nodes and Reliability
 
@@ -37,12 +37,10 @@
 
 - [x] StoreKit 2 client product, entitlement, purchase and restore state。
 - [x] Account entitlement surface with localized expiration-date display。
-- [x] Rewarded access policy, balance, UMP and AdMob client integration。
-- [x] Local AdMob SSV verifier and client anti-abuse implementation。
-- [ ] Resolve Apple VPN Guideline 5.4 vs AdMob; recommended StoreKit-only App Store target。
-- [ ] Production external setup only if ads are retained; StoreKit sandbox verification。
+- [x] StoreKit-only subscription, one-time ten-minute first-connection experience and Firebase Analytics funnel events。
+- [ ] StoreKit sandbox verification。
 - [ ] Paywall purchase/restore/expiry device evidence。
-- [ ] Privacy/Terms and minimal funnel events。
+- [x] Publish Privacy/Terms and App Privacy labels；minimal Firebase funnel events are integrated。
 
 ## Phase 5 — Release Validation
 

@@ -67,7 +67,16 @@
 - **Reason:** 否则转化漏斗优化的是不可用体验，也无法区分产品问题与网络问题。
 - **Evidence:** AGENTS 的闭环优先级；当前最大风险为真实流量未验证。
 
+### StoreKit-only 首发与免费体验边界
+
+- **Current rule:** App Store target 不包含广告 SDK、UMP、rewarded balance、广告标识或追踪；免费用户仅获得一次性、封顶 10 分钟的首次连接体验，Pro 通过 StoreKit 订阅获得持续保护。
+- **Trial rule:** 产品价格、展示价格和 introductory-offer eligibility 以 StoreKit/ASC 返回为准；不额外叠加每日签到、可累计免费时长或自定义试用余额。
+- **Measurement:** Firebase Analytics 仅记录最小化的启动、连接、paywall、购买/恢复事件，不记录浏览内容、目标 URL、DNS 或数据包载荷。
+- **Evidence:** `FreeExperienceStore.swift`；`SubscriptionStore.swift`；`AsterAnalytics.swift`；ASC App Privacy labels published 2026-09-01。
+
 ### Rewarded ad 频控必须同时限制奖励和展示尝试
+
+> **Historical / superseded:** 该规则属于已移出 App Store target 的 AdMob 实验；首发采用 StoreKit-only 与一次性十分钟首次连接体验，见 ADR-0018。下方内容仅供旧后端归档参考。
 
 - **Problem:** 只限制成功奖励无法阻止反复打开后提前关闭广告，仍可能制造异常展示流量。
 - **Rule:** 5 分钟展示冷却；滚动 24 小时最多 4 奖励和 6 次展示；余额必须能容纳完整奖励。
@@ -76,6 +85,8 @@
 - **Evidence:** `RewardAccessPolicy.swift`；SPEC-0061；Google invalid-traffic 和 SSV 指南。
 
 ### VPN App 中第三方广告不是纯变现选择
+
+> **Historical rationale:** 当前 App Store target 已移除 GMA/UMP/AdMob；本节解释移除原因，不代表广告仍在产品中。
 
 - **Problem:** bundled GMA privacy manifest 声明 linked coarse location、device ID、advertising data、interaction 和 tracking，而 Apple Guideline 5.4 对 VPN App 向第三方使用/披露数据施加严格限制。
 - **Rule:** 首次说明、UMP、opt-in 和 lazy initialization 是必要透明度/最小化措施，但不能被当作化解 5.4 冲突。App Store Release 推荐移除 GMA/UMP/AdMob 并采用 StoreKit-only；保留必须是显式产品/法律风险决定。

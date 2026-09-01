@@ -1,6 +1,6 @@
 # Aster VPN Architecture
 
-> Last verified: 2026-08-31  
+> Last verified: 2026-09-01
 > Evidence cutoff: current workspace, generated Xcode project, current strict App/Extension/test-target builds, release guards, SSV verifier tests and user-reported pre-fd-bridge device connection
 
 ## System Context
@@ -16,9 +16,10 @@ flowchart LR
     UI --> ACC["Account tab"]
     UI --> PAY["Paywall"]
 
-    FEED["Public HTTPS locations endpoint"] --> HTTP["Ephemeral subscription client"]
+    FEED["Optional future public HTTPS locations endpoint"] --> HTTP["Ephemeral subscription client"]
     HTTP --> PARSE["VLESS / VMess / AnyTLS parser + validation"]
-    PARSE --> CAT["App Group · node_catalog.json · last-known-good"]
+    BUNDLE["Bundled reviewed node_catalog.json"] --> CAT["App Group · node_catalog.json · last-known-good"]
+    PARSE --> CAT
     LOC --> CAT
     CAT --> SELECT["Selected validated node"]
     SELECT --> CFG["App Group · tunnel_config.json"]
@@ -42,7 +43,7 @@ flowchart LR
 
 | Module | Responsibility | Durable state | Evidence |
 | --- | --- | --- | --- |
-| `AsterApp` | First-use disclosure sheet, tab-root composition, foreground catalog refresh | `@AppStorage` disclosure acknowledgement | Build-verified |
+| `AsterApp` | Tab-root composition, foreground catalog refresh and Firebase Analytics initialization | App Group/catalog and StoreKit system state | Build-verified |
 | Connection | Status hierarchy, selected location, circular connect/disconnect control, access gates and recoverable messages | None | Build-verified; latest UI runtime pending |
 | Locations | Restore bundled/cache catalog, optionally fetch, parse, install last-known-good, select one node | `node_catalog.json`, `tunnel_config.json` | Bundle/build verified; live tunnel and future feed switching pending |
 | Account | Pro status/expiration, upgrade/restore, privacy and legal entry points | StoreKit system state | Build-verified; StoreKit sandbox pending |
@@ -72,7 +73,7 @@ flowchart LR
 
 ## Connection and Time Flow
 
-1. App restores StoreKit entitlement. Pro users can connect; free users are guided to upgrade before connecting.
+1. App restores StoreKit entitlement. Pro users can connect; free users can use the one-time ten-minute first-connection experience, then are guided to upgrade.
 2. The user chooses a location while disconnected. Catalog selection persists the exact validated current config.
 3. `VPNManager` requires a valid `tunnel_config.json`, then calls `startVPNTunnel()`.
 4. Extension builds structured sing-box JSON, starts Libbox and applies Apple network settings through the platform interface.
@@ -91,7 +92,7 @@ The App Store target is StoreKit-only. No third-party advertising SDK, consent f
 - Catalog/config writes are atomic and use iOS file protection in the App Group.
 - A URL embedded in the binary is recoverable. Production must use a revocable app-specific endpoint, not a personal/master provider token.
 - App-owned PrivacyInfo declares the APIs and data behavior of app code; the current App Store target has no advertising SDK manifest to aggregate.
-- First-use disclosure explains VPN routing, local selection storage and Apple purchase handling before service use.
+- Privacy Policy and Terms remain available from Account/Settings and Paywall; no custom privacy disclosure sheet or ad-consent flow is shown on launch. Firebase Analytics uses a minimal event contract and does not receive browsing content, destination URLs, DNS queries or packet payloads.
 - The Packet Tunnel does not introspect `NEPacketTunnelFlow`. After applying network settings it obtains the utun descriptor only through the generated, exported Libbox binding `LibboxGetTunnelFileDescriptor()`. Release guards reject private KVC/selector patterns and verify the symbol in both XCFramework slices. This source boundary is build-verified; real-device tunnel regression and matching binary provenance remain required.
 - Libbox source revision, reproducible toolchain, GPLv3 obligations, notices and privacy provenance are unresolved.
 

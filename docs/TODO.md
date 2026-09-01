@@ -7,7 +7,7 @@
 
 - [x] **解决 Apple VPN 规则与 AdMob 的冲突**
   - **Decision:** App Store Release target 移除 GMA/UMP/AdMob，免费用户通过 StoreKit paywall 进入订阅；旧 AdMobSSV 后端暂保留，待 Product/Legal 确认后归档。
-  - **Remaining evidence:** 重新生成工程、完成 Release archive privacy report 和 ASC answers 对齐。
+  - **Remaining evidence:** 完成 Release archive privacy report，并与已发布的 ASC App Privacy answers 对齐。
 
 ## High Priority
 
@@ -21,8 +21,8 @@
   - **Specs:** SPEC-0058、SPEC-0059、SPEC-0062。
 
 - [ ] **完成签名真机连接与线路切换矩阵**
-  - **Current:** 真机点击日志已确认失败不是地区化线路字段丢失：先由 `startOrReloadService(nil options)` 引发 Go panic，再由旧 archive 缺少 uTLS 拒绝真实 fingerprint 配置。现已加入 preflight/非空 options，并以 pinned commit 重建 `with_utls,ios,with_low_memory` Libbox；App 与完整 arm64 test bundle build、48 MB package nested codesign 均通过。修复包尚未安装，因为 Thomson’s iPhone 当前虽被识别但 CoreDevice tunnel unavailable。前一版的 49 条线路 bootstrap 已验证，修复后的连接、广告回调、余额扣减和网络出口未验证。
-  - **Dependency:** 在 Thomson’s iPhone 完成测试广告与 VPN 系统权限交互；多线路测试还需要安全的生产前 endpoint。
+  - **Current:** 真机点击日志已确认失败不是地区化线路字段丢失：先由 `startOrReloadService(nil options)` 引发 Go panic，再由旧 archive 缺少 uTLS 拒绝真实 fingerprint 配置。现已加入 preflight/非空 options，并以 pinned commit 重建 `with_utls,ios,with_low_memory` Libbox；App 与完整 arm64 test bundle build、48 MB package nested codesign 均通过。修复包尚未安装，因为 Thomson’s iPhone 当前虽被识别但 CoreDevice tunnel unavailable。前一版的 49 条线路 bootstrap 已验证，修复后的连接、试用计时和网络出口未验证。
+  - **Dependency:** 在 Thomson’s iPhone 完成 VPN 系统权限与真实线路交互；多线路测试还需要安全的生产前 endpoint。
   - **Done when:** 先在用户原设备/线路回归公共 fd resolver；再用两台支持版本 iPhone 覆盖 Wi-Fi/蜂窝、连接/断开、DNS/出口变化、三条线路、后台/前台、网络切换、缓存回退、余额耗尽、Pro 不扣时；日志不含凭据。
   - **Specs:** SPEC-0001、SPEC-0054、SPEC-0056、SPEC-0060、SPEC-0062。
 
@@ -72,7 +72,7 @@
   - **Done when:** 非敏感 DNS/HTTPS/exit health contract 可区分“系统 connected”和“可用保护”；失败不扣时，UI 可恢复。
 
 - [ ] **完成隐私、凭据和 Archive privacy report**
-  - **Current:** Keychain/App Group/File Protection 边界已实现；Privacy Policy/Terms 仅通过 Account/Settings 和 Paywall 法律区域访问。当前 App-owned manifest 与 StoreKit-only 二进制需在最终 Archive 中复核。
+  - **Current:** Keychain/App Group/File Protection 边界已实现；Privacy Policy/Terms 通过 Account/Settings 和 Paywall 法律区域访问；ASC App Privacy answers 已发布。当前 App-owned manifest 与 StoreKit-only 二进制需在最终 Archive 中复核。
   - **Done when:** production dependencies 确定后导出 Archive privacy report；ASC privacy answers、Privacy Policy、保留周期、节点凭据和日志策略逐项一致。
 
 - [ ] **完成连接错误状态机与支持入口**
@@ -82,7 +82,7 @@
 
 ## Release Materials and Supply Chain
 
-  - [ ] **完成 App Store 审核材料** — Privacy/Terms 公网 URL、ASC privacy answers、Review Notes、出口合规、订阅披露、截图、英文 copy review 和 TestFlight smoke；按 `ios-asc-configurator` 的 VPN Privacy UX and User-Facing Copy Gate 复核连接路径、Account/Settings 法律入口和第三方 SDK 文案。
+  - [ ] **完成 App Store 审核材料** — Review Notes、出口合规、订阅披露、截图、英文 copy review 和 TestFlight smoke；Privacy/Terms 公网 URL 与 ASC privacy answers 已完成，仍需按 `ios-asc-configurator` 的 VPN Privacy UX and User-Facing Copy Gate 复核连接路径、Account/Settings 法律入口和第三方 SDK 文案。
 - [ ] **让 Libbox 可复现且可合法分发** — source commit、Go/gomobile、tags 和当前 archive hashes 已记录于 `docs/00_agentic/LIBBOX_PROVENANCE.md`；仍需在干净环境独立复现、归档匹配源、提供 LICENSE/NOTICE/对应源码与 privacy provenance，并取得 GPLv3-or-later 分发法律结论。
 - [ ] **归档签名 Release 证据** — Release guard、生产配置、entitlements、embedded provisioning、aggregated privacy manifest、测试 ID/保留 URL 扫描、size/memory/crash 结果全部保存。
 
@@ -90,7 +90,7 @@
 
 - [x] **AdMob App Store 方案** — Resolved by StoreKit-only Release decision; remaining work is archival cleanup only.
 - [ ] **生产 Locations 验证** — Blocked by: revocable endpoint 未提供；Unblock when: endpoint 与受控节点可用；Owner: Backend/operations。
-- [ ] **签名真机矩阵** — Blocked by: 修复包已签名，但 Thomson’s iPhone 的 CoreDevice tunnel 当前 unavailable；测试广告、VPN 权限、线路连接和网络出口仍需设备端交互，production-like endpoint 也未提供。Unblock when: 解锁并重新建立 USB/device tunnel、安装修复包、完成交互回归并提供受控测试 endpoint；Owner: iOS/operations。
+- [ ] **签名真机矩阵** — Blocked by: 修复包已签名，但 Thomson’s iPhone 的 CoreDevice tunnel 当前 unavailable；VPN 权限、线路连接和网络出口仍需设备端交互，production-like endpoint 也未提供。Unblock when: 解锁并重新建立 USB/device tunnel、安装修复包、完成交互回归并提供受控测试 endpoint；Owner: iOS/operations。
   - Archive gate: `./scripts/validate_signed_archive.sh /absolute/path/to/Aster.xcarchive`；必须在 TestFlight 前通过并保存输出。
 - [ ] **StoreKit sandbox** — 产品已在线创建；当前需要在真机 Sandbox Apple ID 下验证真实产品加载、购买、恢复和试用生命周期；Owner: Product/ASC + iOS。
 - [ ] **最新 UI/arm64 XCTest runtime** — Blocked by: 当前 Mac CoreSimulator UI query/screenshot/shutdown failure，且 x86_64 XCTest 无法安全初始化 bundled Go runtime；Unblock when: healthy arm64 CI/Xcode host 与签名设备；Owner: Build environment。

@@ -12,16 +12,18 @@
 | ADR-0004 | App Group 文件作为当前配置 IPC | 2026-01-14 | Active | None |
 | ADR-0005 | XcodeGen project.yml 是工程配置 SSOT | 2026-01-14 | Active | None |
 | ADR-0006 | 用证据等级报告完成度 | 2026-07-17 | Active | None |
-| ADR-0007 | 激励广告时长取代一次性 Demo | 2026-08-26 | Active | Planned 60-second demo |
-| ADR-0008 | Release 构建拒绝测试广告与缺失法律配置 | 2026-08-26 | Active | None |
+| ADR-0007 | 激励广告时长取代一次性 Demo | 2026-08-26 | Superseded | Planned 60-second demo |
+| ADR-0008 | Release 构建拒绝测试广告与缺失法律配置 | 2026-08-26 | Superseded | None |
 | ADR-0009 | 扣时与 Protected 状态要求 Provider readiness | 2026-08-26 | Active | None |
 | ADR-0010 | 奖励账本与 SSV 身份采用 Keychain fail-closed | 2026-08-26 | Active | UserDefaults-only reward state |
 | ADR-0011 | SSV 使用平台中立 Node verifier 与 HMAC SQLite audit | 2026-08-26 | Active | External verifier only as a plan |
 | ADR-0012 | Libbox platform bridge 负责 Apple TUN 生命周期 | 2026-08-26 | Active | Provider independently applying hard-coded settings |
-| ADR-0013 | 使用 last-known-good 订阅 Catalog 驱动线路选择 | 2026-08-28 | Active | Single preinstalled tunnel config |
-| ADR-0014 | 首次数据说明与按需初始化第三方广告 SDK | 2026-08-28 | Active | Every-launch eager UMP/GMA preparation |
+| ADR-0013 | 使用 last-known-good 订阅 Catalog 驱动线路选择 | 2026-08-28 | Active | Single preinstalled tunnel config (首发改为内置目录) |
+| ADR-0014 | 首次数据说明与按需初始化第三方广告 SDK | 2026-08-28 | Superseded | Every-launch eager UMP/GMA preparation |
 | ADR-0015 | Entitlement 必须声明在 XcodeGen SSOT | 2026-08-28 | Active | Empty generated entitlement files |
 | ADR-0016 | Packet Tunnel 只使用公开 Libbox fd resolver | 2026-08-28 | Active | KVC access to Packet Flow implementation details |
+| ADR-0018 | StoreKit-only 首发与连接优先体验 | 2026-09-01 | Active | ADR-0007, ADR-0014 |
+| ADR-0019 | App Privacy 标签与 Firebase Analytics 对齐 | 2026-09-01 | Active | None |
 
 ## ADR-0001: 单产品单核心任务
 
@@ -68,6 +70,8 @@
 
 ## ADR-0007: 激励广告时长取代一次性 Demo
 
+> **Superseded by ADR-0018 (2026-09-01):** 首发 App Store target 改为 StoreKit-only；本节保留历史经济模型，不再描述当前产品行为。
+
 - **Decision:** 免费访问统一为“用户主动观看 rewarded ad → 获得 10 分钟”，不再叠加一次性 60 秒 Demo。
 - **Reason:** 两套免费资格会让连接门槛、倒计时、滥用规则和转化归因互相冲突；单一余额模型更透明、可测且便于控制广告频率。
 - **Guardrails:** 5 分钟冷却、滚动 24 小时最多 4 奖励/6 展示、120 分钟余额上限、无自动展示；Pro 完全无广告。
@@ -81,6 +85,8 @@
 - **Boundary:** 频控是体验和第一层滥用保护，不是 Apple 审核豁免，也不能替代 AdMob SSV 签名校验、transaction 幂等和服务端对账。
 
 ## ADR-0008: Release 构建拒绝测试广告与缺失法律/线路配置
+
+> **Superseded by ADR-0018 (2026-09-01):** Release 不再注入或校验 AdMob/UMP 配置；仅保留公开隐私 URL 与其他生产安全配置校验。
 
 - **Decision:** Debug 使用 Google 官方 rewarded test ID；Release 必须注入生产 App ID、rewarded ad unit ID、公开 HTTPS Privacy URL 和公开 HTTPS Locations URL，否则构建失败；本地/私网、userinfo、fragment、占位变量与 IANA 保留域名同样拒绝。
 - **Reason:** Google 要求开发期使用测试广告，但测试 ID、空隐私 URL 或占位配置都不能进入发布包。
@@ -118,13 +124,15 @@
 
 ## ADR-0013: 使用 last-known-good 订阅 Catalog 驱动线路选择
 
-- **Decision:** App 从 build-controlled public HTTPS endpoint 获取明文/Base64 VLESS/VMess feed，完成大小/协议/安全/schema 校验后，整批原子安装为 App Group `node_catalog.json`；只有显式选中的验证节点写入 Extension 契约 `tunnel_config.json`。
+- **Decision:** 首发 App 从 bundle 内置的已审核 `node_catalog.json` 初始化 App Group；只有显式选中的验证节点写入 Extension 契约 `tunnel_config.json`。远端公开 HTTPS 更新保留为后续迁移，必须可撤销且不得携带个人/master subscription token。
 - **Reason:** 线路运营需要远程更新，但未验证响应不能破坏已能连接的配置。Catalog 与 Extension 的最小当前配置分离，可限制数据面复杂度和故障半径。
 - **Guardrails:** ephemeral session、同 host HTTPS redirect、1 MB/200 node 上限、拒绝 insecure 新 VLESS、稳定 opaque ID、6 小时/前台刷新、原子 primary + validated backup、失败保留 last-known-good；现有有效配置作为 “Current Location” 保留。Debug device import 是一次性 QA bridge，replacement/fresh install 不得假设其 catalog 仍存在。
 - **Security boundary:** Info.plist URL 可被提取；不得嵌入个人/master subscription secret，生产必须使用 revocable app-specific endpoint。当前没有 feed 签名，TLS 与 build-controlled endpoint 是现阶段完整性边界。
 - **Evidence:** `NodeSubscriptionClient.swift`；`NodeSubscriptionParser.swift`；`NodeCatalogStore.swift`；`NodeCatalogPersistence.swift`；`LocationsView.swift`；`SPEC-0062`。
 
 ## ADR-0014: 首次数据说明与按需初始化第三方广告 SDK
+
+> **Superseded by ADR-0018 (2026-09-01):** 当前首发不展示自定义隐私说明页或广告同意流程；法律入口保留在 Account/Settings 与 Paywall。Apple VPN 授权仅在用户首次点击连接时由系统展示。
 
 - **Decision:** 首次使用 VPN 服务前显示数据用途说明；Google UMP/GMA 只在用户明确打开 Rewarded Access 后初始化，不在冷启动或首次说明前发送广告 SDK 请求。
 - **Reason:** VPN 用户需要在使用/购买前知道流量路由与数据用途；未选择广告的用户不应承受广告 SDK 启动请求和隐私成本。
@@ -153,3 +161,17 @@
 - Apple Guideline 5.4 对 VPN App 向第三方使用/披露数据施加严格限制，而 bundled GMA privacy manifest 声明 third-party advertising/tracking 相关的 coarse location、device ID、advertising data 和 interaction。
 - **Recommended resolution:** App Store Release target 移除 GMA/UMP/AdMob，免费层和转化由 StoreKit/产品策略重新定义；保留当前 rewarded implementation 不能被当作已满足审核。
 - 若产品选择保留广告，必须把高拒审/合规风险作为显式产品与法律决定，而不是通过文案或 UMP 假设已解决。
+
+## ADR-0018: StoreKit-only 首发与连接优先体验
+
+- **Decision:** App Store 首发版本不集成第三方广告、UMP、rewarded access、广告标识或追踪；免费用户获得一次性、封顶 10 分钟的首次连接体验，Pro 通过 StoreKit 订阅获得持续保护。StoreKit 的产品价格和 introductory-offer eligibility 是唯一试用/价格来源。
+- **Reason:** VPN 数据与第三方广告披露存在 Apple Guideline 5.4 风险；连接价值必须先被体验，且自定义免费余额会与 Apple 原生试用和反滥用状态复杂度冲突。
+- **Impact:** 连接流程不再依赖广告或自定义隐私弹窗；Privacy Policy/Terms 从 Account/Settings 与 Paywall 访问；Apple VPN 授权仅在首次点击连接时触发。
+- **Evidence:** `Aster/Sources/Aster/Core/Services/FreeExperienceStore.swift`；`SubscriptionStore.swift`；`AsterApp.swift`；`PROJECT_STATUS.md`。
+
+## ADR-0019: App Privacy 标签与 Firebase Analytics 对齐
+
+- **Decision:** ASC 仅声明“不与你关联的数据”：Device ID、Product Interaction、Performance Data、Other Diagnostic Data；四项用途均为 Analytics，不用于追踪，不声明广告数据。
+- **Reason:** 与当前 `FirebaseCore` + `FirebaseAnalyticsCore` 12.18.0、无 IDFA、无广告 SDK 的实际 App target 保持一致。
+- **Impact:** 后续新增 SDK、事件参数或数据用途时，必须同步复核 ASC 标签、Privacy Policy 和最终 Archive privacy report。
+- **Evidence:** ASC App Privacy 页面于 2026-09-01 显示已发布；`Aster/Sources/Aster/Core/Services/AsterAnalytics.swift`；`PROJECT_STATUS.md`。

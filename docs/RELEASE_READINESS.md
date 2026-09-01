@@ -8,7 +8,7 @@
 | Area | Current evidence | Release state |
 | --- | --- | --- |
 | Project generation/entitlements | `./setup.sh` passed; App + Extension generated entitlements contain Packet Tunnel and App Group; self-test passes | Build-verified; signed archive pending |
-| App/Extension/resources | Current strict `Aster` target is being rebuilt without GMA/UMP; Libbox, AppIcon, PrivacyInfo and embedded PacketTunnel remain required | Rebuild required |
+| App/Extension/resources | Current strict `Aster` target is StoreKit-only and has no GMA/UMP; Libbox, AppIcon, PrivacyInfo and embedded PacketTunnel remain required | Build-verified; release archive required |
 | iOS automated suite | 59 methods (50 unit, 9 UI); latest `AsterTests` and `AsterUITests` targets each exit 0 | Existing unit `.xcresult`: 44 pass + 1 named x86_64 Libbox skip, 0 failures/unexpected; new parser/region/cache/recovery and Account/tab/control cases await runtime; post-fix UI runtime still CoreSimulator-blocked |
 | Monetization | StoreKit products, purchase, restore and verified entitlement; no third-party ad SDK in the App Store binary | Build-verified; ASC sandbox pending |
 | SSV verifier | 12/12 Node tests, syntax check, official registry audit 0, non-root container smoke | Local test-verified; deployment/live callback pending |
@@ -16,7 +16,7 @@
 | StoreKit/paywall | Dynamic products/prices/trial eligibility, purchase, restore, verified entitlement and truthful copy | Build-verified; ASC sandbox pending |
 | VPN | Apple TUN/Libbox bridge and readiness contract build; private KVC removed; public Libbox fd binding source/symbol guarded; post-change PacketTunnel compile/link passed | Owner's prior connection predates bridge change; device regression/network matrix missing |
 | Copy | English product surfaces contain no TODO/FIXME/mock/placeholder/coming-soon/not-implemented markers; no fake price/latency/recommendation | Static/build-verified; final runtime/localization review pending |
-| Privacy | First-use data explanation; VPN routing and on-device configuration are described in user-facing language; no ad SDK in the App Store binary | Static/build verification pending |
+| Privacy | Account/Settings and Paywall legal links; VPN routing and on-device configuration are described in user-facing language; no ad SDK in the App Store binary; ASC App Privacy labels published | Static/build-verified; final Archive privacy report still pending |
 | Release config | Test IDs, missing values, unsafe URLs, userinfo, private/reserved hosts rejected | Guard verified; production values absent |
 | Repeatable CI gate | `scripts/run_quality_gate.sh` requires an explicit arm64 destination, runs all local safety gates and rejects anything short of 59/59 with 0 skips | Script/fail-fast verified; healthy-host full run pending |
 | Signed archive gate | `scripts/validate_signed_archive.sh` rejects test bundles/IDs, unsafe production URLs, invalid signatures/entitlements, missing privacy manifests/Extension and wrong Libbox fd binding | Script/fail-fast verified; signed archive pending |
@@ -49,9 +49,9 @@ The current release includes a reviewed, validated catalog in the app bundle and
 - The core hierarchy remains connection-first: status, selected location, primary action, then Pro value.
 - Home and Locations do not show fabricated speed, ping, server load, “best” or “fastest” claims.
 - StoreKit supplies every displayed price/trial; BEST VALUE is conditional on real annual savings.
-- Error copy gives a next action for unavailable location source, update failure, config save, ad privacy/load/show, VPN readiness, purchase and restore.
+- Error copy gives a next action for unavailable location source, update failure, config save, VPN readiness, purchase and restore.
 - Existing current config is labeled “Current Location,” not presented as a fake country.
-- First-use screen explains service/data behavior before VPN use or purchase.
+- No custom privacy disclosure sheet is shown on launch; Privacy Policy and Terms remain reachable from Account/Settings and Paywall. The system VPN permission is deferred until the user taps Connect.
 - Production Swift source marker scan has no unfinished user-facing strings. Documentation retains historical AdMob rationale, but the current App/Release source contains no ad SDK references.
 - The first executable UI audit found insufficient deterministic contrast on a translucent disclosure card; cards now use an opaque deep-blue surface. The fix is build-verified and awaits a healthy-host UI audit rerun.
 
@@ -79,7 +79,7 @@ The current release includes a reviewed, validated catalog in the app bundle and
 - [ ] Complete organization signing, Network Extension approval, App Group and signed Archive/TestFlight checks.
 - [ ] Configure and sandbox-test StoreKit products/subscription group/offers.
 - [ ] Retire or archive the unused `Backend/AdMobSSV` service after Product/Legal confirms no internal experiment depends on it.
-- [ ] Publish Privacy/Terms; align ASC privacy answers with aggregated archive manifests.
+- [x] Publish Privacy/Terms and ASC App Privacy answers; align the final Archive privacy report with the published labels before submission.
 - [ ] Prepare Review Notes, export-compliance answers, screenshots and final English copy review.
 - [ ] Resolve Libbox revision/reproducibility/GPL/notices/privacy provenance.
 - [ ] Scan the final Archive for test IDs, placeholder URLs, private selectors, entitlements and embedded privacy manifests.
