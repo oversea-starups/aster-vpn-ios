@@ -126,9 +126,8 @@ final class PacketTunnelPlatformInterface: NSObject, LibboxPlatformInterfaceProt
         pathMonitor = monitor
         let firstUpdate = DispatchSemaphore(value: 0)
         let deliveredFirstUpdate = LockedBox(false)
-        let listenerBox = UncheckedSendableBox(listener)
         monitor.pathUpdateHandler = { path in
-            Self.publish(path, to: listenerBox.value)
+            Self.publish(path, to: listener)
             let shouldSignal = deliveredFirstUpdate.withValue { delivered in
                 guard !delivered else { return false }
                 delivered = true
@@ -138,7 +137,10 @@ final class PacketTunnelPlatformInterface: NSObject, LibboxPlatformInterfaceProt
                 firstUpdate.signal()
             }
         }
-        monitor.start(queue: DispatchQueue(label: "com.astervpn.packet-tunnel.path-monitor"))
+        // Keep the monitor on a system utility queue. A private serial queue
+        // can re-enter Libbox's callback bridge while it is synchronously
+        // waiting for the first update, which aborts the extension on device.
+        monitor.start(queue: DispatchQueue.global(qos: .utility))
 
         guard firstUpdate.wait(timeout: .now() + 5) == .success else {
             monitor.cancel()
@@ -374,13 +376,6 @@ private final class LockedBox<Value>: @unchecked Sendable {
     }
 }
 
-private final class UncheckedSendableBox<Value>: @unchecked Sendable {
-    let value: Value
-
-    init(_ value: Value) {
-        self.value = value
-    }
-}
 
 private enum PacketTunnelPlatformError: LocalizedError {
     case invalidTunOptions

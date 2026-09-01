@@ -21,7 +21,7 @@
   - **Specs:** SPEC-0058、SPEC-0059、SPEC-0062。
 
 - [ ] **完成签名真机连接与线路切换矩阵**
-  - **Current:** 真机日志已定位并修复三层兼容问题：`startOrReloadService(nil options)` 的 Go panic、旧 archive 缺少 uTLS，以及精简构建缺少 Libbox 内部所需的 `with_clash_api`。已加入 preflight/非空 options、以 pinned commit 重建 `with_utls,with_clash_api,ios,with_low_memory` Libbox，并将 Provider 启动移出 XPC 主线程；连接图标改为静态状态图标，连接超时收敛到可重试状态，连接前幂等修复 App Group 配置，首次默认优先 AnyTLS 线路。另补回旧版已验证的 remote DNS、53 端口 hijack、IPv6 TUN、MTU/gVisor 和默认接口自动探测。2026-09-01 修复包已重新编译、签名、安装并在 Thomson iPhone 上实测：日志出现 `Libbox command server started`、`Tunnel file descriptor delivered`、`status changed to connected` 和 `NESMVPNSessionStateRunning`，未再出现 Clash API 缺失错误；真实远端握手、DNS/HTTPS 出口、免费时长在新包上的行为与多线路矩阵仍待继续验证。
+  - **Current:** 真机日志已定位并修复三层兼容问题：`startOrReloadService(nil options)` 的 Go panic、旧 archive 缺少 uTLS，以及精简构建缺少 Libbox 内部所需的 `with_clash_api`。已加入 preflight/非空 options、以 pinned commit 重建 `with_utls,with_clash_api,ios,with_low_memory` Libbox，并将 Provider 启动工作移出 XPC 主线程；连接图标改为静态状态图标，连接超时收敛到可重试状态，连接前幂等修复 App Group 配置，首次默认优先 AnyTLS 线路。另补回旧版已验证的 remote DNS、53 端口 hijack、IPv6 TUN、MTU/gVisor 和默认接口自动探测。2026-09-02 又发现 Debug PacketTunnel 的 LLVM coverage instrumentation 会尝试写入只读扩展 bundle 的 `default.profraw`，触发 SIGABRT/`Plugin failed`；随后关闭 Libbox Debug probes，并把接口监控移至系统 utility 队列，已重新安装设备包。真实远端握手、DNS/HTTPS 出口、免费时长在新包上的行为与多线路矩阵仍待继续验证。
   - **Dependency:** 在 Thomson’s iPhone 完成 VPN 系统权限与真实线路交互；多线路测试还需要安全的生产前 endpoint。
   - **Done when:** 先在用户原设备/线路回归公共 fd resolver；再用两台支持版本 iPhone 覆盖 Wi-Fi/蜂窝、连接/断开、DNS/出口变化、三条线路、后台/前台、网络切换、缓存回退、余额耗尽、Pro 不扣时；日志不含凭据。
   - **Specs:** SPEC-0001、SPEC-0054、SPEC-0056、SPEC-0060、SPEC-0062。

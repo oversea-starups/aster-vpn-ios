@@ -130,13 +130,13 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
         options.basePath = baseURL.path
         options.workingPath = workingURL.path
         options.tempPath = FileManager.default.temporaryDirectory.path
-        #if DEBUG
-        options.logMaxLines = 256
-        options.debug = true
-        #else
+        // Libbox's debug mode enables additional platform probes that are not
+        // required by the packet tunnel and can abort the extension on-device
+        // while the default-interface monitor is being initialized. Keep the
+        // engine in its production mode for both Debug and Release builds;
+        // lifecycle diagnostics remain available through PacketTunnelLog.
         options.logMaxLines = 0
         options.debug = false
-        #endif
 
         var setupError: NSError?
         guard LibboxSetup(options, &setupError) else {
