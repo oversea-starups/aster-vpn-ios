@@ -34,6 +34,10 @@
   - **Dependency:** App Store Connect monthly/yearly products、subscription group、价格/intro offer 和法律 URL。
   - **Done when:** sandbox 覆盖 eligible/ineligible trial、购买、pending、cancel、restore、expiry、refund；Pro 无广告且不扣时；文案与 App Store 配置一致。
 
+- [ ] **验证 StoreKit 原生试用与 MRR 策略**
+  - **Decision (2026-09-01):** 保留已配置且由 StoreKit 判定用户有资格的 introductory offer；无资格用户直接看到正常订阅 CTA。暂不增加每日签到、可累计免费时长或自定义试用余额：这些权益会稀释 Pro 的无限保护价值、增加滥用与状态复杂度，并可能与 App Store 试用资格产生冲突。
+  - **Done when:** 在 Sandbox 覆盖有资格/无资格、购买、取消、恢复和过期路径，确认价格、试用文案和续订条款均由 StoreKit/ASC 返回并按地区显示；上线后按 cohort 比较试用转化、首付率、续订率和退款率。
+
 - [ ] **完成本地化多语言翻译与适配**
   - **Scope:** 以英文为基线，覆盖 `zh-Hans`、`zh-Hant`、`ja`、`es`、`de`、`fr`；Home、Locations、Account、Paywall、系统授权前后提示、错误与恢复购买文案必须自然、用户向、无技术内部术语。
   - **Done when:** 所有用户可见字符串进入 `Localizable.strings`/String Catalog；法律 URL、价格、日期和订阅条款按地区核对；最小屏、最大 Dynamic Type、VoiceOver、文本膨胀和截图逐语言验收。

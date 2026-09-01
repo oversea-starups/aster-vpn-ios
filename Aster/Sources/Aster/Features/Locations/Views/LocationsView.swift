@@ -6,7 +6,7 @@ struct LocationsView: View {
     @StateObject private var store = NodeCatalogStore.shared
     @StateObject private var subscriptionStore = SubscriptionStore.shared
     @State private var selectedSection: LocationsSection = .vip
-    @State private var showsPaywall = false
+    @State private var selectedProductID: String? = AppConfiguration.yearlyProductID
     let canSwitchLocation: Bool
     let showsCloseButton: Bool
 
@@ -45,9 +45,6 @@ struct LocationsView: View {
             .task {
                 await store.refreshIfNeeded()
             }
-            .sheet(isPresented: $showsPaywall) {
-                PaywallView()
-            }
         }
     }
 
@@ -83,35 +80,70 @@ struct LocationsView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                 } else {
                     ForEach(subscriptionStore.products, id: \.id) { product in
-                        HStack(spacing: 12) {
-                            Image(systemName: "checkmark.circle.fill")
-                                .foregroundStyle(AsterTheme.mint)
-                            VStack(alignment: .leading, spacing: 3) {
-                                Text(product.displayName)
+                        Button {
+                            selectedProductID = product.id
+                        } label: {
+                            HStack(spacing: 12) {
+                                Image(systemName: selectedProductID == product.id ? "checkmark.circle.fill" : "circle")
+                                    .foregroundStyle(selectedProductID == product.id ? AsterTheme.mint : .secondary)
+                                VStack(alignment: .leading, spacing: 3) {
+                                    Text(product.displayName)
+                                        .font(.headline)
+                                    Text(product.description)
+                                        .font(.caption)
+                                        .foregroundStyle(.white)
+                                        .lineLimit(2)
+                                }
+                                Spacer(minLength: 8)
+                                Text(product.displayPrice)
                                     .font(.headline)
-                                Text(product.description)
-                                    .font(.caption)
-                                    .foregroundStyle(.white)
-                                    .lineLimit(2)
                             }
-                            Spacer(minLength: 8)
-                            Text(product.displayPrice)
-                                .font(.headline)
+                            .padding(14)
+                            .background(
+                                selectedProductID == product.id ? AsterTheme.mint.opacity(0.10) : .white.opacity(0.06),
+                                in: RoundedRectangle(cornerRadius: 16, style: .continuous)
+                            )
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                    .stroke(
+                                        selectedProductID == product.id ? AsterTheme.mint : .white.opacity(0.10),
+                                        lineWidth: 1.5
+                                    )
+                            }
                         }
-                        .padding(14)
-                        .background(.white.opacity(0.06), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                        .buttonStyle(.plain)
+                        .accessibilityValue(selectedProductID == product.id ? "Selected" : "Not selected")
                     }
                 }
             }
 
-            Button("View and choose a plan") {
-                showsPaywall = true
+            if let selectedProduct {
+                Button {
+                    Task { _ = await subscriptionStore.purchase(selectedProduct) }
+                } label: {
+                    HStack(spacing: 10) {
+                        if subscriptionStore.isLoading {
+                            ProgressView().tint(AsterTheme.navy)
+                        }
+                        Text(purchaseTitle(for: selectedProduct))
+                            .font(.headline)
+                    }
+                    .frame(maxWidth: .infinity, minHeight: 52)
+                }
+                .buttonStyle(.plain)
+                .foregroundStyle(AsterTheme.navy)
+                .background(AsterTheme.mint, in: RoundedRectangle(cornerRadius: 15, style: .continuous))
+                .disabled(subscriptionStore.isLoading)
+                .accessibilityIdentifier("vipPurchaseButton")
             }
-            .font(.body.weight(.bold))
-            .foregroundStyle(AsterTheme.navy)
-            .frame(maxWidth: .infinity, minHeight: 48)
-            .background(AsterTheme.mint, in: RoundedRectangle(cornerRadius: 15, style: .continuous))
-            .accessibilityIdentifier("vipUpgradeButton")
+
+            if let message = subscriptionStore.userMessage {
+                Text(message)
+                    .font(.footnote)
+                    .foregroundStyle(AsterTheme.warning)
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity)
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .asterCard()
@@ -120,6 +152,35 @@ struct LocationsView: View {
                 await subscriptionStore.loadProducts()
             }
         }
+        .onChange(of: subscriptionStore.products.map(\.id)) { productIDs in
+            guard let first = productIDs.first else { return }
+            if selectedProductID == nil || !productIDs.contains(selectedProductID ?? "") {
+                selectedProductID = productIDs.first(where: { $0 == AppConfiguration.yearlyProductID }) ?? first
+            }
+        }
+    }
+
+    private var selectedProduct: Product? {
+        subscriptionStore.products.first(where: { $0.id == selectedProductID }) ?? subscriptionStore.products.first
+    }
+
+    private func purchaseTitle(for product: Product) -> String {
+        guard
+            subscriptionStore.freeTrialEligibleProductIDs.contains(product.id),
+            let period = product.subscription?.introductoryOffer?.period
+        else {
+            return "Subscribe with Apple"
+        }
+
+        let unit: String
+        switch period.unit {
+        case .day: unit = "day"
+        case .week: unit = "week"
+        case .month: unit = "month"
+        case .year: unit = "year"
+        @unknown default: unit = "period"
+        }
+        return "Start a \(period.value)-\(unit) free trial"
     }
 
     private var locationsContent: some View {

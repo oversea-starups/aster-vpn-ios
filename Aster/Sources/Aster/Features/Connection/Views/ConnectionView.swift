@@ -29,19 +29,21 @@ struct ConnectionView: View {
     }
 
     private func homeLayout(compact: Bool) -> some View {
-        VStack(spacing: compact ? 12 : 18) {
+        VStack(spacing: compact ? 10 : 14) {
             brandHeader
             statusHero(compact: compact)
+            // Keep the upgrade reason close to the primary connection outcome.
+            // Location switching remains immediately available as the secondary action.
+            accessHubCard(compact: compact)
+
             locationCard
 
             if let message = viewModel.userMessage {
                 messageCard(message)
             }
-
-            accessHubCard(compact: compact)
         }
         .padding(.horizontal, compact ? 16 : 20)
-        .padding(.vertical, compact ? 10 : 12)
+        .padding(.vertical, compact ? 8 : 10)
         .frame(maxWidth: .infinity, alignment: .top)
     }
 
@@ -66,14 +68,14 @@ struct ConnectionView: View {
                     .background(AsterTheme.mint, in: Capsule())
             }
         }
-        .padding(.top, 8)
+        .padding(.top, 4)
     }
 
     private func statusHero(compact: Bool) -> some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 10) {
             connectionSwitch(compact: compact)
 
-            VStack(spacing: 7) {
+            VStack(spacing: 5) {
                 Text(viewModel.presentationState.title)
                     .font(compact ? .title2.weight(.bold) : .largeTitle.weight(.bold))
                 Text(viewModel.presentationState.detail)
@@ -96,16 +98,16 @@ struct ConnectionView: View {
             ZStack {
                 Circle()
                     .fill(statusColor.opacity(0.13))
-                    .frame(width: compact ? 142 : 170, height: compact ? 142 : 170)
+                    .frame(width: compact ? 136 : 154, height: compact ? 136 : 154)
                 Circle()
                     .stroke(statusColor.opacity(0.22), lineWidth: 1)
-                    .frame(width: compact ? 122 : 146, height: compact ? 122 : 146)
+                    .frame(width: compact ? 116 : 132, height: compact ? 116 : 132)
                 Circle()
                     .fill(primaryActionColor)
-                    .frame(width: compact ? 96 : 116, height: compact ? 96 : 116)
+                    .frame(width: compact ? 92 : 104, height: compact ? 92 : 104)
                     .shadow(color: primaryActionColor.opacity(0.42), radius: 16, y: 6)
                 Image(systemName: viewModel.presentationState.symbolName)
-                    .font(.system(size: compact ? 34 : 44, weight: .semibold))
+                    .font(.system(size: compact ? 32 : 40, weight: .semibold))
                     .foregroundStyle(AsterTheme.navy)
                     .rotationEffect(
                         .degrees(viewModel.presentationState.isTransitioning && !reduceMotion ? 360 : 0)

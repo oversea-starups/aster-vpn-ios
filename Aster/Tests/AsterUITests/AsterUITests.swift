@@ -30,8 +30,9 @@ final class AsterUITests: XCTestCase {
         let app = launchApp()
         XCTAssertTrue(app.buttons["locationPickerButton"].waitForExistence(timeout: 8))
         app.buttons["locationPickerButton"].tap()
-        XCTAssertTrue(app.buttons["Locations"].waitForExistence(timeout: 5))
-        app.buttons["Locations"].tap()
+        let locationsSegment = app.segmentedControls.buttons["Locations"]
+        XCTAssertTrue(locationsSegment.waitForExistence(timeout: 5))
+        locationsSegment.tap()
         XCTAssertTrue(
             app.staticTexts["Locations are temporarily unavailable"].exists ||
             app.staticTexts["Updated"].exists ||

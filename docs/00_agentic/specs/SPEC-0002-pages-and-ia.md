@@ -16,7 +16,7 @@
 
 ### 2) Locations Tab
 - 顶部使用两个分段 Tab：`VIP`（默认）与 `Locations`；不额外显示 “Home” 或 “Available locations” 等重复标题。
-- `VIP` 展示 StoreKit 返回的真实套餐名称、价格与升级入口；购买与恢复流程继续由 Paywall/Account 承载。
+- `VIP` 进入后直接加载并展示 StoreKit 返回的真实套餐名称、描述和本地化价格；选择套餐后可直接发起 Apple 购买，不增加“查看套餐”中间按钮。恢复购买仍由 Account 承载；StoreKit 原生试用只对符合资格的用户显示。
 - `Locations` 展示可用地区、切换限制、刷新状态和可恢复错误。
 - 连接中不可更换地区；断开后选择即保存并回到 Home
 
