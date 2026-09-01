@@ -32,7 +32,7 @@
   - **Done when:** 当前 UI 在健康 arm64 simulator/CI 执行通过、0 failures、0 unexpected skips；保存 `.xcresult`；UI 覆盖 Home、Locations、Account、Paywall、圆形连接开关、最大 Dynamic Type、VoiceOver/Reduce Motion 基线和未完成文案扫描。
 
 - [ ] **完成 StoreKit 产品与 sandbox 生命周期**
-  - **Current:** 动态价格/试用资格、购买、恢复和 verified entitlement 已实现。
+  - **Current:** 动态价格/试用资格、购买、恢复和 verified entitlement 已实现；ASC 实际产品 ID 已核对并修正为 `com.astervpn.Aster.premium.monthly` 与 `com.astervpn.Aster.premium.annual`，此前错误 ID 会导致 Paywall 返回空产品。
   - **Dependency:** App Store Connect monthly/yearly products、subscription group、价格/intro offer 和法律 URL。
   - **Done when:** sandbox 覆盖 eligible/ineligible trial、购买、pending、cancel、restore、expiry、refund；Pro 无广告且不扣时；文案与 App Store 配置一致。
 
