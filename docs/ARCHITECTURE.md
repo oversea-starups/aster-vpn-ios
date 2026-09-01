@@ -107,7 +107,7 @@ The App Store target is StoreKit-only. No third-party advertising SDK, consent f
 - The root is a fixed three-tab shell: Home, Locations and Account. Home and Account use `ViewThatFits` fixed compositions and only fall back to a hidden-indicator scroll container for small screens or accessibility text sizes; the Locations list remains scrollable because its length is data-driven.
 - Home shows the circular power control, current region and one access surface. The full-width Pro CTA is the strongest conversion action. Account is the single destination for subscription, restore and legal actions. `SubscriptionTier` separates capability tiers from billing cadence; only verified StoreKit products mapped in `AppConfiguration` are surfaced (currently monthly/yearly both map to Pro).
 - Account displays the verified StoreKit entitlement state. For an active subscription with an expiration date it shows a localized neutral `Access through <date>` label; it never claims renewal unless StoreKit supplies that evidence. Free users see a clear upgrade CTA.
-- The first-use data disclosure is a large, non-dismissible sheet over the tabs. It must be explicitly continued before catalog refresh; full Privacy Policy/Terms links remain available in the sheet and Account.
+- No custom privacy disclosure sheet is shown on launch or before connection. Privacy Policy and Terms of Use remain available in Account/Settings and the Paywall legal section; Apple’s VPN configuration permission is shown only by the system when connection requires it.
 
 ## Verification and Operations
 

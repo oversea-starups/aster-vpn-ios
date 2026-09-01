@@ -17,7 +17,7 @@
 | Rewarded ads / consent | Google Mobile Ads 13.8.0 + UMP 3.1.0 | SPM resolution and ad/consent services |
 | Subscription | StoreKit 2 | `SubscriptionStore`, `PaywallView` |
 | SSV backend | Node 24 container + built-in HTTP + SQLite (`better-sqlite3`) | `Backend/AdMobSSV/`; 12/12 tests, npm audit 0, container smoke |
-| Privacy declaration | Apple Privacy Manifest + first-use disclosure | app manifest and disclosure source; aggregated GMA/UMP conflict/archive report pending |
+| Privacy declaration | Apple Privacy Manifest + Account/Settings legal links | app manifest and final Archive privacy report pending |
 | Tests | XCTest unit + UI | latest 48-unit and 9-UI targets compile/link with exit 0; previous 45-unit `.xcresult` is 44 pass + 1 named x86_64 Libbox skip, while new parser/region/cache cases and post-fix UI runtime remain pending |
 
 ## Planned, Not Integrated

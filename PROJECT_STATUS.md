@@ -7,7 +7,7 @@
 ## Project Overview
 
 - **Purpose:** 面向美区 iPhone 用户提供可信的一键 VPN，并通过订阅形成主要商业闭环。
-- **Implemented slice:** 多线路订阅更新/选择、StoreKit paywall 与到期状态展示、Home/Locations/Account 三 Tab、圆形连接开关、Apple TUN/Libbox bridge、首次使用数据说明和生产配置守卫；App Store 目标为 StoreKit-only，不包含第三方广告。
+- **Implemented slice:** 多线路订阅更新/选择、StoreKit paywall 与到期状态展示、Home/Locations/Account 三 Tab、圆形连接开关、Apple TUN/Libbox bridge、Account/Settings 法律入口和生产配置守卫；App Store 目标为 StoreKit-only，不包含第三方广告。
 - **Evidence state:** 当前 App target 已重新生成并严格编译、链接、打包成功，且已移除 GMA/UMP、广告标识和激励入口；最新 `AsterTests` 与 `AsterUITests` targets 也分别 exit 0。AnyTLS 解析、密码凭据和 TLS ALPN builder 测试已通过。Clash Meta 实际配置已转换为 49 个去重节点（VLESS 2、VMess 17、AnyTLS 30），状态记录被过滤，用户标签收敛为地区名，并逐节点完成 catalog 解码、校验与 sing-box JSON 构建。另已使用组织 Team `66B9A952T9`、Network Extension/App Group entitlement 和 Apple Development 身份完成 arm64 Debug device package；主 App、Packet Tunnel 与嵌入 frameworks 的 `codesign --verify --deep --strict` exit 0。由于 CoreDevice 直接写 App Group 根目录存在兼容性错误，已通过仅 Debug 编译的导入桥将经校验的 catalog/config 从 App 沙盒 Library 写入 App Group；暂存文件已在启动后清理，导入流程完成。UI runtime 仍被 CoreSimulator UI query、screenshot、shutdown 及 LaunchServices migration 阻断，不能标记为 UI runtime-passed。用户报告旧线路真机连接成功，但该记录早于 fd bridge 变更，且未提供设备/OS/网络/出口/DNS 记录，因此只记为历史 user-reported device evidence。
 - **Release decision:** **Not release-ready.** StoreKit-only 已解决 AdMob 与 Apple VPN 审核规则的产品冲突，但生产节点源、签名、StoreKit sandbox、法律材料、公共 fd bridge 真机回归和完整设备矩阵仍未完成。
 - **Current VPN correction (supersedes the earlier installed-package state):** 用户点击连接后的设备日志已把失败定位为两层 Libbox 兼容问题：空 override options 导致 Go panic，以及旧 archive 未启用 uTLS。当前已用 pinned upstream source 重建 `with_utls,ios,with_low_memory` Libbox，加入 config preflight 和非空 options，并适配新 binding；iPhoneOS App build 与完整 arm64 `build-for-testing` 均 exit 0，新 48 MB Debug 包 nested codesign 验证通过。手机现在被识别但 CoreDevice tunnel unavailable，因此修复包尚未安装，不能标记 device-verified。
@@ -50,7 +50,7 @@
 - 根导航固定为 Home、Locations、Account 三个 Tab；Home 与 Account 使用 `ViewThatFits` 的固定版式，仅在小屏或辅助功能字号下回退到隐藏滚动指示器的容器，避免网页式首页滚动。Home 使用圆形电源开关作为唯一主连接动作；Locations 列表仍按数据长度滚动，并只显示地区名。
 - Home 遵循“状态/圆形开关 → 当前地区 → Pro 主 CTA”的单任务层级；Account 成为唯一的订阅/协议入口。状态记录不会进入可选线路列表。
 - Paywall 仅显示 StoreKit 返回的真实产品、价格、trial eligibility 和年度节省；产品不可用时不显示假价格。购买、恢复、verified entitlement 已实现；Account 显示 Aster Pro 的本地化 `Access through <date>` 到期信息，不在缺少 StoreKit 证据时推断续订状态。
-- 首次服务使用前以不可跳过的大尺寸 sheet 展示一次性的 “Before you connect” 数据用途说明；文案使用用户向语言，避免 tunnel extension、entitlement、IP-derived coarse location 等内部术语，按钮为 Continue 而非法律同意。Privacy URL 可用时提供入口，Terms 始终可达，Account 提供恢复购买和订阅管理。已移除可选广告说明。
+- 不在首次启动或首次连接前展示自有隐私说明页/弹窗，避免阻断核心连接路径。Privacy Policy 与 Terms of Use 仅通过 Account/Settings 和 Paywall 法律区域访问。
 - Production Swift sources 扫描未发现 TODO/FIXME/mock/placeholder/coming-soon/not-implemented 等面向用户的半成品标记。Debug 配置中的 Google 官方测试 ID 和保留域名不会通过 Release guard。
 - 系统 UI contrast audit 曾定位到首次披露半透明卡片正文；全局卡片已改为确定的不透明 deep-blue surface，修复后 target build 通过，仍需在健康 UI automation host 重跑确认。
 

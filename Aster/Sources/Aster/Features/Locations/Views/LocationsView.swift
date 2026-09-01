@@ -2,7 +2,6 @@ import SwiftUI
 
 struct LocationsView: View {
     @Environment(\.dismiss) private var dismiss
-    @AppStorage("privacy_disclosure_acknowledged_v1") private var privacyDisclosureAcknowledged = false
     @StateObject private var store = NodeCatalogStore.shared
     let canSwitchLocation: Bool
     let showsCloseButton: Bool
@@ -75,7 +74,6 @@ struct LocationsView: View {
                 }
             }
             .task {
-                guard privacyDisclosureAcknowledged else { return }
                 await store.refreshIfNeeded()
             }
         }

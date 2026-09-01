@@ -18,22 +18,6 @@ final class AsterUITests: XCTestCase {
         XCTAssertTrue(app.descendants(matching: .any)["Terms"].exists)
     }
 
-    func testFirstUseDataDisclosureUsesProductionCopy() throws {
-        let app = XCUIApplication()
-        app.launchArguments += ["-privacy_disclosure_acknowledged_v1", "NO"]
-        app.launch()
-
-        XCTAssertTrue(app.staticTexts["privacyDisclosureTitle"].waitForExistence(timeout: 8))
-        XCTAssertTrue(app.staticTexts["VPN connection"].exists)
-        XCTAssertTrue(app.staticTexts["On this device"].exists)
-        XCTAssertFalse(app.staticTexts["Optional rewarded ads"].exists)
-        XCTAssertTrue(app.staticTexts["Subscriptions"].exists)
-        XCTAssertTrue(app.buttons["acceptPrivacyDisclosureButton"].exists)
-        if #available(iOS 17.0, *) {
-            try app.performAccessibilityAudit(for: [.contrast])
-        }
-    }
-
     func testHomeAccessibilityAudit() throws {
         let app = launchApp()
         XCTAssertTrue(app.staticTexts["Not protected"].waitForExistence(timeout: 8))
@@ -66,10 +50,7 @@ final class AsterUITests: XCTestCase {
 
     func testConversionActionsRemainReachableAtLargestAccessibilityText() {
         let app = XCUIApplication()
-        app.launchArguments += [
-            "-privacy_disclosure_acknowledged_v1", "YES",
-            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityExtraExtraExtraLarge"
-        ]
+        app.launchArguments += ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityExtraExtraExtraLarge"]
         app.launch()
 
         let connect = app.buttons["connectButton"]
@@ -90,7 +71,6 @@ final class AsterUITests: XCTestCase {
 
     private func launchApp() -> XCUIApplication {
         let app = XCUIApplication()
-        app.launchArguments += ["-privacy_disclosure_acknowledged_v1", "YES"]
         app.launch()
         return app
     }

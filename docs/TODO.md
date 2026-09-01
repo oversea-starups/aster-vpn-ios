@@ -1,7 +1,7 @@
 # TODO
 
 > Last reviewed: 2026-09-01  
-> 只列未完成工作；当前 App Store 目标为 StoreKit-only，不包含第三方广告；Locations catalog、schema v2、三 Tab/圆形连接开关、Account 到期状态、首次数据说明和 entitlement 修复见 `PROJECT_STATUS.md`。
+> 只列未完成工作；当前 App Store 目标为 StoreKit-only，不包含第三方广告；Locations catalog、schema v2、三 Tab/圆形连接开关、Account 法律入口和 entitlement 修复见 `PROJECT_STATUS.md`。
 
 ## Critical Release Decisions
 
@@ -27,7 +27,7 @@
 - [ ] **在健康 CI/Simulator 执行完整 XCTest**
   - **Current:** 最新 App、50 unit target 与 9 UI target 均严格 compile/link exit 0；已有 45 unit 执行为 44 pass、1 个明确的 x86_64 Libbox/Go signal-stack skip，0 failure/0 unexpected；新增状态记录/地区标签/缓存迁移/恢复用例尚未 runtime 执行。UI 首轮发现 disclosure contrast 与状态注入问题并已修复，suite 已扩展 Locations、Account、圆形连接开关与最大 Dynamic Type；修复后 CoreSimulator UI query、screenshot、shutdown 及全新 iOS 18.5 设备 migration 同时异常，尚无当前 UI pass evidence。
   - **Command:** `ASTER_TEST_DESTINATION_ID=<arm64-simulator-udid> ./scripts/run_quality_gate.sh`，门禁会保存 `.xcresult`/summary/log 并拒绝任何 skip。
-  - **Done when:** 59/59 在健康 arm64 simulator/CI 执行通过、0 failures、0 unexpected skips；保存 `.xcresult`；UI 覆盖首次数据说明、Home、Locations、Account、Reward、Paywall、圆形连接开关、最大 Dynamic Type、VoiceOver/Reduce Motion 基线和未完成文案扫描。
+  - **Done when:** 当前 UI 在健康 arm64 simulator/CI 执行通过、0 failures、0 unexpected skips；保存 `.xcresult`；UI 覆盖 Home、Locations、Account、Paywall、圆形连接开关、最大 Dynamic Type、VoiceOver/Reduce Motion 基线和未完成文案扫描。
 
 - [ ] **完成 StoreKit 产品与 sandbox 生命周期**
   - **Current:** 动态价格/试用资格、购买、恢复和 verified entitlement 已实现。
@@ -35,7 +35,7 @@
   - **Done when:** sandbox 覆盖 eligible/ineligible trial、购买、pending、cancel、restore、expiry、refund；Pro 无广告且不扣时；文案与 App Store 配置一致。
 
 - [ ] **完成本地化多语言翻译与适配**
-  - **Scope:** 以英文为基线，覆盖 `zh-Hans`、`zh-Hant`、`ja`、`es`、`de`、`fr`；首次数据说明、Home、Locations、Account、Paywall、错误与恢复购买文案必须自然、用户向、无技术内部术语。
+  - **Scope:** 以英文为基线，覆盖 `zh-Hans`、`zh-Hant`、`ja`、`es`、`de`、`fr`；Home、Locations、Account、Paywall、系统授权前后提示、错误与恢复购买文案必须自然、用户向、无技术内部术语。
   - **Done when:** 所有用户可见字符串进入 `Localizable.strings`/String Catalog；法律 URL、价格、日期和订阅条款按地区核对；最小屏、最大 Dynamic Type、VoiceOver、文本膨胀和截图逐语言验收。
   - **Owner:** iOS/Product/Localization
 
@@ -46,12 +46,20 @@
 
 ## Medium Priority
 
+- [ ] **验证连接优先的转化与留存实验**
+  - **P0 首次成功连接：**首次打开直接落 Home，自动准备可用线路；连接失败时提供明确的 `Try again`/`Choose a location`，不要先展示 paywall。
+  - **P0 价值后置 paywall：**用户完成一次成功连接或主动点击升级后再展示 Pro 价值；文案聚焦“无限保护时长、更多地区、持续保护”，不使用倒计时、假折扣或阻断式 upsell。
+  - **P1 可信状态反馈：**显示 `Connecting → Protected` 的阶段变化、最近一次连接地区和可恢复错误；不展示未经真实数据支持的速度、延迟或“最快”承诺。
+  - **P1 温和留存：**仅在用户主动断开、连接失败或连续多次成功连接后提供下一步建议（重连、切换地区、升级）；不使用推送骚扰或 VPN 连接中的插屏。
+  - **P1 可度量漏斗：**记录匿名的首次启动、首次点击 Connect、系统授权结果、连接 ready、paywall 查看、购买/恢复结果和 D1/D7 回访；不记录浏览内容、完整节点凭据或流量内容。
+  - **Done when:** 先建立 1 周基线，再一次只改一个变量；以首次 ready 连接率、首次连接耗时、paywall→购买率、D1/D7 留存和退款率共同评估，不只看点击率。
+
 - [ ] **补真实 traffic-ready 证据**
   - **Current:** Provider readiness 只证明 Libbox 启动与 Apple network settings 应用，不证明远端握手、DNS 或 HTTPS 出口。
   - **Done when:** 非敏感 DNS/HTTPS/exit health contract 可区分“系统 connected”和“可用保护”；失败不扣时，UI 可恢复。
 
 - [ ] **完成隐私、凭据和 Archive privacy report**
-  - **Current:** Keychain/App Group/File Protection 边界已实现；首次数据说明已接入。当前 App-owned manifest 与 StoreKit-only 二进制需在最终 Archive 中复核。
+  - **Current:** Keychain/App Group/File Protection 边界已实现；Privacy Policy/Terms 仅通过 Account/Settings 和 Paywall 法律区域访问。当前 App-owned manifest 与 StoreKit-only 二进制需在最终 Archive 中复核。
   - **Done when:** production dependencies 确定后导出 Archive privacy report；ASC privacy answers、Privacy Policy、保留周期、节点凭据和日志策略逐项一致。
 
 - [ ] **完成连接错误状态机与支持入口**
@@ -61,7 +69,7 @@
 
 ## Release Materials and Supply Chain
 
-- [ ] **完成 App Store 审核材料** — Privacy/Terms 公网 URL、ASC privacy answers、Review Notes、出口合规、订阅披露、截图、英文 copy review 和 TestFlight smoke；按 `ios-asc-configurator` 的 VPN Privacy UX and User-Facing Copy Gate 复核首次连接说明、法律入口、隐私选择和第三方 SDK 文案。
+  - [ ] **完成 App Store 审核材料** — Privacy/Terms 公网 URL、ASC privacy answers、Review Notes、出口合规、订阅披露、截图、英文 copy review 和 TestFlight smoke；按 `ios-asc-configurator` 的 VPN Privacy UX and User-Facing Copy Gate 复核连接路径、Account/Settings 法律入口和第三方 SDK 文案。
 - [ ] **让 Libbox 可复现且可合法分发** — source commit、Go/gomobile、tags 和当前 archive hashes 已记录于 `docs/00_agentic/LIBBOX_PROVENANCE.md`；仍需在干净环境独立复现、归档匹配源、提供 LICENSE/NOTICE/对应源码与 privacy provenance，并取得 GPLv3-or-later 分发法律结论。
 - [ ] **归档签名 Release 证据** — Release guard、生产配置、entitlements、embedded provisioning、aggregated privacy manifest、测试 ID/保留 URL 扫描、size/memory/crash 结果全部保存。
 

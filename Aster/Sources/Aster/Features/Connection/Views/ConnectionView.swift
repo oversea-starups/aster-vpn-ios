@@ -2,7 +2,6 @@ import SwiftUI
 
 struct ConnectionView: View {
     @StateObject private var viewModel = ConnectionViewModel()
-    @AppStorage("privacy_disclosure_acknowledged_v1") private var privacyDisclosureAcknowledged = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
@@ -27,7 +26,6 @@ struct ConnectionView: View {
                 LocationsView(canSwitchLocation: viewModel.canSwitchLocation)
             }
             .task {
-                guard privacyDisclosureAcknowledged else { return }
                 await viewModel.refreshLocationsIfNeeded()
             }
         }
