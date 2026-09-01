@@ -43,7 +43,7 @@
 - 节点 ID 由规范化连接字段 SHA-256 派生，不暴露 UUID。Catalog 以受保护、原子写入的 App Group `node_catalog.json` 保存 last-known-good；更新失败继续使用已验证缓存。
 - 首次启动、进入前台或超过 6 小时时自动刷新；Locations 页支持手动刷新和显式选择。连接期间禁止换线，选择后才将单个验证配置写入 `tunnel_config.json`。
 - 现有可连接配置不会因订阅缺失或远端不包含该节点而被删除，会以 “Current Location” 保留，避免升级破坏用户已验证线路。
-- Release 构建新增 `ASTER_NODE_SUBSCRIPTION_URL`，必须是公开 HTTPS URL；用户信息、fragment、本地/私网/保留域名和占位变量均被 App 与构建守卫拒绝。
+- Release 构建仍支持 `ASTER_NODE_SUBSCRIPTION_URL`，但当前首发决策是先使用安装包内置的已审核 catalog、暂不走接口；未来启用远端更新时必须使用公开 HTTPS URL，用户信息、fragment、本地/私网/保留域名和占位变量均被 App 与构建守卫拒绝。
 
 ### UI, subscription and review-facing copy
 

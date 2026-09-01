@@ -12,9 +12,10 @@
 ## High Priority
 
 - [ ] **提供安全的生产 Locations endpoint**
-  - **Current:** HTTPS fetch、VLESS/VMess/AnyTLS parser、原子 primary + validated backup catalog、6 小时/前台刷新和 Locations UI 已 build-verified；Release 尚无 `ASTER_NODE_SUBSCRIPTION_URL`。2026-09-01 的真机线路消失已定位为 replacement install 后未重新执行一次性 Debug bootstrap，而不是过滤器删除线路；本次包已重新导入经验证的 catalog/config。Clash Meta AnyTLS password is handled in the dedicated credential field。
+  - **Decision (2026-09-01):** 首发版本先采用安装包内置的已审核 catalog，不依赖远端接口；待用户量和线路运维需求达到阈值后，再切换为可撤销的公开 HTTPS 更新。
+  - **Current:** HTTPS fetch、VLESS/VMess/AnyTLS parser、原子 primary + validated backup catalog、6 小时/前台刷新和 Locations UI 已 build-verified；内置 catalog 加载机制和实际清单仍待接入。Release 尚无 `ASTER_NODE_SUBSCRIPTION_URL`。2026-09-01 的真机线路消失已定位为 replacement install 后未重新执行一次性 Debug bootstrap，而不是过滤器删除线路；本次包已重新导入经验证的 catalog/config。Clash Meta AnyTLS password is handled in the dedicated credential field。
   - **Constraint:** URL 会出现在 Info.plist，不能使用个人或 master provider subscription token。
-  - **Open question:** 用户希望将线路整合进安装包，但仓库当前没有经批准可发布的 catalog/节点凭据。不能凭空生成或把个人/master 订阅凭据写入 App Store 包；需要产品/运营提供可公开发布的固定节点清单，或提供可撤销的公开 HTTPS endpoint。收到来源后再把它接入首装内置种子并保留远端更新。
+  - **Blocker:** 仓库当前没有经批准可发布的 catalog/节点凭据。不能凭空生成或把个人/master 订阅凭据写入 App Store 包；需要产品/运营提供可公开发布的固定节点清单。收到清单后接入首装内置资源，并关闭远端刷新路径。
   - **Outcome:** revocable、app-specific 的公开 bootstrap/control endpoint；服务端负责撤销、轮换和最小暴露。
   - **Done when:** 至少 3 个受控节点可刷新/选择；错误更新不覆盖缓存；token 轮换、节点删除、schema v1→v2 和重放场景通过。
   - **Specs:** SPEC-0058、SPEC-0059、SPEC-0062。
