@@ -50,7 +50,7 @@ ASTER_NODE_SUBSCRIPTION_URL=https://...
 
 ## 快速开始
 
-前置条件：macOS、Xcode、XcodeGen；真机连接还需要 Apple Developer Team、Network Extension 能力和有效 VPN 节点。
+前置条件：macOS、Xcode、XcodeGen、Git LFS（Libbox 的 gVisor-enabled framework 以 LFS 管理）；真机连接还需要 Apple Developer Team、Network Extension 能力和有效 VPN 节点。首次克隆后执行 `git lfs pull`，再运行 `./setup.sh`。
 
 ```bash
 ./setup.sh
