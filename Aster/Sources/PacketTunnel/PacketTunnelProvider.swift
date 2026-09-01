@@ -39,6 +39,7 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
                 PacketTunnelLog.logger.notice("Sing-box configuration built")
                 try self.prepareLibbox()
                 PacketTunnelLog.logger.notice("Libbox setup completed")
+                PacketTunnelLog.logger.notice("Validating Libbox configuration")
                 try self.validateLibboxConfiguration(singBoxJSON, configuration: configuration)
                 PacketTunnelLog.logger.notice("Libbox configuration validated")
 

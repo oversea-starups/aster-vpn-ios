@@ -6,8 +6,8 @@ repository_root="$(cd "$(dirname "$0")/.." && pwd)"
 source_revision="650ef881c8fb216259e4ebcfbd74234554c39612"
 gomobile_version="v0.1.12"
 go_toolchain="go1.25.5"
-expected_device_hash="92e997f1b5740c5e7c34d5fb272b167668aa7da714371ff30eccbd22cbc74313"
-expected_simulator_hash="c0bd23646fa71e0acd20ad657468fcbc41eff19eaeb8d8707664fb9c218f861c"
+expected_device_hash="70e673633a3251aaccaa95b8b714afb5af699d95d2a96cc430579b3293e058bf"
+expected_simulator_hash="fe1a199e6878cfe3442b1afba338d95a4e0c3dbc9dba5912a13f799a6f3301e2"
 build_root="$(mktemp -d /private/tmp/aster-libbox-build.XXXXXX)"
 source_root="$build_root/sing-box"
 isolated_gopath="$build_root/gopath"
@@ -27,11 +27,13 @@ git -C "$source_root" apply --check "$patch_file"
 git -C "$source_root" apply "$patch_file"
 
 mkdir -p "$isolated_gopath"
-echo "Installing pinned gomobile tool..."
+echo "Installing pinned gomobile/gobind tools..."
 env GOPATH="$isolated_gopath" GOTOOLCHAIN="$go_toolchain" \
   go install "github.com/sagernet/gomobile/cmd/gomobile@$gomobile_version"
+env GOPATH="$isolated_gopath" GOTOOLCHAIN="$go_toolchain" \
+  go install "github.com/sagernet/gomobile/cmd/gobind@$gomobile_version"
 
-echo "Building minimal iOS/iOS Simulator Libbox with uTLS..."
+echo "Building minimal iOS/iOS Simulator Libbox with gVisor, uTLS and Clash API bootstrap..."
 (
   cd "$source_root"
   env GOPATH="$isolated_gopath" GOTOOLCHAIN="$go_toolchain" \
@@ -52,8 +54,8 @@ if [[ "$device_hash" != "$expected_device_hash" || "$simulator_hash" != "$expect
 fi
 
 for binary in "$device_binary" "$simulator_binary"; do
-  strings "$binary" | grep -E -- '-tags=with_utls,with_clash_api,ios(,iossimulator)?,with_low_memory' >/dev/null || {
-    echo "error: required uTLS/Clash bootstrap/low-memory build tags are missing from $binary" >&2
+  strings "$binary" | grep -E -- '-tags=with_gvisor,with_utls,with_clash_api,ios(,iossimulator)?,with_low_memory' >/dev/null || {
+    echo "error: required gVisor/uTLS/Clash bootstrap/low-memory build tags are missing from $binary" >&2
     exit 1
   }
 done

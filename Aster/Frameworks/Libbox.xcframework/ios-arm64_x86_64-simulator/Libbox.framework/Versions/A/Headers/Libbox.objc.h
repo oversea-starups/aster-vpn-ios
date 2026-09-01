@@ -601,13 +601,13 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setBridgeName:) NSString* _Nonnull bridgeName;
-@property (nonatomic, setter=setMTU:) int32_t mtu;
-@property (nonatomic, setter=setInet4Port:) NSString* _Nonnull inet4Port;
-@property (nonatomic, setter=setInet6Port:) NSString* _Nonnull inet6Port;
-@property (nonatomic, setter=setInterface:) NSString* _Nonnull interface;
-@property (nonatomic, setter=setRuleIndex:) int32_t ruleIndex;
-@property (nonatomic, setter=setRouteTable:) int32_t routeTable;
+@property (nonatomic) NSString* _Nonnull bridgeName;
+@property (nonatomic) int32_t mtu;
+@property (nonatomic) NSString* _Nonnull inet4Port;
+@property (nonatomic) NSString* _Nonnull inet6Port;
+@property (nonatomic) NSString* _Nonnull interface;
+@property (nonatomic) int32_t ruleIndex;
+@property (nonatomic) int32_t routeTable;
 @end
 
 @interface LibboxCommandClient : NSObject <goSeqRefInterface> {
@@ -666,7 +666,7 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setStatusInterval:) int64_t statusInterval;
+@property (nonatomic) int64_t statusInterval;
 - (void)addCommand:(int32_t)command;
 @end
 
@@ -795,27 +795,27 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setID:) NSString* _Nonnull id_;
-@property (nonatomic, setter=setInbound:) NSString* _Nonnull inbound;
-@property (nonatomic, setter=setInboundType:) NSString* _Nonnull inboundType;
-@property (nonatomic, setter=setIPVersion:) int32_t ipVersion;
-@property (nonatomic, setter=setNetwork:) NSString* _Nonnull network;
-@property (nonatomic, setter=setSource:) NSString* _Nonnull source;
-@property (nonatomic, setter=setDestination:) NSString* _Nonnull destination;
-@property (nonatomic, setter=setDomain:) NSString* _Nonnull domain;
-@property (nonatomic, setter=setProtocol:) NSString* _Nonnull protocol;
-@property (nonatomic, setter=setUser:) NSString* _Nonnull user;
-@property (nonatomic, setter=setFromOutbound:) NSString* _Nonnull fromOutbound;
-@property (nonatomic, setter=setCreatedAt:) int64_t createdAt;
-@property (nonatomic, setter=setClosedAt:) int64_t closedAt;
-@property (nonatomic, setter=setUplink:) int64_t uplink;
-@property (nonatomic, setter=setDownlink:) int64_t downlink;
-@property (nonatomic, setter=setUplinkTotal:) int64_t uplinkTotal;
-@property (nonatomic, setter=setDownlinkTotal:) int64_t downlinkTotal;
-@property (nonatomic, setter=setRule:) NSString* _Nonnull rule;
-@property (nonatomic, setter=setOutbound:) NSString* _Nonnull outbound;
-@property (nonatomic, setter=setOutboundType:) NSString* _Nonnull outboundType;
-@property (nonatomic, setter=setProcessInfo:) LibboxProcessInfo* _Nullable processInfo;
+@property (nonatomic) NSString* _Nonnull id_;
+@property (nonatomic) NSString* _Nonnull inbound;
+@property (nonatomic) NSString* _Nonnull inboundType;
+@property (nonatomic) int32_t ipVersion;
+@property (nonatomic) NSString* _Nonnull network;
+@property (nonatomic) NSString* _Nonnull source;
+@property (nonatomic) NSString* _Nonnull destination;
+@property (nonatomic) NSString* _Nonnull domain;
+@property (nonatomic) NSString* _Nonnull protocol;
+@property (nonatomic) NSString* _Nonnull user;
+@property (nonatomic) NSString* _Nonnull fromOutbound;
+@property (nonatomic) int64_t createdAt;
+@property (nonatomic) int64_t closedAt;
+@property (nonatomic) int64_t uplink;
+@property (nonatomic) int64_t downlink;
+@property (nonatomic) int64_t uplinkTotal;
+@property (nonatomic) int64_t downlinkTotal;
+@property (nonatomic) NSString* _Nonnull rule;
+@property (nonatomic) NSString* _Nonnull outbound;
+@property (nonatomic) NSString* _Nonnull outboundType;
+@property (nonatomic) LibboxProcessInfo* _Nullable processInfo;
 - (id<LibboxStringIterator> _Nullable)chain;
 - (NSString* _Nonnull)displayDestination;
 @end
@@ -826,12 +826,12 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setType:) int32_t type;
-@property (nonatomic, setter=setID:) NSString* _Nonnull id_;
-@property (nonatomic, setter=setConnection:) LibboxConnection* _Nullable connection;
-@property (nonatomic, setter=setUplinkDelta:) int64_t uplinkDelta;
-@property (nonatomic, setter=setDownlinkDelta:) int64_t downlinkDelta;
-@property (nonatomic, setter=setClosedAt:) int64_t closedAt;
+@property (nonatomic) int32_t type;
+@property (nonatomic) NSString* _Nonnull id_;
+@property (nonatomic) LibboxConnection* _Nullable connection;
+@property (nonatomic) int64_t uplinkDelta;
+@property (nonatomic) int64_t downlinkDelta;
+@property (nonatomic) int64_t closedAt;
 @end
 
 @interface LibboxConnectionEvents : NSObject <goSeqRefInterface> {
@@ -840,7 +840,7 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setReset:) BOOL reset;
+@property (nonatomic) BOOL reset;
 - (id<LibboxConnectionEventIterator> _Nullable)iterator;
 @end
 
@@ -850,9 +850,9 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setUserId:) int32_t userId;
-@property (nonatomic, setter=setUserName:) NSString* _Nonnull userName;
-@property (nonatomic, setter=setProcessPath:) NSString* _Nonnull processPath;
+@property (nonatomic) int32_t userId;
+@property (nonatomic) NSString* _Nonnull userName;
+@property (nonatomic) NSString* _Nonnull processPath;
 - (id<LibboxStringIterator> _Nullable)androidPackageNames;
 - (void)setAndroidPackageNames:(id<LibboxStringIterator> _Nullable)names;
 @end
@@ -877,12 +877,12 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setName:) NSString* _Nonnull name;
-@property (nonatomic, setter=setDescription:) NSString* _Nonnull description;
-@property (nonatomic, setter=setDeprecatedVersion:) NSString* _Nonnull deprecatedVersion;
-@property (nonatomic, setter=setScheduledVersion:) NSString* _Nonnull scheduledVersion;
-@property (nonatomic, setter=setEnvName:) NSString* _Nonnull envName;
-@property (nonatomic, setter=setMigrationLink:) NSString* _Nonnull migrationLink;
+@property (nonatomic) NSString* _Nonnull name;
+@property (nonatomic) NSString* _Nonnull description;
+@property (nonatomic) NSString* _Nonnull deprecatedVersion;
+@property (nonatomic) NSString* _Nonnull scheduledVersion;
+@property (nonatomic) NSString* _Nonnull envName;
+@property (nonatomic) NSString* _Nonnull migrationLink;
 - (BOOL)impending;
 - (NSString* _Nonnull)message;
 - (NSString* _Nonnull)messageWithLink;
@@ -894,7 +894,7 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setMessage:) NSString* _Nonnull message;
+@property (nonatomic) NSString* _Nonnull message;
 - (NSData* _Nullable)encode;
 @end
 
@@ -917,9 +917,9 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setURL:) NSString* _Nonnull url;
-@property (nonatomic, setter=setCountry:) NSString* _Nonnull country;
-@property (nonatomic, setter=setName:) NSString* _Nonnull name;
+@property (nonatomic) NSString* _Nonnull url;
+@property (nonatomic) NSString* _Nonnull country;
+@property (nonatomic) NSString* _Nonnull name;
 @end
 
 @interface LibboxFDroidPingResult : NSObject <goSeqRefInterface> {
@@ -928,9 +928,9 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setURL:) NSString* _Nonnull url;
-@property (nonatomic, setter=setLatencyMs:) int32_t latencyMs;
-@property (nonatomic, setter=setError:) NSString* _Nonnull error;
+@property (nonatomic) NSString* _Nonnull url;
+@property (nonatomic) int32_t latencyMs;
+@property (nonatomic) NSString* _Nonnull error;
 @end
 
 @interface LibboxFDroidUpdateInfo : NSObject <goSeqRefInterface> {
@@ -939,11 +939,11 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setVersionCode:) int32_t versionCode;
-@property (nonatomic, setter=setVersionName:) NSString* _Nonnull versionName;
-@property (nonatomic, setter=setDownloadURL:) NSString* _Nonnull downloadURL;
-@property (nonatomic, setter=setFileSize:) int64_t fileSize;
-@property (nonatomic, setter=setFileSHA256:) NSString* _Nonnull fileSHA256;
+@property (nonatomic) int32_t versionCode;
+@property (nonatomic) NSString* _Nonnull versionName;
+@property (nonatomic) NSString* _Nonnull downloadURL;
+@property (nonatomic) int64_t fileSize;
+@property (nonatomic) NSString* _Nonnull fileSHA256;
 @end
 
 @interface LibboxImportRemoteProfile : NSObject <goSeqRefInterface> {
@@ -952,9 +952,9 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setName:) NSString* _Nonnull name;
-@property (nonatomic, setter=setURL:) NSString* _Nonnull url;
-@property (nonatomic, setter=setHost:) NSString* _Nonnull host;
+@property (nonatomic) NSString* _Nonnull name;
+@property (nonatomic) NSString* _Nonnull url;
+@property (nonatomic) NSString* _Nonnull host;
 @end
 
 @interface LibboxLogEntry : NSObject <goSeqRefInterface> {
@@ -963,8 +963,8 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setLevel:) int32_t level;
-@property (nonatomic, setter=setMessage:) NSString* _Nonnull message;
+@property (nonatomic) int32_t level;
+@property (nonatomic) NSString* _Nonnull message;
 @end
 
 @interface LibboxNeighborEntry : NSObject <goSeqRefInterface> {
@@ -973,9 +973,9 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setAddress:) NSString* _Nonnull address;
-@property (nonatomic, setter=setMacAddress:) NSString* _Nonnull macAddress;
-@property (nonatomic, setter=setHostname:) NSString* _Nonnull hostname;
+@property (nonatomic) NSString* _Nonnull address;
+@property (nonatomic) NSString* _Nonnull macAddress;
+@property (nonatomic) NSString* _Nonnull hostname;
 @end
 
 @interface LibboxNeighborSubscription : NSObject <goSeqRefInterface> {
@@ -993,15 +993,15 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setIndex:) int32_t index;
-@property (nonatomic, setter=setMTU:) int32_t mtu;
-@property (nonatomic, setter=setName:) NSString* _Nonnull name;
-@property (nonatomic, setter=setAddresses:) id<LibboxStringIterator> _Nullable addresses;
-@property (nonatomic, setter=setFlags:) int32_t flags;
-@property (nonatomic, setter=setType:) int32_t type;
-@property (nonatomic, setter=setDNSServer:) id<LibboxStringIterator> _Nullable dnsServer;
-@property (nonatomic, setter=setGateway:) id<LibboxStringIterator> _Nullable gateway;
-@property (nonatomic, setter=setMetered:) BOOL metered;
+@property (nonatomic) int32_t index;
+@property (nonatomic) int32_t mtu;
+@property (nonatomic) NSString* _Nonnull name;
+@property (nonatomic) id<LibboxStringIterator> _Nullable addresses;
+@property (nonatomic) int32_t flags;
+@property (nonatomic) int32_t type;
+@property (nonatomic) id<LibboxStringIterator> _Nullable dnsServer;
+@property (nonatomic) id<LibboxStringIterator> _Nullable gateway;
+@property (nonatomic) BOOL metered;
 @end
 
 @interface LibboxNetworkQualityProgress : NSObject <goSeqRefInterface> {
@@ -1010,17 +1010,17 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setPhase:) int32_t phase;
-@property (nonatomic, setter=setDownloadCapacity:) int64_t downloadCapacity;
-@property (nonatomic, setter=setUploadCapacity:) int64_t uploadCapacity;
-@property (nonatomic, setter=setDownloadRPM:) int32_t downloadRPM;
-@property (nonatomic, setter=setUploadRPM:) int32_t uploadRPM;
-@property (nonatomic, setter=setIdleLatencyMs:) int32_t idleLatencyMs;
-@property (nonatomic, setter=setElapsedMs:) int64_t elapsedMs;
-@property (nonatomic, setter=setDownloadCapacityAccuracy:) int32_t downloadCapacityAccuracy;
-@property (nonatomic, setter=setUploadCapacityAccuracy:) int32_t uploadCapacityAccuracy;
-@property (nonatomic, setter=setDownloadRPMAccuracy:) int32_t downloadRPMAccuracy;
-@property (nonatomic, setter=setUploadRPMAccuracy:) int32_t uploadRPMAccuracy;
+@property (nonatomic) int32_t phase;
+@property (nonatomic) int64_t downloadCapacity;
+@property (nonatomic) int64_t uploadCapacity;
+@property (nonatomic) int32_t downloadRPM;
+@property (nonatomic) int32_t uploadRPM;
+@property (nonatomic) int32_t idleLatencyMs;
+@property (nonatomic) int64_t elapsedMs;
+@property (nonatomic) int32_t downloadCapacityAccuracy;
+@property (nonatomic) int32_t uploadCapacityAccuracy;
+@property (nonatomic) int32_t downloadRPMAccuracy;
+@property (nonatomic) int32_t uploadRPMAccuracy;
 @end
 
 @interface LibboxNetworkQualityResult : NSObject <goSeqRefInterface> {
@@ -1029,15 +1029,15 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setDownloadCapacity:) int64_t downloadCapacity;
-@property (nonatomic, setter=setUploadCapacity:) int64_t uploadCapacity;
-@property (nonatomic, setter=setDownloadRPM:) int32_t downloadRPM;
-@property (nonatomic, setter=setUploadRPM:) int32_t uploadRPM;
-@property (nonatomic, setter=setIdleLatencyMs:) int32_t idleLatencyMs;
-@property (nonatomic, setter=setDownloadCapacityAccuracy:) int32_t downloadCapacityAccuracy;
-@property (nonatomic, setter=setUploadCapacityAccuracy:) int32_t uploadCapacityAccuracy;
-@property (nonatomic, setter=setDownloadRPMAccuracy:) int32_t downloadRPMAccuracy;
-@property (nonatomic, setter=setUploadRPMAccuracy:) int32_t uploadRPMAccuracy;
+@property (nonatomic) int64_t downloadCapacity;
+@property (nonatomic) int64_t uploadCapacity;
+@property (nonatomic) int32_t downloadRPM;
+@property (nonatomic) int32_t uploadRPM;
+@property (nonatomic) int32_t idleLatencyMs;
+@property (nonatomic) int32_t downloadCapacityAccuracy;
+@property (nonatomic) int32_t uploadCapacityAccuracy;
+@property (nonatomic) int32_t downloadRPMAccuracy;
+@property (nonatomic) int32_t uploadRPMAccuracy;
 @end
 
 @interface LibboxNetworkQualityTest : NSObject <goSeqRefInterface> {
@@ -1065,13 +1065,13 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setIdentifier:) NSString* _Nonnull identifier;
-@property (nonatomic, setter=setTypeName:) NSString* _Nonnull typeName;
-@property (nonatomic, setter=setTypeID:) int32_t typeID;
-@property (nonatomic, setter=setTitle:) NSString* _Nonnull title;
-@property (nonatomic, setter=setSubtitle:) NSString* _Nonnull subtitle;
-@property (nonatomic, setter=setBody:) NSString* _Nonnull body;
-@property (nonatomic, setter=setOpenURL:) NSString* _Nonnull openURL;
+@property (nonatomic) NSString* _Nonnull identifier;
+@property (nonatomic) NSString* _Nonnull typeName;
+@property (nonatomic) int32_t typeID;
+@property (nonatomic) NSString* _Nonnull title;
+@property (nonatomic) NSString* _Nonnull subtitle;
+@property (nonatomic) NSString* _Nonnull body;
+@property (nonatomic) NSString* _Nonnull openURL;
 @end
 
 @interface LibboxOpenConnectAuthChallenge : NSObject <goSeqRefInterface> {
@@ -1080,12 +1080,12 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setID:) NSString* _Nonnull id_;
-@property (nonatomic, setter=setBanner:) NSString* _Nonnull banner;
-@property (nonatomic, setter=setMessage:) NSString* _Nonnull message;
-@property (nonatomic, setter=setError:) NSString* _Nonnull error;
-@property (nonatomic, setter=setForm:) LibboxOpenConnectAuthForm* _Nullable form;
-@property (nonatomic, setter=setBrowser:) LibboxOpenConnectBrowserRequest* _Nullable browser;
+@property (nonatomic) NSString* _Nonnull id_;
+@property (nonatomic) NSString* _Nonnull banner;
+@property (nonatomic) NSString* _Nonnull message;
+@property (nonatomic) NSString* _Nonnull error;
+@property (nonatomic) LibboxOpenConnectAuthForm* _Nullable form;
+@property (nonatomic) LibboxOpenConnectBrowserRequest* _Nullable browser;
 @end
 
 @interface LibboxOpenConnectAuthForm : NSObject <goSeqRefInterface> {
@@ -1103,8 +1103,8 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setValue:) NSString* _Nonnull value;
-@property (nonatomic, setter=setLabel:) NSString* _Nonnull label;
+@property (nonatomic) NSString* _Nonnull value;
+@property (nonatomic) NSString* _Nonnull label;
 @end
 
 @interface LibboxOpenConnectAuthFormField : NSObject <goSeqRefInterface> {
@@ -1113,11 +1113,11 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setSubmissionKey:) NSString* _Nonnull submissionKey;
-@property (nonatomic, setter=setName:) NSString* _Nonnull name;
-@property (nonatomic, setter=setLabel:) NSString* _Nonnull label;
-@property (nonatomic, setter=setKind:) NSString* _Nonnull kind;
-@property (nonatomic, setter=setValue:) NSString* _Nonnull value;
+@property (nonatomic) NSString* _Nonnull submissionKey;
+@property (nonatomic) NSString* _Nonnull name;
+@property (nonatomic) NSString* _Nonnull label;
+@property (nonatomic) NSString* _Nonnull kind;
+@property (nonatomic) NSString* _Nonnull value;
 - (id<LibboxOpenConnectAuthFormChoiceIterator> _Nullable)options;
 @end
 
@@ -1135,9 +1135,9 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setURL:) NSString* _Nonnull url;
-@property (nonatomic, setter=setFinalURL:) NSString* _Nonnull finalURL;
-@property (nonatomic, setter=setCacheID:) NSString* _Nonnull cacheID;
+@property (nonatomic) NSString* _Nonnull url;
+@property (nonatomic) NSString* _Nonnull finalURL;
+@property (nonatomic) NSString* _Nonnull cacheID;
 - (id<LibboxStringIterator> _Nullable)callbackURLPrefixes;
 - (id<LibboxStringIterator> _Nullable)cookieNames;
 - (id<LibboxStringIterator> _Nullable)earlyCookieNames;
@@ -1150,7 +1150,7 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nullable instancetype)init:(NSString* _Nullable)finalURL;
-@property (nonatomic, setter=setFinalURL:) NSString* _Nonnull finalURL;
+@property (nonatomic) NSString* _Nonnull finalURL;
 - (void)addCookie:(NSString* _Nullable)name value:(NSString* _Nullable)value;
 - (void)addHeader:(NSString* _Nullable)name value:(NSString* _Nullable)value;
 @end
@@ -1161,12 +1161,12 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setEndpointTag:) NSString* _Nonnull endpointTag;
-@property (nonatomic, setter=setState:) NSString* _Nonnull state;
-@property (nonatomic, setter=setStateText:) NSString* _Nonnull stateText;
-@property (nonatomic, setter=setAuthChallenge:) LibboxOpenConnectAuthChallenge* _Nullable authChallenge;
-@property (nonatomic, setter=setError:) NSString* _Nonnull error;
-@property (nonatomic, setter=setTunnelInfo:) LibboxOpenConnectTunnelInfo* _Nullable tunnelInfo;
+@property (nonatomic) NSString* _Nonnull endpointTag;
+@property (nonatomic) NSString* _Nonnull state;
+@property (nonatomic) NSString* _Nonnull stateText;
+@property (nonatomic) LibboxOpenConnectAuthChallenge* _Nullable authChallenge;
+@property (nonatomic) NSString* _Nonnull error;
+@property (nonatomic) LibboxOpenConnectTunnelInfo* _Nullable tunnelInfo;
 @end
 
 @interface LibboxOpenConnectFormValues : NSObject <goSeqRefInterface> {
@@ -1202,11 +1202,11 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setServer:) NSString* _Nonnull server;
-@property (nonatomic, setter=setFlavor:) NSString* _Nonnull flavor;
-@property (nonatomic, setter=setTransport:) NSString* _Nonnull transport;
-@property (nonatomic, setter=setMTU:) int32_t mtu;
-@property (nonatomic, setter=setConnectedSince:) int64_t connectedSince;
+@property (nonatomic) NSString* _Nonnull server;
+@property (nonatomic) NSString* _Nonnull flavor;
+@property (nonatomic) NSString* _Nonnull transport;
+@property (nonatomic) int32_t mtu;
+@property (nonatomic) int64_t connectedSince;
 - (id<LibboxStringIterator> _Nullable)dns;
 - (id<LibboxStringIterator> _Nullable)iPv4;
 - (id<LibboxStringIterator> _Nullable)iPv6;
@@ -1218,15 +1218,15 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setID:) NSString* _Nonnull id_;
-@property (nonatomic, setter=setKind:) NSString* _Nonnull kind;
-@property (nonatomic, setter=setUsername:) NSString* _Nonnull username;
-@property (nonatomic, setter=setMessage:) NSString* _Nonnull message;
-@property (nonatomic, setter=setURL:) NSString* _Nonnull url;
-@property (nonatomic, setter=setSecretMessage:) NSString* _Nonnull secretMessage;
-@property (nonatomic, setter=setEcho:) BOOL echo;
-@property (nonatomic, setter=setPreviousError:) NSString* _Nonnull previousError;
-@property (nonatomic, setter=setDeadline:) int64_t deadline;
+@property (nonatomic) NSString* _Nonnull id_;
+@property (nonatomic) NSString* _Nonnull kind;
+@property (nonatomic) NSString* _Nonnull username;
+@property (nonatomic) NSString* _Nonnull message;
+@property (nonatomic) NSString* _Nonnull url;
+@property (nonatomic) NSString* _Nonnull secretMessage;
+@property (nonatomic) BOOL echo;
+@property (nonatomic) NSString* _Nonnull previousError;
+@property (nonatomic) int64_t deadline;
 @end
 
 @interface LibboxOpenVPNChallengeResponse : NSObject <goSeqRefInterface> {
@@ -1235,9 +1235,9 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setUsername:) NSString* _Nonnull username;
-@property (nonatomic, setter=setPassword:) NSString* _Nonnull password;
-@property (nonatomic, setter=setSecret:) NSString* _Nonnull secret;
+@property (nonatomic) NSString* _Nonnull username;
+@property (nonatomic) NSString* _Nonnull password;
+@property (nonatomic) NSString* _Nonnull secret;
 @end
 
 @interface LibboxOpenVPNEndpointStatus : NSObject <goSeqRefInterface> {
@@ -1246,12 +1246,12 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setEndpointTag:) NSString* _Nonnull endpointTag;
-@property (nonatomic, setter=setState:) NSString* _Nonnull state;
-@property (nonatomic, setter=setStateText:) NSString* _Nonnull stateText;
-@property (nonatomic, setter=setChallenge:) LibboxOpenVPNChallenge* _Nullable challenge;
-@property (nonatomic, setter=setError:) NSString* _Nonnull error;
-@property (nonatomic, setter=setTunnelInfo:) LibboxOpenVPNTunnelInfo* _Nullable tunnelInfo;
+@property (nonatomic) NSString* _Nonnull endpointTag;
+@property (nonatomic) NSString* _Nonnull state;
+@property (nonatomic) NSString* _Nonnull stateText;
+@property (nonatomic) LibboxOpenVPNChallenge* _Nullable challenge;
+@property (nonatomic) NSString* _Nonnull error;
+@property (nonatomic) LibboxOpenVPNTunnelInfo* _Nullable tunnelInfo;
 @end
 
 @interface LibboxOpenVPNStatusSubscription : NSObject <goSeqRefInterface> {
@@ -1278,11 +1278,11 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setServer:) NSString* _Nonnull server;
-@property (nonatomic, setter=setNetwork:) NSString* _Nonnull network;
-@property (nonatomic, setter=setCipher:) NSString* _Nonnull cipher;
-@property (nonatomic, setter=setMTU:) int32_t mtu;
-@property (nonatomic, setter=setConnectedSince:) int64_t connectedSince;
+@property (nonatomic) NSString* _Nonnull server;
+@property (nonatomic) NSString* _Nonnull network;
+@property (nonatomic) NSString* _Nonnull cipher;
+@property (nonatomic) int32_t mtu;
+@property (nonatomic) int64_t connectedSince;
 - (id<LibboxStringIterator> _Nullable)dns;
 - (id<LibboxStringIterator> _Nullable)iPv4;
 - (id<LibboxStringIterator> _Nullable)iPv6;
@@ -1294,11 +1294,11 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setTag:) NSString* _Nonnull tag;
-@property (nonatomic, setter=setType:) NSString* _Nonnull type;
-@property (nonatomic, setter=setSelectable:) BOOL selectable;
-@property (nonatomic, setter=setSelected:) NSString* _Nonnull selected;
-@property (nonatomic, setter=setIsExpand:) BOOL isExpand;
+@property (nonatomic) NSString* _Nonnull tag;
+@property (nonatomic) NSString* _Nonnull type;
+@property (nonatomic) BOOL selectable;
+@property (nonatomic) NSString* _Nonnull selected;
+@property (nonatomic) BOOL isExpand;
 - (id<LibboxOutboundGroupItemIterator> _Nullable)getItems;
 @end
 
@@ -1308,10 +1308,10 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setTag:) NSString* _Nonnull tag;
-@property (nonatomic, setter=setType:) NSString* _Nonnull type;
-@property (nonatomic, setter=setURLTestTime:) int64_t urlTestTime;
-@property (nonatomic, setter=setURLTestDelay:) int32_t urlTestDelay;
+@property (nonatomic) NSString* _Nonnull tag;
+@property (nonatomic) NSString* _Nonnull type;
+@property (nonatomic) int64_t urlTestTime;
+@property (nonatomic) int32_t urlTestDelay;
 @end
 
 @interface LibboxOverrideOptions : NSObject <goSeqRefInterface> {
@@ -1320,9 +1320,9 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setAutoRedirect:) BOOL autoRedirect;
-@property (nonatomic, setter=setIncludePackage:) id<LibboxStringIterator> _Nullable includePackage;
-@property (nonatomic, setter=setExcludePackage:) id<LibboxStringIterator> _Nullable excludePackage;
+@property (nonatomic) BOOL autoRedirect;
+@property (nonatomic) id<LibboxStringIterator> _Nullable includePackage;
+@property (nonatomic) id<LibboxStringIterator> _Nullable excludePackage;
 @end
 
 @interface LibboxPProfServer : NSObject <goSeqRefInterface> {
@@ -1341,11 +1341,11 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setUsername:) NSString* _Nonnull username;
-@property (nonatomic, setter=setUid:) int32_t uid;
-@property (nonatomic, setter=setGid:) int32_t gid;
-@property (nonatomic, setter=setHomeDir:) NSString* _Nonnull homeDir;
-@property (nonatomic, setter=setShell:) NSString* _Nonnull shell;
+@property (nonatomic) NSString* _Nonnull username;
+@property (nonatomic) int32_t uid;
+@property (nonatomic) int32_t gid;
+@property (nonatomic) NSString* _Nonnull homeDir;
+@property (nonatomic) NSString* _Nonnull shell;
 - (id<LibboxInt32Iterator> _Nullable)groups;
 - (void)setGroups:(id<LibboxInt32Iterator> _Nullable)groups;
 @end
@@ -1356,10 +1356,10 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setProcessID:) int64_t processID;
-@property (nonatomic, setter=setUserID:) int32_t userID;
-@property (nonatomic, setter=setUserName:) NSString* _Nonnull userName;
-@property (nonatomic, setter=setProcessPath:) NSString* _Nonnull processPath;
+@property (nonatomic) int64_t processID;
+@property (nonatomic) int32_t userID;
+@property (nonatomic) NSString* _Nonnull userName;
+@property (nonatomic) NSString* _Nonnull processPath;
 - (id<LibboxStringIterator> _Nullable)packageNames;
 @end
 
@@ -1369,13 +1369,13 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setName:) NSString* _Nonnull name;
-@property (nonatomic, setter=setType:) int32_t type;
-@property (nonatomic, setter=setConfig:) NSString* _Nonnull config;
-@property (nonatomic, setter=setRemotePath:) NSString* _Nonnull remotePath;
-@property (nonatomic, setter=setAutoUpdate:) BOOL autoUpdate;
-@property (nonatomic, setter=setAutoUpdateInterval:) int32_t autoUpdateInterval;
-@property (nonatomic, setter=setLastUpdated:) int64_t lastUpdated;
+@property (nonatomic) NSString* _Nonnull name;
+@property (nonatomic) int32_t type;
+@property (nonatomic) NSString* _Nonnull config;
+@property (nonatomic) NSString* _Nonnull remotePath;
+@property (nonatomic) BOOL autoUpdate;
+@property (nonatomic) int32_t autoUpdateInterval;
+@property (nonatomic) int64_t lastUpdated;
 - (NSData* _Nullable)encode;
 @end
 
@@ -1385,7 +1385,7 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setProfileID:) int64_t profileID;
+@property (nonatomic) int64_t profileID;
 - (NSData* _Nullable)encode;
 @end
 
@@ -1415,9 +1415,9 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setProfileID:) int64_t profileID;
-@property (nonatomic, setter=setName:) NSString* _Nonnull name;
-@property (nonatomic, setter=setType:) int32_t type;
+@property (nonatomic) int64_t profileID;
+@property (nonatomic) NSString* _Nonnull name;
+@property (nonatomic) int32_t type;
 @end
 
 @interface LibboxRemoteConnectionOptions : NSObject <goSeqRefInterface> {
@@ -1426,8 +1426,8 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setURL:) NSString* _Nonnull url;
-@property (nonatomic, setter=setSecret:) NSString* _Nonnull secret;
+@property (nonatomic) NSString* _Nonnull url;
+@property (nonatomic) NSString* _Nonnull secret;
 @end
 
 @interface LibboxRoutePrefix : NSObject <goSeqRefInterface> {
@@ -1458,11 +1458,11 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setPhase:) int32_t phase;
-@property (nonatomic, setter=setExternalAddr:) NSString* _Nonnull externalAddr;
-@property (nonatomic, setter=setLatencyMs:) int32_t latencyMs;
-@property (nonatomic, setter=setNATMapping:) int32_t natMapping;
-@property (nonatomic, setter=setNATFiltering:) int32_t natFiltering;
+@property (nonatomic) int32_t phase;
+@property (nonatomic) NSString* _Nonnull externalAddr;
+@property (nonatomic) int32_t latencyMs;
+@property (nonatomic) int32_t natMapping;
+@property (nonatomic) int32_t natFiltering;
 @end
 
 @interface LibboxSTUNTestResult : NSObject <goSeqRefInterface> {
@@ -1471,11 +1471,11 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setExternalAddr:) NSString* _Nonnull externalAddr;
-@property (nonatomic, setter=setLatencyMs:) int32_t latencyMs;
-@property (nonatomic, setter=setNATMapping:) int32_t natMapping;
-@property (nonatomic, setter=setNATFiltering:) int32_t natFiltering;
-@property (nonatomic, setter=setNATTypeSupported:) BOOL natTypeSupported;
+@property (nonatomic) NSString* _Nonnull externalAddr;
+@property (nonatomic) int32_t latencyMs;
+@property (nonatomic) int32_t natMapping;
+@property (nonatomic) int32_t natFiltering;
+@property (nonatomic) BOOL natTypeSupported;
 @end
 
 @interface LibboxSTUNTestSession : NSObject <goSeqRefInterface> {
@@ -1493,21 +1493,21 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setBasePath:) NSString* _Nonnull basePath;
-@property (nonatomic, setter=setWorkingPath:) NSString* _Nonnull workingPath;
-@property (nonatomic, setter=setTempPath:) NSString* _Nonnull tempPath;
-@property (nonatomic, setter=setFixAndroidStack:) BOOL fixAndroidStack;
-@property (nonatomic, setter=setCommandServerListenPort:) int32_t commandServerListenPort;
-@property (nonatomic, setter=setCommandServerSecret:) NSString* _Nonnull commandServerSecret;
-@property (nonatomic, setter=setLogMaxLines:) long logMaxLines;
-@property (nonatomic, setter=setDebug:) BOOL debug;
-@property (nonatomic, setter=setCrashReportSource:) NSString* _Nonnull crashReportSource;
-@property (nonatomic, setter=setAppVersion:) NSString* _Nonnull appVersion;
-@property (nonatomic, setter=setAppMarketingVersion:) NSString* _Nonnull appMarketingVersion;
-@property (nonatomic, setter=setOomKillerEnabled:) BOOL oomKillerEnabled;
-@property (nonatomic, setter=setOomKillerDisabled:) BOOL oomKillerDisabled;
-@property (nonatomic, setter=setOomMemoryLimit:) int64_t oomMemoryLimit;
-@property (nonatomic, setter=setPowerReportEnabled:) BOOL powerReportEnabled;
+@property (nonatomic) NSString* _Nonnull basePath;
+@property (nonatomic) NSString* _Nonnull workingPath;
+@property (nonatomic) NSString* _Nonnull tempPath;
+@property (nonatomic) BOOL fixAndroidStack;
+@property (nonatomic) int32_t commandServerListenPort;
+@property (nonatomic) NSString* _Nonnull commandServerSecret;
+@property (nonatomic) long logMaxLines;
+@property (nonatomic) BOOL debug;
+@property (nonatomic) NSString* _Nonnull crashReportSource;
+@property (nonatomic) NSString* _Nonnull appVersion;
+@property (nonatomic) NSString* _Nonnull appMarketingVersion;
+@property (nonatomic) BOOL oomKillerEnabled;
+@property (nonatomic) BOOL oomKillerDisabled;
+@property (nonatomic) int64_t oomMemoryLimit;
+@property (nonatomic) BOOL powerReportEnabled;
 @end
 
 @interface LibboxStatusMessage : NSObject <goSeqRefInterface> {
@@ -1516,15 +1516,15 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setMemory:) int64_t memory;
-@property (nonatomic, setter=setGoroutines:) int32_t goroutines;
-@property (nonatomic, setter=setConnectionsIn:) int32_t connectionsIn;
-@property (nonatomic, setter=setConnectionsOut:) int32_t connectionsOut;
-@property (nonatomic, setter=setTrafficAvailable:) BOOL trafficAvailable;
-@property (nonatomic, setter=setUplink:) int64_t uplink;
-@property (nonatomic, setter=setDownlink:) int64_t downlink;
-@property (nonatomic, setter=setUplinkTotal:) int64_t uplinkTotal;
-@property (nonatomic, setter=setDownlinkTotal:) int64_t downlinkTotal;
+@property (nonatomic) int64_t memory;
+@property (nonatomic) int32_t goroutines;
+@property (nonatomic) int32_t connectionsIn;
+@property (nonatomic) int32_t connectionsOut;
+@property (nonatomic) BOOL trafficAvailable;
+@property (nonatomic) int64_t uplink;
+@property (nonatomic) int64_t downlink;
+@property (nonatomic) int64_t uplinkTotal;
+@property (nonatomic) int64_t downlinkTotal;
 @end
 
 @interface LibboxStringBox : NSObject <goSeqRefInterface> {
@@ -1533,7 +1533,7 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setValue:) NSString* _Nonnull value;
+@property (nonatomic) NSString* _Nonnull value;
 @end
 
 @interface LibboxSystemProxyStatus : NSObject <goSeqRefInterface> {
@@ -1542,8 +1542,8 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setAvailable:) BOOL available;
-@property (nonatomic, setter=setEnabled:) BOOL enabled;
+@property (nonatomic) BOOL available;
+@property (nonatomic) BOOL enabled;
 @end
 
 @interface LibboxTaildropDownloadSession : NSObject <goSeqRefInterface> {
@@ -1561,10 +1561,10 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setName:) NSString* _Nonnull name;
-@property (nonatomic, setter=setSize:) int64_t size;
-@property (nonatomic, setter=setSenderName:) NSString* _Nonnull senderName;
-@property (nonatomic, setter=setModifiedAt:) int64_t modifiedAt;
+@property (nonatomic) NSString* _Nonnull name;
+@property (nonatomic) int64_t size;
+@property (nonatomic) NSString* _Nonnull senderName;
+@property (nonatomic) int64_t modifiedAt;
 @end
 
 @interface LibboxTaildropInbox : NSObject <goSeqRefInterface> {
@@ -1573,7 +1573,7 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setEndpointTag:) NSString* _Nonnull endpointTag;
+@property (nonatomic) NSString* _Nonnull endpointTag;
 - (id<LibboxTaildropFileIterator> _Nullable)files;
 - (id<LibboxTaildropReceivingFileIterator> _Nullable)receiving;
 @end
@@ -1593,11 +1593,11 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setName:) NSString* _Nonnull name;
-@property (nonatomic, setter=setSize:) int64_t size;
-@property (nonatomic, setter=setReceivedBytes:) int64_t receivedBytes;
-@property (nonatomic, setter=setSenderID:) NSString* _Nonnull senderID;
-@property (nonatomic, setter=setSenderName:) NSString* _Nonnull senderName;
+@property (nonatomic) NSString* _Nonnull name;
+@property (nonatomic) int64_t size;
+@property (nonatomic) int64_t receivedBytes;
+@property (nonatomic) NSString* _Nonnull senderID;
+@property (nonatomic) NSString* _Nonnull senderName;
 @end
 
 @interface LibboxTaildropSendOptions : NSObject <goSeqRefInterface> {
@@ -1606,8 +1606,8 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nullable instancetype)init;
-@property (nonatomic, setter=setEndpointTag:) NSString* _Nonnull endpointTag;
-@property (nonatomic, setter=setPeerStableID:) NSString* _Nonnull peerStableID;
+@property (nonatomic) NSString* _Nonnull endpointTag;
+@property (nonatomic) NSString* _Nonnull peerStableID;
 /**
  * AddFile queues a file whose content the caller writes through
 TaildropSendSession.WriteChunk in queue order, terminated by FinishFile.
@@ -1634,19 +1634,19 @@ verified against the written byte count.
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setEndpointTag:) NSString* _Nonnull endpointTag;
-@property (nonatomic, setter=setBackendState:) NSString* _Nonnull backendState;
-@property (nonatomic, setter=setStateText:) NSString* _Nonnull stateText;
-@property (nonatomic, setter=setAuthURL:) NSString* _Nonnull authURL;
-@property (nonatomic, setter=setNetworkName:) NSString* _Nonnull networkName;
-@property (nonatomic, setter=setMagicDNSSuffix:) NSString* _Nonnull magicDNSSuffix;
-@property (nonatomic, setter=setSelf:) LibboxTailscalePeer* _Nullable self_;
-@property (nonatomic, setter=setExitNode:) LibboxTailscalePeer* _Nullable exitNode;
-@property (nonatomic, setter=setKeyAuth:) BOOL keyAuth;
-@property (nonatomic, setter=setCanShareFiles:) BOOL canShareFiles;
-@property (nonatomic, setter=setWaitingFileCount:) int32_t waitingFileCount;
-@property (nonatomic, setter=setReceivingFileCount:) int32_t receivingFileCount;
-@property (nonatomic, setter=setUnreadFileCount:) int32_t unreadFileCount;
+@property (nonatomic) NSString* _Nonnull endpointTag;
+@property (nonatomic) NSString* _Nonnull backendState;
+@property (nonatomic) NSString* _Nonnull stateText;
+@property (nonatomic) NSString* _Nonnull authURL;
+@property (nonatomic) NSString* _Nonnull networkName;
+@property (nonatomic) NSString* _Nonnull magicDNSSuffix;
+@property (nonatomic) LibboxTailscalePeer* _Nullable self_;
+@property (nonatomic) LibboxTailscalePeer* _Nullable exitNode;
+@property (nonatomic) BOOL keyAuth;
+@property (nonatomic) BOOL canShareFiles;
+@property (nonatomic) int32_t waitingFileCount;
+@property (nonatomic) int32_t receivingFileCount;
+@property (nonatomic) int32_t unreadFileCount;
 - (id<LibboxTailscaleUserGroupIterator> _Nullable)userGroups;
 @end
 
@@ -1656,21 +1656,21 @@ verified against the written byte count.
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setStableID:) NSString* _Nonnull stableID;
-@property (nonatomic, setter=setHostName:) NSString* _Nonnull hostName;
-@property (nonatomic, setter=setDNSName:) NSString* _Nonnull dnsName;
-@property (nonatomic, setter=setOS:) NSString* _Nonnull os;
-@property (nonatomic, setter=setOnline:) BOOL online;
-@property (nonatomic, setter=setExitNode:) BOOL exitNode;
-@property (nonatomic, setter=setExitNodeOption:) BOOL exitNodeOption;
-@property (nonatomic, setter=setShareeNode:) BOOL shareeNode;
-@property (nonatomic, setter=setExpired:) BOOL expired;
-@property (nonatomic, setter=setActive:) BOOL active;
-@property (nonatomic, setter=setCanReceiveFiles:) BOOL canReceiveFiles;
-@property (nonatomic, setter=setRxBytes:) int64_t rxBytes;
-@property (nonatomic, setter=setTxBytes:) int64_t txBytes;
-@property (nonatomic, setter=setKeyExpiry:) int64_t keyExpiry;
-@property (nonatomic, setter=setLastSeen:) int64_t lastSeen;
+@property (nonatomic) NSString* _Nonnull stableID;
+@property (nonatomic) NSString* _Nonnull hostName;
+@property (nonatomic) NSString* _Nonnull dnsName;
+@property (nonatomic) NSString* _Nonnull os;
+@property (nonatomic) BOOL online;
+@property (nonatomic) BOOL exitNode;
+@property (nonatomic) BOOL exitNodeOption;
+@property (nonatomic) BOOL shareeNode;
+@property (nonatomic) BOOL expired;
+@property (nonatomic) BOOL active;
+@property (nonatomic) BOOL canReceiveFiles;
+@property (nonatomic) int64_t rxBytes;
+@property (nonatomic) int64_t txBytes;
+@property (nonatomic) int64_t keyExpiry;
+@property (nonatomic) int64_t lastSeen;
 - (id<LibboxStringIterator> _Nullable)sshHostKeys;
 - (id<LibboxStringIterator> _Nullable)tailscaleIPs;
 @end
@@ -1681,13 +1681,13 @@ verified against the written byte count.
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setLatencyMs:) double latencyMs;
-@property (nonatomic, setter=setIsDirect:) BOOL isDirect;
-@property (nonatomic, setter=setEndpoint:) NSString* _Nonnull endpoint;
-@property (nonatomic, setter=setPeerRelay:) NSString* _Nonnull peerRelay;
-@property (nonatomic, setter=setDERPRegionID:) int32_t derpRegionID;
-@property (nonatomic, setter=setDERPRegionCode:) NSString* _Nonnull derpRegionCode;
-@property (nonatomic, setter=setError:) NSString* _Nonnull error;
+@property (nonatomic) double latencyMs;
+@property (nonatomic) BOOL isDirect;
+@property (nonatomic) NSString* _Nonnull endpoint;
+@property (nonatomic) NSString* _Nonnull peerRelay;
+@property (nonatomic) int32_t derpRegionID;
+@property (nonatomic) NSString* _Nonnull derpRegionCode;
+@property (nonatomic) NSString* _Nonnull error;
 @end
 
 @interface LibboxTailscalePingSession : NSObject <goSeqRefInterface> {
@@ -1705,16 +1705,16 @@ verified against the written byte count.
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setEndpointTag:) NSString* _Nonnull endpointTag;
-@property (nonatomic, setter=setPeerAddress:) NSString* _Nonnull peerAddress;
-@property (nonatomic, setter=setUsername:) NSString* _Nonnull username;
-@property (nonatomic, setter=setTerminalType:) NSString* _Nonnull terminalType;
-@property (nonatomic, setter=setColumns:) int32_t columns;
-@property (nonatomic, setter=setRows:) int32_t rows;
-@property (nonatomic, setter=setWidthPixels:) int32_t widthPixels;
-@property (nonatomic, setter=setHeightPixels:) int32_t heightPixels;
-@property (nonatomic, setter=setHostKeys:) id<LibboxStringIterator> _Nullable hostKeys;
-@property (nonatomic, setter=setForwardAgent:) BOOL forwardAgent;
+@property (nonatomic) NSString* _Nonnull endpointTag;
+@property (nonatomic) NSString* _Nonnull peerAddress;
+@property (nonatomic) NSString* _Nonnull username;
+@property (nonatomic) NSString* _Nonnull terminalType;
+@property (nonatomic) int32_t columns;
+@property (nonatomic) int32_t rows;
+@property (nonatomic) int32_t widthPixels;
+@property (nonatomic) int32_t heightPixels;
+@property (nonatomic) id<LibboxStringIterator> _Nullable hostKeys;
+@property (nonatomic) BOOL forwardAgent;
 @end
 
 @interface LibboxTailscaleSSHSession : NSObject <goSeqRefInterface> {
@@ -1752,10 +1752,10 @@ verified against the written byte count.
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setUserID:) int64_t userID;
-@property (nonatomic, setter=setLoginName:) NSString* _Nonnull loginName;
-@property (nonatomic, setter=setDisplayName:) NSString* _Nonnull displayName;
-@property (nonatomic, setter=setProfilePicURL:) NSString* _Nonnull profilePicURL;
+@property (nonatomic) int64_t userID;
+@property (nonatomic) NSString* _Nonnull loginName;
+@property (nonatomic) NSString* _Nonnull displayName;
+@property (nonatomic) NSString* _Nonnull profilePicURL;
 - (id<LibboxTailscalePeerIterator> _Nullable)peers;
 @end
 
@@ -1765,21 +1765,21 @@ verified against the written byte count.
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nullable instancetype)init:(NSString* _Nullable)serverTag deviceID:(NSString* _Nullable)deviceID;
-@property (nonatomic, setter=setServerTag:) NSString* _Nonnull serverTag;
-@property (nonatomic, setter=setDeviceID:) NSString* _Nonnull deviceID;
-@property (nonatomic, setter=setBusNum:) int32_t busNum;
-@property (nonatomic, setter=setDevNum:) int32_t devNum;
-@property (nonatomic, setter=setSpeed:) int32_t speed;
-@property (nonatomic, setter=setVendorID:) int32_t vendorID;
-@property (nonatomic, setter=setProductID:) int32_t productID;
-@property (nonatomic, setter=setBCDDevice:) int32_t bcdDevice;
-@property (nonatomic, setter=setDeviceClass:) int32_t deviceClass;
-@property (nonatomic, setter=setDeviceSubClass:) int32_t deviceSubClass;
-@property (nonatomic, setter=setDeviceProtocol:) int32_t deviceProtocol;
-@property (nonatomic, setter=setConfigurationValue:) int32_t configurationValue;
-@property (nonatomic, setter=setNumConfigurations:) int32_t numConfigurations;
-@property (nonatomic, setter=setSerial:) NSString* _Nonnull serial;
-@property (nonatomic, setter=setProduct:) NSString* _Nonnull product;
+@property (nonatomic) NSString* _Nonnull serverTag;
+@property (nonatomic) NSString* _Nonnull deviceID;
+@property (nonatomic) int32_t busNum;
+@property (nonatomic) int32_t devNum;
+@property (nonatomic) int32_t speed;
+@property (nonatomic) int32_t vendorID;
+@property (nonatomic) int32_t productID;
+@property (nonatomic) int32_t bcdDevice;
+@property (nonatomic) int32_t deviceClass;
+@property (nonatomic) int32_t deviceSubClass;
+@property (nonatomic) int32_t deviceProtocol;
+@property (nonatomic) int32_t configurationValue;
+@property (nonatomic) int32_t numConfigurations;
+@property (nonatomic) NSString* _Nonnull serial;
+@property (nonatomic) NSString* _Nonnull product;
 - (void)addInterface:(int32_t)interfaceClass interfaceSubClass:(int32_t)interfaceSubClass interfaceProtocol:(int32_t)interfaceProtocol;
 @end
 
@@ -1789,7 +1789,7 @@ verified against the written byte count.
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setServerTag:) NSString* _Nonnull serverTag;
+@property (nonatomic) NSString* _Nonnull serverTag;
 - (id<LibboxUSBSharedDeviceIterator> _Nullable)devices;
 @end
 
@@ -1817,10 +1817,10 @@ verified against the written byte count.
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setOffset:) int32_t offset;
-@property (nonatomic, setter=setLength:) int32_t length;
-@property (nonatomic, setter=setActualLength:) int32_t actualLength;
-@property (nonatomic, setter=setStatus:) int32_t status;
+@property (nonatomic) int32_t offset;
+@property (nonatomic) int32_t length;
+@property (nonatomic) int32_t actualLength;
+@property (nonatomic) int32_t status;
 @end
 
 @interface LibboxUSBLocalDeviceInfo : NSObject <goSeqRefInterface> {
@@ -1829,22 +1829,22 @@ verified against the written byte count.
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setStableID:) NSString* _Nonnull stableID;
-@property (nonatomic, setter=setBusID:) NSString* _Nonnull busID;
-@property (nonatomic, setter=setBackend:) int32_t backend;
-@property (nonatomic, setter=setBusNum:) int32_t busNum;
-@property (nonatomic, setter=setDevNum:) int32_t devNum;
-@property (nonatomic, setter=setSpeed:) int32_t speed;
-@property (nonatomic, setter=setVendorID:) int32_t vendorID;
-@property (nonatomic, setter=setProductID:) int32_t productID;
-@property (nonatomic, setter=setBCDDevice:) int32_t bcdDevice;
-@property (nonatomic, setter=setDeviceClass:) int32_t deviceClass;
-@property (nonatomic, setter=setDeviceSubClass:) int32_t deviceSubClass;
-@property (nonatomic, setter=setDeviceProtocol:) int32_t deviceProtocol;
-@property (nonatomic, setter=setConfigurationValue:) int32_t configurationValue;
-@property (nonatomic, setter=setNumConfigurations:) int32_t numConfigurations;
-@property (nonatomic, setter=setSerial:) NSString* _Nonnull serial;
-@property (nonatomic, setter=setProduct:) NSString* _Nonnull product;
+@property (nonatomic) NSString* _Nonnull stableID;
+@property (nonatomic) NSString* _Nonnull busID;
+@property (nonatomic) int32_t backend;
+@property (nonatomic) int32_t busNum;
+@property (nonatomic) int32_t devNum;
+@property (nonatomic) int32_t speed;
+@property (nonatomic) int32_t vendorID;
+@property (nonatomic) int32_t productID;
+@property (nonatomic) int32_t bcdDevice;
+@property (nonatomic) int32_t deviceClass;
+@property (nonatomic) int32_t deviceSubClass;
+@property (nonatomic) int32_t deviceProtocol;
+@property (nonatomic) int32_t configurationValue;
+@property (nonatomic) int32_t numConfigurations;
+@property (nonatomic) NSString* _Nonnull serial;
+@property (nonatomic) NSString* _Nonnull product;
 - (id<LibboxUSBSharedDeviceInterfaceIterator> _Nullable)interfaces;
 @end
 
@@ -1854,12 +1854,12 @@ verified against the written byte count.
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setServerTag:) NSString* _Nonnull serverTag;
-@property (nonatomic, setter=setDeviceID:) NSString* _Nonnull deviceID;
-@property (nonatomic, setter=setLocalDeviceID:) NSString* _Nonnull localDeviceID;
-@property (nonatomic, setter=setLabel:) NSString* _Nonnull label;
-@property (nonatomic, setter=setVendorID:) int32_t vendorID;
-@property (nonatomic, setter=setProductID:) int32_t productID;
+@property (nonatomic) NSString* _Nonnull serverTag;
+@property (nonatomic) NSString* _Nonnull deviceID;
+@property (nonatomic) NSString* _Nonnull localDeviceID;
+@property (nonatomic) NSString* _Nonnull label;
+@property (nonatomic) int32_t vendorID;
+@property (nonatomic) int32_t productID;
 @end
 
 @interface LibboxUSBLocalProviderManager : NSObject <goSeqRefInterface> {
@@ -1892,24 +1892,24 @@ verified against the written byte count.
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setBusID:) NSString* _Nonnull busID;
-@property (nonatomic, setter=setStableID:) NSString* _Nonnull stableID;
-@property (nonatomic, setter=setBackend:) int32_t backend;
-@property (nonatomic, setter=setState:) int32_t state;
-@property (nonatomic, setter=setDeviceID:) NSString* _Nonnull deviceID;
-@property (nonatomic, setter=setBusNum:) int32_t busNum;
-@property (nonatomic, setter=setDevNum:) int32_t devNum;
-@property (nonatomic, setter=setSpeed:) int32_t speed;
-@property (nonatomic, setter=setVendorID:) int32_t vendorID;
-@property (nonatomic, setter=setProductID:) int32_t productID;
-@property (nonatomic, setter=setBCDDevice:) int32_t bcdDevice;
-@property (nonatomic, setter=setDeviceClass:) int32_t deviceClass;
-@property (nonatomic, setter=setDeviceSubClass:) int32_t deviceSubClass;
-@property (nonatomic, setter=setDeviceProtocol:) int32_t deviceProtocol;
-@property (nonatomic, setter=setConfigurationValue:) int32_t configurationValue;
-@property (nonatomic, setter=setNumConfigurations:) int32_t numConfigurations;
-@property (nonatomic, setter=setSerial:) NSString* _Nonnull serial;
-@property (nonatomic, setter=setProduct:) NSString* _Nonnull product;
+@property (nonatomic) NSString* _Nonnull busID;
+@property (nonatomic) NSString* _Nonnull stableID;
+@property (nonatomic) int32_t backend;
+@property (nonatomic) int32_t state;
+@property (nonatomic) NSString* _Nonnull deviceID;
+@property (nonatomic) int32_t busNum;
+@property (nonatomic) int32_t devNum;
+@property (nonatomic) int32_t speed;
+@property (nonatomic) int32_t vendorID;
+@property (nonatomic) int32_t productID;
+@property (nonatomic) int32_t bcdDevice;
+@property (nonatomic) int32_t deviceClass;
+@property (nonatomic) int32_t deviceSubClass;
+@property (nonatomic) int32_t deviceProtocol;
+@property (nonatomic) int32_t configurationValue;
+@property (nonatomic) int32_t numConfigurations;
+@property (nonatomic) NSString* _Nonnull serial;
+@property (nonatomic) NSString* _Nonnull product;
 - (id<LibboxUSBSharedDeviceInterfaceIterator> _Nullable)interfaces;
 @end
 
@@ -1919,9 +1919,9 @@ verified against the written byte count.
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setInterfaceClass:) int32_t interfaceClass;
-@property (nonatomic, setter=setInterfaceSubClass:) int32_t interfaceSubClass;
-@property (nonatomic, setter=setInterfaceProtocol:) int32_t interfaceProtocol;
+@property (nonatomic) int32_t interfaceClass;
+@property (nonatomic) int32_t interfaceSubClass;
+@property (nonatomic) int32_t interfaceProtocol;
 @end
 
 @interface LibboxUSBURBRequest : NSObject <goSeqRefInterface> {
@@ -1930,17 +1930,17 @@ verified against the written byte count.
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic, setter=setDeviceID:) NSString* _Nonnull deviceID;
-@property (nonatomic, setter=setSeq:) int64_t seq;
-@property (nonatomic, setter=setEndpoint:) int32_t endpoint;
-@property (nonatomic, setter=setDirectionIn:) BOOL directionIn;
-@property (nonatomic, setter=setTransferFlags:) int32_t transferFlags;
-@property (nonatomic, setter=setSetup:) NSData* _Nullable setup;
-@property (nonatomic, setter=setTransferBufferLength:) int32_t transferBufferLength;
-@property (nonatomic, setter=setOutData:) NSData* _Nullable outData;
-@property (nonatomic, setter=setNumberOfPackets:) int32_t numberOfPackets;
-@property (nonatomic, setter=setStartFrame:) int32_t startFrame;
-@property (nonatomic, setter=setInterval:) int32_t interval;
+@property (nonatomic) NSString* _Nonnull deviceID;
+@property (nonatomic) int64_t seq;
+@property (nonatomic) int32_t endpoint;
+@property (nonatomic) BOOL directionIn;
+@property (nonatomic) int32_t transferFlags;
+@property (nonatomic) NSData* _Nullable setup;
+@property (nonatomic) int32_t transferBufferLength;
+@property (nonatomic) NSData* _Nullable outData;
+@property (nonatomic) int32_t numberOfPackets;
+@property (nonatomic) int32_t startFrame;
+@property (nonatomic) int32_t interval;
 - (LibboxUSBIsoPacket* _Nullable)getIsoPacket:(int32_t)index;
 - (int32_t)isoPacketCount;
 @end
@@ -1951,11 +1951,11 @@ verified against the written byte count.
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nullable instancetype)init:(NSString* _Nullable)deviceID seq:(int64_t)seq;
-@property (nonatomic, setter=setDeviceID:) NSString* _Nonnull deviceID;
-@property (nonatomic, setter=setSeq:) int64_t seq;
-@property (nonatomic, setter=setStatus:) int32_t status;
-@property (nonatomic, setter=setActualLength:) int32_t actualLength;
-@property (nonatomic, setter=setInData:) NSData* _Nullable inData;
+@property (nonatomic) NSString* _Nonnull deviceID;
+@property (nonatomic) int64_t seq;
+@property (nonatomic) int32_t status;
+@property (nonatomic) int32_t actualLength;
+@property (nonatomic) NSData* _Nullable inData;
 - (void)addIsoPacket:(int32_t)offset length:(int32_t)length actualLength:(int32_t)actualLength status:(int32_t)status;
 @end
 
@@ -1965,8 +1965,8 @@ verified against the written byte count.
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nullable instancetype)init:(NSString* _Nullable)wifiSSID wifiBSSID:(NSString* _Nullable)wifiBSSID;
-@property (nonatomic, setter=setSSID:) NSString* _Nonnull ssid;
-@property (nonatomic, setter=setBSSID:) NSString* _Nonnull bssid;
+@property (nonatomic) NSString* _Nonnull ssid;
+@property (nonatomic) NSString* _Nonnull bssid;
 @end
 
 FOUNDATION_EXPORT const int32_t LibboxCommandClashMode;

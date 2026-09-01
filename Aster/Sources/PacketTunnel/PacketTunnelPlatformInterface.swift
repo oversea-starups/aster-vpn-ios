@@ -280,29 +280,29 @@ final class PacketTunnelPlatformInterface: NSObject,
     }
 
     private func apply(_ settings: NEPacketTunnelNetworkSettings?) throws {
-        let completed = DispatchSemaphore(value: 0)
-        let applyError = LockedBox<Error?>(nil)
-
         PacketTunnelLog.logger.notice("Applying tunnel network settings")
-        tunnel.setTunnelNetworkSettings(settings) { error in
-            if let error {
-                let nsError = error as NSError
-                PacketTunnelLog.logger.error(
-                    "Tunnel network settings callback error domain=\(nsError.domain, privacy: .public) code=\(nsError.code, privacy: .public)"
-                )
-            } else {
-                PacketTunnelLog.logger.notice("Tunnel network settings callback succeeded")
+        // Libbox calls openTun synchronously from a Go runtime thread. Calling
+        // NetworkExtension's completion-handler API directly on that stack can
+        // deadlock the provider queue: iOS waits for the provider request to
+        // finish while the Go bridge waits for this callback. Hop to a detached
+        // Swift task and await the imported async variant instead. This mirrors
+        // Apple's continuation semantics and keeps the cgo stack re-entrant.
+        let provider = UncheckedSendableBox(tunnel)
+        try runBlocking {
+            try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+                provider.value.setTunnelNetworkSettings(settings) { error in
+                    if let error {
+                        let nsError = error as NSError
+                        PacketTunnelLog.logger.error(
+                            "Tunnel network settings callback error domain=\(nsError.domain, privacy: .public) code=\(nsError.code, privacy: .public)"
+                        )
+                        continuation.resume(throwing: error)
+                    } else {
+                        PacketTunnelLog.logger.notice("Tunnel network settings callback succeeded")
+                        continuation.resume()
+                    }
+                }
             }
-            applyError.withValue { $0 = error }
-            completed.signal()
-        }
-
-        guard completed.wait(timeout: .now() + 10) == .success else {
-            PacketTunnelLog.logger.error("Tunnel network settings callback timed out")
-            throw PacketTunnelPlatformError.networkSettingsTimedOut
-        }
-        if let error = applyError.value {
-            throw error
         }
     }
 
@@ -413,6 +413,33 @@ private final class UncheckedSendableBox<Value>: @unchecked Sendable {
     init(_ value: Value) {
         self.value = value
     }
+}
+
+/// Bridges Libbox's synchronous platform callbacks to Swift async APIs without
+/// blocking the Go runtime's callback queue. The detached task is intentional:
+/// a structured task created on the caller's executor can inherit the same
+/// cooperative thread that NetworkExtension needs to deliver its completion.
+private func runBlocking<T>(
+    _ operation: @escaping @Sendable () async throws -> T
+) throws -> T {
+    let semaphore = DispatchSemaphore(value: 0)
+    let result = LockedBox<Result<T, Error>?>(nil)
+    Task.detached {
+        do {
+            let value = try await operation()
+            result.withValue { $0 = .success(value) }
+        } catch {
+            result.withValue { $0 = .failure(error) }
+        }
+        semaphore.signal()
+    }
+    guard semaphore.wait(timeout: .now() + 15) == .success else {
+        throw PacketTunnelPlatformError.networkSettingsTimedOut
+    }
+    guard let value = result.value else {
+        throw PacketTunnelPlatformError.networkSettingsTimedOut
+    }
+    return try value.get()
 }
 
 private enum PacketTunnelPlatformError: LocalizedError {

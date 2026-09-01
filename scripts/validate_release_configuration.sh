@@ -62,8 +62,8 @@ for libbox_binary in \
   "$repository_root/Aster/Frameworks/Libbox.xcframework/ios-arm64/Libbox.framework/Libbox" \
   "$repository_root/Aster/Frameworks/Libbox.xcframework/ios-arm64_x86_64-simulator/Libbox.framework/Libbox"
 do
-  if ! /usr/bin/strings "$libbox_binary" | /usr/bin/grep -Eq -- '-tags=with_utls,with_clash_api,ios(,iossimulator)?,with_low_memory'; then
-    echo "error: Libbox must be built with uTLS, internal Clash bootstrap and Network Extension low-memory tags: $libbox_binary"
+  if ! /usr/bin/strings "$libbox_binary" | /usr/bin/grep -Eq -- '-tags=with_gvisor,with_utls,with_clash_api,ios(,iossimulator)?,with_low_memory'; then
+    echo "error: Libbox must be built with gVisor, uTLS, internal Clash bootstrap and Network Extension low-memory tags: $libbox_binary"
     invalid=1
   fi
 done

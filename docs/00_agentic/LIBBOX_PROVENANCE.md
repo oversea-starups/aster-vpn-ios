@@ -1,6 +1,6 @@
 # Bundled Libbox provenance
 
-> Last rebuilt: 2026-09-01  
+> Last rebuilt: 2026-09-02
 > State: build-provenance recorded; GPL distribution/legal review and independent reproducibility are still release blockers.
 
 ## Current binary
@@ -12,13 +12,13 @@
 - Go runtime embedded in the linked device binary: `go1.25.5`
 - gomobile module: `github.com/sagernet/gomobile v0.1.12`
 - Targets: `ios,iossimulator`; minimum iOS `15.0`
-- Product tags: `with_utls` and the internal `with_clash_api` bootstrap module; the Apple build also applies `ios` and `with_low_memory`. The Clash API is not exposed or bound to a user-facing listener.
+- Product tags: `with_gvisor`, `with_utls` and the internal `with_clash_api` bootstrap module; the Apple build also applies `ios` and `with_low_memory`. The Clash API is not exposed or bound to a user-facing listener. gVisor is required for the configured Network Extension TUN stack.
 - Deliberately excluded as outside Aster's product scope: Tailscale/SSH, USBIP, OpenVPN/OpenConnect, QUIC, WireGuard and naive outbound. `with_clash_api` is the sole exception: it is retained only for Libbox's internal bootstrap/reload path and no Clash control listener or user-facing API is exposed.
-- Device archive SHA-256: `7aea9ec03b31b0fc45f4533ede934c54b4030b435faeceefc3e139eca2ff677a`
-- Simulator archive SHA-256: `dd33886edab107eb841a5c18f2724ed1b358ec03ea6c608fda25a1670b205f6f`
-- Linked device metadata reports `-tags=with_utls,with_clash_api,ios,with_low_memory`; simulator slices additionally report `iossimulator`.
+- Device binary SHA-256: `70e673633a3251aaccaa95b8b714afb5af699d95d2a96cc430579b3293e058bf`
+- Simulator binary SHA-256: `fe1a199e6878cfe3442b1afba338d95a4e0c3dbc9dba5912a13f799a6f3301e2`
+- Linked device metadata reports `-tags=with_gvisor,with_utls,with_clash_api,ios,with_low_memory`; simulator slices additionally report `iossimulator`.
 
-The minimal tag selection is required both for uTLS fingerprint compatibility and to keep optional platform interfaces and Network Extension resource cost out of the shipping slice. The generated interface revision adds optional bridge, shell, neighbor-monitor and notification hooks; Aster explicitly reports those optional features unavailable and does not expose them to users.
+The minimal tag selection is required for the configured gVisor TUN stack and uTLS fingerprint compatibility while keeping optional platform interfaces and Network Extension resource cost out of the shipping slice. The generated interface revision adds optional bridge, shell, neighbor-monitor and notification hooks; Aster explicitly reports those optional features unavailable and does not expose them to users.
 
 ## 2026-09-01 compatibility incident
 
@@ -31,6 +31,8 @@ The provider now:
 3. uses the uTLS-enabled archive above;
 4. keeps lifecycle diagnostics free of node credentials;
 5. has an arm64 regression test whose generated configuration includes a `chrome` uTLS fingerprint.
+
+The first gVisor-enabled replacement was built from the same pinned source and toolchain after device logs showed the previous archive rejected the configured `gvisor` TUN stack. The reproducible build script now installs both `gomobile` and `gobind`, and its hash/tag checks match the binaries above.
 
 ## Remaining release work
 
