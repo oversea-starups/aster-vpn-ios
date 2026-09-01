@@ -95,7 +95,11 @@ public enum SingBoxConfigurationBuilder {
                 "tag": "tun-in",
                 "interface_name": "utun",
                 "address": ["172.19.0.1/30", "fdfe:dcba:9876::1/126"],
-                "mtu": 9000,
+                // iOS rejects jumbo TUN MTUs (the device log reports
+                // `Invalid argument` for 9000). Keep the tunnel within the
+                // platform-supported Ethernet MTU so Network Extension can
+                // finish bringing the interface up.
+                "mtu": 1500,
                 "stack": "gvisor",
                 "auto_route": true,
                 "strict_route": true

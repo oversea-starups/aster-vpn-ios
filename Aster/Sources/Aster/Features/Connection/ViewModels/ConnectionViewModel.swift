@@ -1,6 +1,12 @@
 import Combine
 import Foundation
 import NetworkExtension
+import OSLog
+
+private let connectionLog = Logger(
+    subsystem: "com.astervpn.Aster",
+    category: "Connection"
+)
 
 enum ConnectionPresentationState: Equatable {
     case unavailable
@@ -171,6 +177,9 @@ final class ConnectionViewModel: ObservableObject {
     func toggleConnection() {
         actionMessage = nil
         updateUserMessage()
+        connectionLog.notice(
+            "Connection toggle state=\(self.presentationState.title, privacy: .public) entitlementReady=\(self.isEntitlementReady, privacy: .public) locationSelected=\(self.hasSelectedLocation, privacy: .public)"
+        )
         AsterAnalytics.log(
             AsterAnalytics.Event.connectTap,
             parameters: ["source": "home", "location": selectedLocationName, "is_pro": isPro]
@@ -180,23 +189,28 @@ final class ConnectionViewModel: ObservableObject {
             vpnManager.disconnect()
         case .unavailable, .disconnected:
             guard isEntitlementReady else {
+                connectionLog.notice("Connection blocked: entitlement not ready")
                 actionMessage = "Checking your access. Please try again in a moment."
                 updateUserMessage()
                 return
             }
             guard hasSelectedLocation else {
+                connectionLog.notice("Connection blocked: no location selected")
                 showsLocations = true
                 return
             }
             guard isPro || freeExperience.canStartOrContinue else {
+                connectionLog.notice("Connection blocked: free experience unavailable")
                 showsPaywall = true
                 return
             }
             guard nodeCatalog.ensureSelectedConfiguration() else {
+                connectionLog.notice("Connection blocked: selected location configuration unavailable")
                 updateUserMessage()
                 return
             }
             if !isPro { pendingFreeExperience = true }
+            connectionLog.notice("Connection accepted; starting VPN")
             vpnManager.connect()
         }
     }

@@ -1,6 +1,12 @@
 import Combine
 @preconcurrency import Foundation
 @preconcurrency import NetworkExtension
+import OSLog
+
+private let vpnLogger = Logger(
+    subsystem: "com.astervpn.Aster",
+    category: "VPNManager"
+)
 
 @MainActor
 final class VPNManager: ObservableObject {
@@ -39,9 +45,13 @@ final class VPNManager: ObservableObject {
         resetDataPlaneReadiness()
         disconnectRequested = false
         connectionAttemptInFlight = true
+        vpnLogger.notice(
+            "Connect requested; managerLoaded=\(self.manager != nil, privacy: .public) ready=\(self.isReady, privacy: .public) status=\(self.status.rawValue, privacy: .public)"
+        )
 
         guard let manager, isReady else {
             pendingConnect = true
+            vpnLogger.notice("VPN manager unavailable; loading preferences")
             loadManagerIfNeeded()
             return
         }
@@ -49,13 +59,19 @@ final class VPNManager: ObservableObject {
         do {
             _ = try TunnelConfigManager.loadConfig()
             try manager.connection.startVPNTunnel()
+            vpnLogger.notice("startVPNTunnel accepted by Network Extension")
             scheduleConnectionTimeout()
         } catch let error as TunnelConfigError {
             connectionAttemptInFlight = false
             userMessage = error.localizedDescription
+            vpnLogger.error("Tunnel config rejected before start: \(error.localizedDescription, privacy: .public)")
         } catch {
             connectionAttemptInFlight = false
             userMessage = Self.userMessage(for: error)
+            let nsError = error as NSError
+            vpnLogger.error(
+                "startVPNTunnel failed domain=\(nsError.domain, privacy: .public) code=\(nsError.code, privacy: .public) description=\(String(nsError.localizedDescription.prefix(256)), privacy: .public)"
+            )
         }
     }
 
@@ -91,6 +107,10 @@ final class VPNManager: ObservableObject {
                 if let error {
                     self.status = .invalid
                     self.userMessage = Self.userMessage(for: error)
+                    let nsError = error as NSError
+                    vpnLogger.error(
+                        "loadAllFromPreferences failed domain=\(nsError.domain, privacy: .public) code=\(nsError.code, privacy: .public)"
+                    )
                     self.finishManagerLoad()
                     return
                 }
@@ -99,9 +119,13 @@ final class VPNManager: ObservableObject {
                 if let existing = managers?.first(where: {
                     ($0.protocolConfiguration as? NETunnelProviderProtocol)?.providerBundleIdentifier == expectedProviderID
                 }) {
+                    vpnLogger.notice(
+                        "Found existing VPN manager; enabled=\(existing.isEnabled, privacy: .public) status=\(existing.connection.status.rawValue, privacy: .public)"
+                    )
                     self.install(existing)
                     self.finishManagerLoad()
                 } else {
+                    vpnLogger.notice("No existing VPN manager found; creating one")
                     self.createManager()
                 }
             }
@@ -124,6 +148,10 @@ final class VPNManager: ObservableObject {
                 if let error {
                     self.status = .invalid
                     self.userMessage = Self.userMessage(for: error)
+                    let nsError = error as NSError
+                    vpnLogger.error(
+                        "saveToPreferences failed domain=\(nsError.domain, privacy: .public) code=\(nsError.code, privacy: .public)"
+                    )
                     self.finishManagerLoad()
                     return
                 }
@@ -132,7 +160,12 @@ final class VPNManager: ObservableObject {
                         if let loadError {
                             self.status = .invalid
                             self.userMessage = Self.userMessage(for: loadError)
+                            let nsError = loadError as NSError
+                            vpnLogger.error(
+                                "loadFromPreferences failed domain=\(nsError.domain, privacy: .public) code=\(nsError.code, privacy: .public)"
+                            )
                         } else {
+                            vpnLogger.notice("New VPN manager loaded after save")
                             self.install(newManager)
                         }
                         self.finishManagerLoad()

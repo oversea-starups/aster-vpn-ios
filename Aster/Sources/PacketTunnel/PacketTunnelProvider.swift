@@ -1,3 +1,4 @@
+import Foundation
 import Libbox
 import NetworkExtension
 import OSLog
@@ -42,7 +43,17 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
                 PacketTunnelLog.logger.notice("Libbox configuration validated")
 
                 var creationError: NSError?
-                let service = LibboxNewCommandServer(nil, self.platformInterface, &creationError)
+                let service = LibboxNewCommandServer(
+                    // The bundled Libbox build includes the internal command
+                    // server. Its handler is an in-process callback only; it
+                    // does not publish a listener or expose a Clash API to
+                    // other apps. Passing the platform object here matches
+                    // the previously working integration and lets Libbox
+                    // satisfy its internal service lifecycle callbacks.
+                    self.platformInterface,
+                    self.platformInterface,
+                    &creationError
+                )
                 if let creationError {
                     throw creationError
                 }
@@ -76,6 +87,7 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
                 self.boxService?.close()
                 self.boxService = nil
                 self.platformInterface.reset()
+                self.removeLibboxCommandSocket()
                 self.dataPlaneReady = false
                 completionHandler(error)
             }
@@ -92,6 +104,7 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
         boxService?.close()
         boxService = nil
         platformInterface.reset()
+        removeLibboxCommandSocket()
         completionHandler()
     }
 
@@ -119,12 +132,19 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
             throw TunnelConfigError.appGroupUnavailable
         }
 
+        // Keep the runtime path short: Libbox creates `command.sock` below
+        // basePath, and iOS enforces a tight Unix-domain socket path limit.
+        // A per-launch nested UUID directory can exceed that limit. The
+        // extension is single-owner, so reuse the short directory and remove
+        // only the stale command socket before setup.
         let baseURL = container.appendingPathComponent("libbox", isDirectory: true)
         let workingURL = baseURL.appendingPathComponent("working", isDirectory: true)
+        PacketTunnelLog.logger.notice("Preparing Libbox runtime directory")
         try FileManager.default.createDirectory(
             at: workingURL,
             withIntermediateDirectories: true
         )
+        removeLibboxCommandSocket(at: baseURL)
 
         let options = LibboxSetupOptions()
         options.basePath = baseURL.path
@@ -142,6 +162,17 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
         guard LibboxSetup(options, &setupError) else {
             throw setupError ?? PacketTunnelError.serviceUnavailable
         }
+        PacketTunnelLog.logger.notice("Libbox setup returned successfully")
+    }
+
+    private func removeLibboxCommandSocket(at baseURL: URL? = nil) {
+        let root = baseURL ?? FileManager.default.containerURL(
+            forSecurityApplicationGroupIdentifier: AppConstants.appGroupName
+        )?.appendingPathComponent("libbox", isDirectory: true)
+        guard let root else { return }
+        try? FileManager.default.removeItem(
+            at: root.appendingPathComponent("command.sock")
+        )
     }
 
     private func validateLibboxConfiguration(

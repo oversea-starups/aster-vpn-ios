@@ -3,7 +3,9 @@ import Foundation
 import Network
 import NetworkExtension
 
-final class PacketTunnelPlatformInterface: NSObject, LibboxPlatformInterfaceProtocol {
+final class PacketTunnelPlatformInterface: NSObject,
+    LibboxPlatformInterfaceProtocol,
+    LibboxCommandServerHandlerProtocol {
     private unowned let tunnel: NEPacketTunnelProvider
     private var networkSettings: NEPacketTunnelNetworkSettings?
     private var pathMonitor: NWPathMonitor?
@@ -66,6 +68,23 @@ final class PacketTunnelPlatformInterface: NSObject, LibboxPlatformInterfaceProt
 
     func send(_ notification: LibboxNotification?) throws {}
 
+    // The command server expects a handler even though Aster does not expose
+    // a user-facing Clash/API control plane. Keep these callbacks local to the
+    // extension and do not open any external listener.
+    func serviceReload() throws {}
+    func serviceStop() throws {}
+    func connectSSHAgent(_ ret0_: UnsafeMutablePointer<Int32>?) throws {
+        throw PacketTunnelPlatformError.unsupportedPlatformFeature
+    }
+    func triggerNativeCrash() throws {
+        throw PacketTunnelPlatformError.unsupportedPlatformFeature
+    }
+    func getSystemProxyStatus() throws -> LibboxSystemProxyStatus {
+        LibboxSystemProxyStatus()
+    }
+    func setSystemProxyEnabled(_ enabled: Bool) throws {}
+    func writeDebugMessage(_ message: String?) {}
+
     func cancelNotification(_ identifier: String?, typeID: Int32) throws {}
 
     func registerMyInterface(_ name: String?) {}
@@ -126,20 +145,22 @@ final class PacketTunnelPlatformInterface: NSObject, LibboxPlatformInterfaceProt
         pathMonitor = monitor
         let firstUpdate = DispatchSemaphore(value: 0)
         let deliveredFirstUpdate = LockedBox(false)
+        let listenerBox = UncheckedSendableBox(listener)
         monitor.pathUpdateHandler = { path in
-            Self.publish(path, to: listener)
             let shouldSignal = deliveredFirstUpdate.withValue { delivered in
                 guard !delivered else { return false }
                 delivered = true
                 return true
             }
             if shouldSignal {
+                // Release the synchronous Libbox bridge before entering the
+                // callback into Go. The callback may synchronously query the
+                // platform again; signalling first prevents a re-entrancy
+                // deadlock while startDefaultInterfaceMonitor is waiting.
                 firstUpdate.signal()
             }
+            Self.publish(path, to: listenerBox.value)
         }
-        // Keep the monitor on a system utility queue. A private serial queue
-        // can re-enter Libbox's callback bridge while it is synchronously
-        // waiting for the first update, which aborts the extension on device.
         monitor.start(queue: DispatchQueue.global(qos: .utility))
 
         guard firstUpdate.wait(timeout: .now() + 5) == .success else {
@@ -262,12 +283,22 @@ final class PacketTunnelPlatformInterface: NSObject, LibboxPlatformInterfaceProt
         let completed = DispatchSemaphore(value: 0)
         let applyError = LockedBox<Error?>(nil)
 
+        PacketTunnelLog.logger.notice("Applying tunnel network settings")
         tunnel.setTunnelNetworkSettings(settings) { error in
+            if let error {
+                let nsError = error as NSError
+                PacketTunnelLog.logger.error(
+                    "Tunnel network settings callback error domain=\(nsError.domain, privacy: .public) code=\(nsError.code, privacy: .public)"
+                )
+            } else {
+                PacketTunnelLog.logger.notice("Tunnel network settings callback succeeded")
+            }
             applyError.withValue { $0 = error }
             completed.signal()
         }
 
         guard completed.wait(timeout: .now() + 10) == .success else {
+            PacketTunnelLog.logger.error("Tunnel network settings callback timed out")
             throw PacketTunnelPlatformError.networkSettingsTimedOut
         }
         if let error = applyError.value {
@@ -376,6 +407,13 @@ private final class LockedBox<Value>: @unchecked Sendable {
     }
 }
 
+private final class UncheckedSendableBox<Value>: @unchecked Sendable {
+    let value: Value
+
+    init(_ value: Value) {
+        self.value = value
+    }
+}
 
 private enum PacketTunnelPlatformError: LocalizedError {
     case invalidTunOptions

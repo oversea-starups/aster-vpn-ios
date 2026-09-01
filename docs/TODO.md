@@ -1,6 +1,6 @@
 # TODO
 
-> Last reviewed: 2026-09-01  
+> Last reviewed: 2026-09-02
 > 只列未完成工作；当前 App Store 目标为 StoreKit-only，不包含第三方广告；Locations catalog、schema v2、三 Tab/圆形连接开关、Account 法律入口和 entitlement 修复见 `PROJECT_STATUS.md`。
 
 ## Critical Release Decisions
@@ -21,7 +21,7 @@
   - **Specs:** SPEC-0058、SPEC-0059、SPEC-0062。
 
 - [ ] **完成签名真机连接与线路切换矩阵**
-  - **Current:** 真机日志已定位并修复三层兼容问题：`startOrReloadService(nil options)` 的 Go panic、旧 archive 缺少 uTLS，以及精简构建缺少 Libbox 内部所需的 `with_clash_api`。已加入 preflight/非空 options、以 pinned commit 重建 `with_utls,with_clash_api,ios,with_low_memory` Libbox，并将 Provider 启动工作移出 XPC 主线程；连接图标改为静态状态图标，连接超时收敛到可重试状态，连接前幂等修复 App Group 配置，首次默认优先 AnyTLS 线路。另补回旧版已验证的 remote DNS、53 端口 hijack、IPv6 TUN、MTU/gVisor 和默认接口自动探测。2026-09-02 又发现 Debug PacketTunnel 的 LLVM coverage instrumentation 会尝试写入只读扩展 bundle 的 `default.profraw`，触发 SIGABRT/`Plugin failed`；随后关闭 Libbox Debug probes，并把接口监控移至系统 utility 队列，已重新安装设备包。真实远端握手、DNS/HTTPS 出口、免费时长在新包上的行为与多线路矩阵仍待继续验证。
+  - **Current:** 真机日志已定位并修复三层兼容问题：`startOrReloadService(nil options)` 的 Go panic、旧 archive 缺少 uTLS，以及精简构建缺少 Libbox 内部所需的 `with_clash_api`。已加入 preflight/非空 options、以 pinned commit 重建 `with_utls,with_clash_api,ios,with_low_memory` Libbox，并将 Provider 启动工作移出 XPC 主线程；连接图标改为静态状态图标，连接超时收敛到可重试状态，连接前幂等修复 App Group 配置，首次默认优先 AnyTLS 线路。历史可用实现把平台对象同时作为 command-server handler 与 platform interface，当前已恢复；运行目录改为短路径并清理 stale socket。另补回旧版已验证的 remote DNS、53 端口 hijack、IPv6 TUN、MTU/gVisor 和默认接口自动探测；MTU 已从设备报错的 9000 收敛为 1500。2026-09-02 又发现同步 Libbox 桥接在首个默认接口回调前释放就绪信号，可能导致扩展停在 `Default interface monitor requested` 并被系统判为 `Plugin failed`；现改为先 signal 再进入 Libbox listener，同时保留 utility 队列和关闭 Debug probes。真实远端握手、DNS/HTTPS 出口、免费时长在新包上的行为与多线路矩阵仍待继续验证。
   - **Dependency:** 在 Thomson’s iPhone 完成 VPN 系统权限与真实线路交互；多线路测试还需要安全的生产前 endpoint。
   - **Done when:** 先在用户原设备/线路回归公共 fd resolver；再用两台支持版本 iPhone 覆盖 Wi-Fi/蜂窝、连接/断开、DNS/出口变化、三条线路、后台/前台、网络切换、缓存回退、余额耗尽、Pro 不扣时；日志不含凭据。
   - **Specs:** SPEC-0001、SPEC-0054、SPEC-0056、SPEC-0060、SPEC-0062。

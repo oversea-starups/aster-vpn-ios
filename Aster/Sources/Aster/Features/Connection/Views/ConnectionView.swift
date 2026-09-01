@@ -122,7 +122,6 @@ struct ConnectionView: View {
         .accessibilityLabel(viewModel.presentationState.isProtected ? "Disconnect VPN" : "Connect VPN")
         .accessibilityValue(viewModel.presentationState.title)
         .accessibilityHint(viewModel.presentationState.isProtected ? "Disconnects the VPN" : "Starts the VPN or opens upgrade options")
-        .disabled(!viewModel.isEntitlementReady)
     }
 
     private func accessHubCard(compact: Bool) -> some View {
