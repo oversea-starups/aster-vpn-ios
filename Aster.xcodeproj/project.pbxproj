@@ -17,7 +17,6 @@
 		3558B3FB988348FBCB408809 /* TunnelProviderMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14568A089CABD42EE6894945 /* TunnelProviderMessage.swift */; };
 		39ED187EAA77FE74746AB5E7 /* VPNNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4787FA4008F71F1F50F9B93 /* VPNNode.swift */; };
 		406905F37888657CA77A3CA4 /* PacketTunnelPlatformInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019F9B1F9B0C6AA41E99A96B /* PacketTunnelPlatformInterface.swift */; };
-		48BE1E0A326FC32F018CDEB5 /* VPNDataUseDisclosureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D315CCE62830F1EB2741E1 /* VPNDataUseDisclosureView.swift */; };
 		577B2C7E291728A87CBEE126 /* AsterUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277FAF0601E4CF1B4520AE72 /* AsterUITests.swift */; };
 		57DDCC6EA1DB119468CBDE33 /* SingBoxConfigurationBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF748C525CF17B618C37C69A /* SingBoxConfigurationBuilder.swift */; };
 		71BC6F7E9E1341402F3BF168 /* NodeSubscriptionParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E5E2A58D63A2E30360DC48 /* NodeSubscriptionParser.swift */; };
@@ -138,7 +137,6 @@
 		83262FA47F740C03E2583B5D /* AsterTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsterTabView.swift; sourceTree = "<group>"; };
 		91E5E2A58D63A2E30360DC48 /* NodeSubscriptionParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeSubscriptionParser.swift; sourceTree = "<group>"; };
 		941376CEB75AFF673BD25CF3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		A1D315CCE62830F1EB2741E1 /* VPNDataUseDisclosureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNDataUseDisclosureView.swift; sourceTree = "<group>"; };
 		AE8E0B34BD179B3C124BC7DD /* NodeCatalogStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeCatalogStore.swift; sourceTree = "<group>"; };
 		B4787FA4008F71F1F50F9B93 /* VPNNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNNode.swift; sourceTree = "<group>"; };
 		BAD72DC9EE623B3B51DECBD5 /* VPNManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNManager.swift; sourceTree = "<group>"; };
@@ -396,7 +394,6 @@
 		A6DE3412B5A757A9ED2078AA /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				A1D315CCE62830F1EB2741E1 /* VPNDataUseDisclosureView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -705,7 +702,6 @@
 				EEEC669F7347A4EA816ECB8E /* SubscriptionTier.swift in Sources */,
 				B7DD151A9ED5EE50E3F831C2 /* TunnelConfigManager.swift in Sources */,
 				3558B3FB988348FBCB408809 /* TunnelProviderMessage.swift in Sources */,
-				48BE1E0A326FC32F018CDEB5 /* VPNDataUseDisclosureView.swift in Sources */,
 				C03F8ACB36AC3551B58901B4 /* VPNManager.swift in Sources */,
 				7C53C48446CC99C0CB7C4917 /* VPNNode.swift in Sources */,
 			);
