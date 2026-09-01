@@ -1,0 +1,23 @@
+# Aster VPN — Cursor Compatibility Rules
+
+Canonical agent instructions live in `AGENTS.md`. Before changing code, read:
+
+1. `AGENTS.md`
+2. `docs/00_agentic/PRODUCT_BRIEF.md`
+3. `PROJECT_STATUS.md`
+4. `docs/TODO.md`
+5. `docs/00_agentic/AGENTIC_CODING_GUIDE.md`
+6. Specs directly related to the task
+
+Hard constraints:
+
+- Optimize only the one-tap VPN core loop: connect, trustworthy status, recoverable failure, subscription reason.
+- Keep SwiftUI UI/business logic out of the Packet Tunnel Extension.
+- Treat Extension resources as constrained and verify memory/CPU on target devices; do not assume an unmeasured fixed budget.
+- Never log traffic content, full node URLs, UUIDs, tokens, receipts, or personal data.
+- Do not use display strings as connection state. Use an explicit, testable state model.
+- Report work as planned, implemented, build-verified, device-verified, or release-verified.
+- Simulator builds do not verify VPN traffic. NetworkExtension changes require signed device evidence.
+- Update project configuration through `project.yml`, regenerate with `./setup.sh`, and verify the generated project.
+- When evidence conflicts, current code/tests/runtime and active SSOT outrank old specs. Record unresolved conflicts instead of guessing.
+

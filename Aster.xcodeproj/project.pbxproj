@@ -1,0 +1,1125 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		020A044CD23ED6CA335B36C9 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3265B0717E7791763953ED97 /* AppConstants.swift */; };
+		102D2913BDED6498061FEC41 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 828277D1355C9CFEAE7CD85B /* PrivacyInfo.xcprivacy */; };
+		11E27A9444C0ABBA107FF4C2 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B4617E7D2B36E4C322D3A3 /* AccountView.swift */; };
+		141FABABFF946B60480E789F /* DebugDeviceImportBootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85951A3C0700BE58D8C5A0B /* DebugDeviceImportBootstrap.swift */; };
+		1C9F1681AB37A69837A41FE6 /* NodeSubscriptionParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595DED849E42F7456CF78E1B /* NodeSubscriptionParserTests.swift */; };
+		26AFCF5AABC9407F3B2CD47F /* ConnectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14471986EF3717E42FA1F53 /* ConnectionView.swift */; };
+		2E9363B274545B66509F833A /* PacketTunnel.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6D62455EB61919A91016A83D /* PacketTunnel.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		3558B3FB988348FBCB408809 /* TunnelProviderMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14568A089CABD42EE6894945 /* TunnelProviderMessage.swift */; };
+		39ED187EAA77FE74746AB5E7 /* VPNNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4787FA4008F71F1F50F9B93 /* VPNNode.swift */; };
+		406905F37888657CA77A3CA4 /* PacketTunnelPlatformInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019F9B1F9B0C6AA41E99A96B /* PacketTunnelPlatformInterface.swift */; };
+		48BE1E0A326FC32F018CDEB5 /* VPNDataUseDisclosureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D315CCE62830F1EB2741E1 /* VPNDataUseDisclosureView.swift */; };
+		577B2C7E291728A87CBEE126 /* AsterUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277FAF0601E4CF1B4520AE72 /* AsterUITests.swift */; };
+		57DDCC6EA1DB119468CBDE33 /* SingBoxConfigurationBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF748C525CF17B618C37C69A /* SingBoxConfigurationBuilder.swift */; };
+		71BC6F7E9E1341402F3BF168 /* NodeSubscriptionParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E5E2A58D63A2E30360DC48 /* NodeSubscriptionParser.swift */; };
+		724397DCC42F134AC4D57DE6 /* TunnelProviderMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14568A089CABD42EE6894945 /* TunnelProviderMessage.swift */; };
+		747D8AA9B1ED869FB5BD6A3B /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211100A854B39EC7AA20D646 /* PaywallView.swift */; };
+		7C53C48446CC99C0CB7C4917 /* VPNNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4787FA4008F71F1F50F9B93 /* VPNNode.swift */; };
+		8008B2420C5F19E919019CC2 /* Libbox.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 318DA523A3AD242DF45FF1AC /* Libbox.xcframework */; };
+		866CCB8138965EB664D330C2 /* NodeCatalogStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 070156D5BBB5433628951F6B /* NodeCatalogStoreTests.swift */; };
+		8CB05A86DC8CA57B1CD59E8A /* NodeSubscriptionClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C2B4F1B8262FD4AA384618 /* NodeSubscriptionClientTests.swift */; };
+		8D906E2E8B034B0C65B1848A /* ConnectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11CF738CED603802C4400C8 /* ConnectionViewModel.swift */; };
+		8D9C8BACE500062EDCD80632 /* NodeCatalogStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE8E0B34BD179B3C124BC7DD /* NodeCatalogStore.swift */; };
+		8F5D2F18F7C3C364F7163D39 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 35F2D11518BE3ACA2A2DFF69 /* Assets.xcassets */; };
+		9E7E2B6684BB57659B981987 /* TunnelConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86FDF0682B26C61B4C3BA99 /* TunnelConfigurationTests.swift */; };
+		9EAB285CBD1786C49C48FFD2 /* NodeCatalogPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BD3C93F56E4E05369A3A9B /* NodeCatalogPersistence.swift */; };
+		9FE94CB83BB4A8E22B0B408A /* AsterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F8512335A44BEAAA3F5292 /* AsterApp.swift */; };
+		A1BAE2BAE9419D9149F78A51 /* NodeSubscriptionClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ED03547E4A788ADB13416C8 /* NodeSubscriptionClient.swift */; };
+		AC0F1B2E3359732FD4C0DDAD /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3265B0717E7791763953ED97 /* AppConstants.swift */; };
+		B04623427BD3971C821DC48A /* TunnelProviderMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C4ECA08358469345A7C1D8 /* TunnelProviderMessageTests.swift */; };
+		B3AAE983D85D46102D44DA74 /* Libbox.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 318DA523A3AD242DF45FF1AC /* Libbox.xcframework */; };
+		B7CCAE4C71AC60101135AEAC /* SingBoxConfigurationBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF748C525CF17B618C37C69A /* SingBoxConfigurationBuilder.swift */; };
+		B7DD151A9ED5EE50E3F831C2 /* TunnelConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C78EBA9F647215EF0C1415C /* TunnelConfigManager.swift */; };
+		C03F8ACB36AC3551B58901B4 /* VPNManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAD72DC9EE623B3B51DECBD5 /* VPNManager.swift */; };
+		CBB1B63A88D586DA9BC252D0 /* Libbox.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 318DA523A3AD242DF45FF1AC /* Libbox.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		CE27140185CAB84E7C454690 /* AsterTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83262FA47F740C03E2583B5D /* AsterTabView.swift */; };
+		CE98A4127F42A8A454C212FE /* TunnelConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C78EBA9F647215EF0C1415C /* TunnelConfigManager.swift */; };
+		D05395AD6E455B42BA60AB65 /* LocationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF1622B7E45D16533B35705A /* LocationsView.swift */; };
+		DE9A0ABF1567ED4264607487 /* SubscriptionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C12B056DAC016E26F287DB /* SubscriptionStore.swift */; };
+		E1D837B2FB78EE8513DF3974 /* AsterTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF336426AB983585DA0A937C /* AsterTheme.swift */; };
+		E6758F209D8484D172C30052 /* AppConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490D01248336AA31FFBCF7C3 /* AppConfiguration.swift */; };
+		EEEC669F7347A4EA816ECB8E /* SubscriptionTier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796A0FD64092A2D96C0AA3E5 /* SubscriptionTier.swift */; };
+		F0952850442B71A4C6E2B861 /* PacketTunnelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8E4D76E45903038E6A9BFE /* PacketTunnelProvider.swift */; };
+		FE98C06CD9B2C13EC37B11E5 /* Libbox.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 318DA523A3AD242DF45FF1AC /* Libbox.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		1F2EB52D9D9C29FFC5A9D084 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 803B8273E7560208A8C34C3C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 54586CC0DD147B6213263959;
+			remoteInfo = Aster;
+		};
+		38C0AD3DF1897212F5DE2489 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 803B8273E7560208A8C34C3C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 54586CC0DD147B6213263959;
+			remoteInfo = Aster;
+		};
+		E8668B9C3AF04E1DDBBAD9FE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 803B8273E7560208A8C34C3C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 342EB89C227AB1D16137D7A4;
+			remoteInfo = PacketTunnel;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4D9A425D13F7C5F4C4B88A55 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				2E9363B274545B66509F833A /* PacketTunnel.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6A0C9F1889DC993BF181915B /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				FE98C06CD9B2C13EC37B11E5 /* Libbox.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		95404333B390F81E8B1E1C34 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				CBB1B63A88D586DA9BC252D0 /* Libbox.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		019F9B1F9B0C6AA41E99A96B /* PacketTunnelPlatformInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketTunnelPlatformInterface.swift; sourceTree = "<group>"; };
+		070156D5BBB5433628951F6B /* NodeCatalogStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeCatalogStoreTests.swift; sourceTree = "<group>"; };
+		0C78EBA9F647215EF0C1415C /* TunnelConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TunnelConfigManager.swift; sourceTree = "<group>"; };
+		10B4617E7D2B36E4C322D3A3 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
+		14568A089CABD42EE6894945 /* TunnelProviderMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TunnelProviderMessage.swift; sourceTree = "<group>"; };
+		14C12B056DAC016E26F287DB /* SubscriptionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionStore.swift; sourceTree = "<group>"; };
+		211100A854B39EC7AA20D646 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
+		21E006C2A567191103BBD687 /* AsterUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = AsterUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		277FAF0601E4CF1B4520AE72 /* AsterUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsterUITests.swift; sourceTree = "<group>"; };
+		318DA523A3AD242DF45FF1AC /* Libbox.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Libbox.xcframework; path = Aster/Frameworks/Libbox.xcframework; sourceTree = "<group>"; };
+		3265B0717E7791763953ED97 /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
+		35F2D11518BE3ACA2A2DFF69 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		37F8512335A44BEAAA3F5292 /* AsterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsterApp.swift; sourceTree = "<group>"; };
+		3ED03547E4A788ADB13416C8 /* NodeSubscriptionClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeSubscriptionClient.swift; sourceTree = "<group>"; };
+		490D01248336AA31FFBCF7C3 /* AppConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfiguration.swift; sourceTree = "<group>"; };
+		53CA8E1265F0A03964DA040D /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		54BD3C93F56E4E05369A3A9B /* NodeCatalogPersistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeCatalogPersistence.swift; sourceTree = "<group>"; };
+		595DED849E42F7456CF78E1B /* NodeSubscriptionParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeSubscriptionParserTests.swift; sourceTree = "<group>"; };
+		6B8E4D76E45903038E6A9BFE /* PacketTunnelProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketTunnelProvider.swift; sourceTree = "<group>"; };
+		6D62455EB61919A91016A83D /* PacketTunnel.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = PacketTunnel.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		796A0FD64092A2D96C0AA3E5 /* SubscriptionTier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionTier.swift; sourceTree = "<group>"; };
+		828277D1355C9CFEAE7CD85B /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		83262FA47F740C03E2583B5D /* AsterTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsterTabView.swift; sourceTree = "<group>"; };
+		91E5E2A58D63A2E30360DC48 /* NodeSubscriptionParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeSubscriptionParser.swift; sourceTree = "<group>"; };
+		941376CEB75AFF673BD25CF3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		A1D315CCE62830F1EB2741E1 /* VPNDataUseDisclosureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNDataUseDisclosureView.swift; sourceTree = "<group>"; };
+		AE8E0B34BD179B3C124BC7DD /* NodeCatalogStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeCatalogStore.swift; sourceTree = "<group>"; };
+		B4787FA4008F71F1F50F9B93 /* VPNNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNNode.swift; sourceTree = "<group>"; };
+		BAD72DC9EE623B3B51DECBD5 /* VPNManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNManager.swift; sourceTree = "<group>"; };
+		C11CF738CED603802C4400C8 /* ConnectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionViewModel.swift; sourceTree = "<group>"; };
+		CDF5B95C40E49420E3973C0D /* Aster.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Aster.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D14471986EF3717E42FA1F53 /* ConnectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionView.swift; sourceTree = "<group>"; };
+		D85951A3C0700BE58D8C5A0B /* DebugDeviceImportBootstrap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugDeviceImportBootstrap.swift; sourceTree = "<group>"; };
+		DA3FC482B24535A005369015 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		E3C4ECA08358469345A7C1D8 /* TunnelProviderMessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TunnelProviderMessageTests.swift; sourceTree = "<group>"; };
+		E92B11D5DBB88607660CAD4E /* AsterTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = AsterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		EF1622B7E45D16533B35705A /* LocationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsView.swift; sourceTree = "<group>"; };
+		F4C2B4F1B8262FD4AA384618 /* NodeSubscriptionClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeSubscriptionClientTests.swift; sourceTree = "<group>"; };
+		F86FDF0682B26C61B4C3BA99 /* TunnelConfigurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TunnelConfigurationTests.swift; sourceTree = "<group>"; };
+		FF336426AB983585DA0A937C /* AsterTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsterTheme.swift; sourceTree = "<group>"; };
+		FF748C525CF17B618C37C69A /* SingBoxConfigurationBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingBoxConfigurationBuilder.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		9CA18311DC2926423122F7DB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8008B2420C5F19E919019CC2 /* Libbox.xcframework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BC366D041C6466A6371DCE0F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B3AAE983D85D46102D44DA74 /* Libbox.xcframework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0B3E5946B578D250BAF36DEE /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				46D73BB05FE8152D2742D59B /* Access */,
+				8BE3FC06D9C9ED9F2DD05AAC /* Account */,
+				D6D720133F64FDD1F7590607 /* Connection */,
+				16CDE2F4E37396180A6EA0FA /* Locations */,
+				22573EFDA66273DAC02384AF /* Privacy */,
+				375B2F98F5406DB8DC68036F /* Subscription */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		13918B601A4930494F564482 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		16CDE2F4E37396180A6EA0FA /* Locations */ = {
+			isa = PBXGroup;
+			children = (
+				EB4583D85A2B665489567871 /* Services */,
+				6D975A3F3FAD62B1B13FC3FD /* Views */,
+			);
+			path = Locations;
+			sourceTree = "<group>";
+		};
+		1EC2FA79B3C8C93AA5CB1E6C /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				B0EA91B08976F600CB0D0624 /* DesignSystem */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		22573EFDA66273DAC02384AF /* Privacy */ = {
+			isa = PBXGroup;
+			children = (
+				A6DE3412B5A757A9ED2078AA /* Views */,
+			);
+			path = Privacy;
+			sourceTree = "<group>";
+		};
+		25B196D2391B9D82C8F6071B /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				211100A854B39EC7AA20D646 /* PaywallView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		3347F69B00087A5F33047DC6 /* Security */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Security;
+			sourceTree = "<group>";
+		};
+		375B2F98F5406DB8DC68036F /* Subscription */ = {
+			isa = PBXGroup;
+			children = (
+				25B196D2391B9D82C8F6071B /* Views */,
+			);
+			path = Subscription;
+			sourceTree = "<group>";
+		};
+		403BC18D598834427DA5570F /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				796A0FD64092A2D96C0AA3E5 /* SubscriptionTier.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		43749F7E48B8D73D3F228C37 /* AsterUITests */ = {
+			isa = PBXGroup;
+			children = (
+				277FAF0601E4CF1B4520AE72 /* AsterUITests.swift */,
+			);
+			name = AsterUITests;
+			path = Aster/Tests/AsterUITests;
+			sourceTree = "<group>";
+		};
+		46D73BB05FE8152D2742D59B /* Access */ = {
+			isa = PBXGroup;
+			children = (
+				13918B601A4930494F564482 /* Models */,
+				B16D97F793A449B462B3CC74 /* Services */,
+				F14FE3A7E265E6A87B5066DF /* Views */,
+			);
+			path = Access;
+			sourceTree = "<group>";
+		};
+		4B74CC26287D1339DA0E6D93 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				10B4617E7D2B36E4C322D3A3 /* AccountView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		57348A0346322A81BFBA7786 /* AsterTests */ = {
+			isa = PBXGroup;
+			children = (
+				070156D5BBB5433628951F6B /* NodeCatalogStoreTests.swift */,
+				F4C2B4F1B8262FD4AA384618 /* NodeSubscriptionClientTests.swift */,
+				595DED849E42F7456CF78E1B /* NodeSubscriptionParserTests.swift */,
+				F86FDF0682B26C61B4C3BA99 /* TunnelConfigurationTests.swift */,
+				E3C4ECA08358469345A7C1D8 /* TunnelProviderMessageTests.swift */,
+			);
+			name = AsterTests;
+			path = Aster/Tests/AsterTests;
+			sourceTree = "<group>";
+		};
+		5CB922C2BDDBCBF6C32075B4 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D14471986EF3717E42FA1F53 /* ConnectionView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		5CC13F16F372EDAC12F81852 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				53CA8E1265F0A03964DA040D /* Debug.xcconfig */,
+				DA3FC482B24535A005369015 /* Release.xcconfig */,
+			);
+			name = Config;
+			path = Aster/Config;
+			sourceTree = "<group>";
+		};
+		6D975A3F3FAD62B1B13FC3FD /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				EF1622B7E45D16533B35705A /* LocationsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		76CE970C6CED3800BCD668FC /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				B30FEB9CCE504BFED9E2375B /* Constants */,
+				F8ADF720CC58B85FD922170C /* Models */,
+			);
+			name = Shared;
+			path = Aster/Sources/Shared;
+			sourceTree = "<group>";
+		};
+		77461EDC9E811A8C562F31A3 /* Configuration */ = {
+			isa = PBXGroup;
+			children = (
+				490D01248336AA31FFBCF7C3 /* AppConfiguration.swift */,
+			);
+			path = Configuration;
+			sourceTree = "<group>";
+		};
+		84444FFD61FE4248C4B1F010 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				14C12B056DAC016E26F287DB /* SubscriptionStore.swift */,
+				BAD72DC9EE623B3B51DECBD5 /* VPNManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		8BE3FC06D9C9ED9F2DD05AAC /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				4B74CC26287D1339DA0E6D93 /* Views */,
+			);
+			path = Account;
+			sourceTree = "<group>";
+		};
+		8D4C14C33AD6A0093C0F2E92 = {
+			isa = PBXGroup;
+			children = (
+				C2452DB96E309F21C868593B /* Aster */,
+				57348A0346322A81BFBA7786 /* AsterTests */,
+				43749F7E48B8D73D3F228C37 /* AsterUITests */,
+				5CC13F16F372EDAC12F81852 /* Config */,
+				EA344A19A8A3A1EBA7F3B78A /* PacketTunnel */,
+				F1B957374081F8C143392192 /* Resources */,
+				76CE970C6CED3800BCD668FC /* Shared */,
+				9BF11E74D21C1601BFCAA7C9 /* Frameworks */,
+				CC27F93FED78DB135292D4E1 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		8FAB7FDC684EB2992DC86455 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				C11CF738CED603802C4400C8 /* ConnectionViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		9BF11E74D21C1601BFCAA7C9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				318DA523A3AD242DF45FF1AC /* Libbox.xcframework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A42FE5D7CAC6F6C2FF87AFAF /* App */ = {
+			isa = PBXGroup;
+			children = (
+				37F8512335A44BEAAA3F5292 /* AsterApp.swift */,
+				83262FA47F740C03E2583B5D /* AsterTabView.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		A6DE3412B5A757A9ED2078AA /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A1D315CCE62830F1EB2741E1 /* VPNDataUseDisclosureView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		B0EA91B08976F600CB0D0624 /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				FF336426AB983585DA0A937C /* AsterTheme.swift */,
+			);
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+		B16D97F793A449B462B3CC74 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		B30FEB9CCE504BFED9E2375B /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				3265B0717E7791763953ED97 /* AppConstants.swift */,
+			);
+			path = Constants;
+			sourceTree = "<group>";
+		};
+		BE4E9D6050EAD743C2DEFBB1 /* DeviceImport */ = {
+			isa = PBXGroup;
+			children = (
+				D85951A3C0700BE58D8C5A0B /* DebugDeviceImportBootstrap.swift */,
+			);
+			path = DeviceImport;
+			sourceTree = "<group>";
+		};
+		C2452DB96E309F21C868593B /* Aster */ = {
+			isa = PBXGroup;
+			children = (
+				A42FE5D7CAC6F6C2FF87AFAF /* App */,
+				E9BC0E08EA4A361D45A4551E /* Core */,
+				0B3E5946B578D250BAF36DEE /* Features */,
+				1EC2FA79B3C8C93AA5CB1E6C /* UI */,
+			);
+			name = Aster;
+			path = Aster/Sources/Aster;
+			sourceTree = "<group>";
+		};
+		CC27F93FED78DB135292D4E1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CDF5B95C40E49420E3973C0D /* Aster.app */,
+				E92B11D5DBB88607660CAD4E /* AsterTests.xctest */,
+				21E006C2A567191103BBD687 /* AsterUITests.xctest */,
+				6D62455EB61919A91016A83D /* PacketTunnel.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D6D720133F64FDD1F7590607 /* Connection */ = {
+			isa = PBXGroup;
+			children = (
+				8FAB7FDC684EB2992DC86455 /* ViewModels */,
+				5CB922C2BDDBCBF6C32075B4 /* Views */,
+			);
+			path = Connection;
+			sourceTree = "<group>";
+		};
+		E9BC0E08EA4A361D45A4551E /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				77461EDC9E811A8C562F31A3 /* Configuration */,
+				BE4E9D6050EAD743C2DEFBB1 /* DeviceImport */,
+				403BC18D598834427DA5570F /* Models */,
+				3347F69B00087A5F33047DC6 /* Security */,
+				84444FFD61FE4248C4B1F010 /* Services */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		EA344A19A8A3A1EBA7F3B78A /* PacketTunnel */ = {
+			isa = PBXGroup;
+			children = (
+				941376CEB75AFF673BD25CF3 /* Info.plist */,
+				019F9B1F9B0C6AA41E99A96B /* PacketTunnelPlatformInterface.swift */,
+				6B8E4D76E45903038E6A9BFE /* PacketTunnelProvider.swift */,
+			);
+			name = PacketTunnel;
+			path = Aster/Sources/PacketTunnel;
+			sourceTree = "<group>";
+		};
+		EB4583D85A2B665489567871 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				54BD3C93F56E4E05369A3A9B /* NodeCatalogPersistence.swift */,
+				AE8E0B34BD179B3C124BC7DD /* NodeCatalogStore.swift */,
+				3ED03547E4A788ADB13416C8 /* NodeSubscriptionClient.swift */,
+				91E5E2A58D63A2E30360DC48 /* NodeSubscriptionParser.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		F14FE3A7E265E6A87B5066DF /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		F1B957374081F8C143392192 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				35F2D11518BE3ACA2A2DFF69 /* Assets.xcassets */,
+				828277D1355C9CFEAE7CD85B /* PrivacyInfo.xcprivacy */,
+			);
+			name = Resources;
+			path = Aster/Resources;
+			sourceTree = "<group>";
+		};
+		F8ADF720CC58B85FD922170C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				FF748C525CF17B618C37C69A /* SingBoxConfigurationBuilder.swift */,
+				0C78EBA9F647215EF0C1415C /* TunnelConfigManager.swift */,
+				14568A089CABD42EE6894945 /* TunnelProviderMessage.swift */,
+				B4787FA4008F71F1F50F9B93 /* VPNNode.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		02DE626DC4C12B51E4E01A71 /* AsterTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2F0172050864A4FA176BBC75 /* Build configuration list for PBXNativeTarget "AsterTests" */;
+			buildPhases = (
+				D325A925BE5CFDCC3F177DB3 /* Sources */,
+				9CA18311DC2926423122F7DB /* Frameworks */,
+				95404333B390F81E8B1E1C34 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				968127B9998E9F8807693C44 /* PBXTargetDependency */,
+			);
+			name = AsterTests;
+			packageProductDependencies = (
+			);
+			productName = AsterTests;
+			productReference = E92B11D5DBB88607660CAD4E /* AsterTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		342EB89C227AB1D16137D7A4 /* PacketTunnel */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 99282DE2DB0A548DFC4AB0F6 /* Build configuration list for PBXNativeTarget "PacketTunnel" */;
+			buildPhases = (
+				9EA27B66CE74FF4A9B3D60C2 /* Sources */,
+				BC366D041C6466A6371DCE0F /* Frameworks */,
+				6A0C9F1889DC993BF181915B /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PacketTunnel;
+			packageProductDependencies = (
+			);
+			productName = PacketTunnel;
+			productReference = 6D62455EB61919A91016A83D /* PacketTunnel.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		54586CC0DD147B6213263959 /* Aster */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A266ADC4F1AADA151FB01E8C /* Build configuration list for PBXNativeTarget "Aster" */;
+			buildPhases = (
+				8127AA53FF2C0562A560BEBC /* Validate Release Configuration */,
+				66F7E9B4BE075656486E9F63 /* Sources */,
+				195D567251F6F68B69454FC0 /* Resources */,
+				4D9A425D13F7C5F4C4B88A55 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1975EE849A660484A5B02839 /* PBXTargetDependency */,
+			);
+			name = Aster;
+			packageProductDependencies = (
+			);
+			productName = Aster;
+			productReference = CDF5B95C40E49420E3973C0D /* Aster.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E93B746D0679D7AC19BB8772 /* AsterUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A1ED12F3204AE22A7DD34646 /* Build configuration list for PBXNativeTarget "AsterUITests" */;
+			buildPhases = (
+				A72B51DE21464C37AFF564E8 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				617C1612B439D20EDA93217A /* PBXTargetDependency */,
+			);
+			name = AsterUITests;
+			packageProductDependencies = (
+			);
+			productName = AsterUITests;
+			productReference = 21E006C2A567191103BBD687 /* AsterUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		803B8273E7560208A8C34C3C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					54586CC0DD147B6213263959 = {
+						DevelopmentTeam = "";
+					};
+					E93B746D0679D7AC19BB8772 = {
+						TestTargetID = 54586CC0DD147B6213263959;
+					};
+				};
+			};
+			buildConfigurationList = 8B54EB16271A399839EA7CFF /* Build configuration list for PBXProject "Aster" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 8D4C14C33AD6A0093C0F2E92;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = CC27F93FED78DB135292D4E1 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				54586CC0DD147B6213263959 /* Aster */,
+				02DE626DC4C12B51E4E01A71 /* AsterTests */,
+				E93B746D0679D7AC19BB8772 /* AsterUITests */,
+				342EB89C227AB1D16137D7A4 /* PacketTunnel */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		195D567251F6F68B69454FC0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8F5D2F18F7C3C364F7163D39 /* Assets.xcassets in Resources */,
+				102D2913BDED6498061FEC41 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		8127AA53FF2C0562A560BEBC /* Validate Release Configuration */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Validate Release Configuration";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/bash\n\nset -eu\n\nif [[ \"${CONFIGURATION:-}\" != \"Release\" ]]; then\n  exit 0\nfi\n\nrepository_root=\"$(cd \"$(dirname \"$0\")/..\" && pwd)\"\ninvalid=0\n\nis_non_public_host() {\n  local host=\"$1\"\n  local a b c d\n\n  case \"$host\" in\n    \"\"|\\[*|localhost|*.localhost|*.local|*.internal|example|*.example|example.com|*.example.com|example.net|*.example.net|example.org|*.example.org|*.invalid|*.test)\n      return 0\n      ;;\n  esac\n\n  if [[ \"$host\" =~ ^([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+)$ ]]; then\n    a=\"${BASH_REMATCH[1]}\"\n    b=\"${BASH_REMATCH[2]}\"\n    c=\"${BASH_REMATCH[3]}\"\n    d=\"${BASH_REMATCH[4]}\"\n    if (( a > 255 || b > 255 || c > 255 || d > 255 )); then\n      return 0\n    fi\n    if (( a == 0 || a == 10 || a == 127 || a >= 224 ||\n          (a == 100 && b >= 64 && b <= 127) ||\n          (a == 169 && b == 254) ||\n          (a == 172 && b >= 16 && b <= 31) ||\n          (a == 192 && b == 168) ||\n          (a == 192 && b == 0 && c == 2) ||\n          (a == 198 && (b == 18 || b == 19 || b == 51)) ||\n          (a == 203 && b == 0 && c == 113) )); then\n      return 0\n    fi\n  fi\n\n  return 1\n}\n\nplatform_interface=\"$repository_root/Aster/Sources/PacketTunnel/PacketTunnelPlatformInterface.swift\"\nif /usr/bin/grep -Eq 'value\\(forKeyPath|socket\\.fileDescriptor|NSSelectorFromString' \"$platform_interface\"; then\n  echo \"error: PacketTunnelPlatformInterface must not access private NetworkExtension implementation details.\"\n  invalid=1\nfi\n\nfor libbox_header in \\\n  \"$repository_root/Aster/Frameworks/Libbox.xcframework/ios-arm64/Libbox.framework/Headers/Libbox.objc.h\" \\\n  \"$repository_root/Aster/Frameworks/Libbox.xcframework/ios-arm64_x86_64-simulator/Libbox.framework/Headers/Libbox.objc.h\"\ndo\n  if ! /usr/bin/grep -Fq 'FOUNDATION_EXPORT int32_t LibboxGetTunnelFileDescriptor(void);' \"$libbox_header\"; then\n    echo \"error: Libbox public tunnel file-descriptor binding is missing from $libbox_header\"\n    invalid=1\n  fi\ndone\n\nfor libbox_binary in \\\n  \"$repository_root/Aster/Frameworks/Libbox.xcframework/ios-arm64/Libbox.framework/Libbox\" \\\n  \"$repository_root/Aster/Frameworks/Libbox.xcframework/ios-arm64_x86_64-simulator/Libbox.framework/Libbox\"\ndo\n  if ! /usr/bin/strings \"$libbox_binary\" | /usr/bin/grep -Eq -- '-tags=with_utls,ios(,iossimulator)?,with_low_memory'; then\n    echo \"error: Libbox must be built with uTLS and Network Extension low-memory tags: $libbox_binary\"\n    invalid=1\n  fi\ndone\n\nprivacy_url=\"${PRIVACY_POLICY_URL:-}\"\nprivacy_host=\"${privacy_url#https://}\"\nprivacy_host=\"${privacy_host%%/*}\"\nprivacy_host=\"${privacy_host%%\\?*}\"\nprivacy_host=\"${privacy_host%%:*}\"\nprivacy_host=\"$(printf '%s' \"$privacy_host\" | /usr/bin/tr '[:upper:]' '[:lower:]')\"\n\nif [[ ! \"$privacy_url\" =~ ^https:// ]] || [[ \"$privacy_url\" == *\"@\"* ]] || [[ \"$privacy_url\" == *\"#\"* ]] || [[ \"$privacy_url\" == *'$('* ]]; then\n  echo \"error: A public HTTPS PRIVACY_POLICY_URL is required for Release builds.\"\n  invalid=1\nelse\n  if is_non_public_host \"$privacy_host\"; then\n    echo \"error: PRIVACY_POLICY_URL must not use a local or reserved placeholder host.\"\n    invalid=1\n  fi\nfi\n\nsubscription_url=\"${NODE_SUBSCRIPTION_URL:-}\"\nsubscription_host=\"${subscription_url#https://}\"\nsubscription_host=\"${subscription_host%%/*}\"\nsubscription_host=\"${subscription_host%%\\?*}\"\nsubscription_host=\"${subscription_host%%:*}\"\nsubscription_host=\"$(printf '%s' \"$subscription_host\" | /usr/bin/tr '[:upper:]' '[:lower:]')\"\n\nif [[ ! \"$subscription_url\" =~ ^https:// ]] || [[ \"$subscription_url\" == *\"@\"* ]] || [[ \"$subscription_url\" == *\"#\"* ]] || [[ \"$subscription_url\" == *'$('* ]]; then\n  echo \"error: A public HTTPS NODE_SUBSCRIPTION_URL is required for Release builds.\"\n  invalid=1\nelse\n  if is_non_public_host \"$subscription_host\"; then\n    echo \"error: NODE_SUBSCRIPTION_URL must use a public non-placeholder host.\"\n    invalid=1\n  fi\nfi\n\nexit \"$invalid\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		66F7E9B4BE075656486E9F63 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				11E27A9444C0ABBA107FF4C2 /* AccountView.swift in Sources */,
+				E6758F209D8484D172C30052 /* AppConfiguration.swift in Sources */,
+				020A044CD23ED6CA335B36C9 /* AppConstants.swift in Sources */,
+				9FE94CB83BB4A8E22B0B408A /* AsterApp.swift in Sources */,
+				CE27140185CAB84E7C454690 /* AsterTabView.swift in Sources */,
+				E1D837B2FB78EE8513DF3974 /* AsterTheme.swift in Sources */,
+				26AFCF5AABC9407F3B2CD47F /* ConnectionView.swift in Sources */,
+				8D906E2E8B034B0C65B1848A /* ConnectionViewModel.swift in Sources */,
+				141FABABFF946B60480E789F /* DebugDeviceImportBootstrap.swift in Sources */,
+				D05395AD6E455B42BA60AB65 /* LocationsView.swift in Sources */,
+				9EAB285CBD1786C49C48FFD2 /* NodeCatalogPersistence.swift in Sources */,
+				8D9C8BACE500062EDCD80632 /* NodeCatalogStore.swift in Sources */,
+				A1BAE2BAE9419D9149F78A51 /* NodeSubscriptionClient.swift in Sources */,
+				71BC6F7E9E1341402F3BF168 /* NodeSubscriptionParser.swift in Sources */,
+				747D8AA9B1ED869FB5BD6A3B /* PaywallView.swift in Sources */,
+				57DDCC6EA1DB119468CBDE33 /* SingBoxConfigurationBuilder.swift in Sources */,
+				DE9A0ABF1567ED4264607487 /* SubscriptionStore.swift in Sources */,
+				EEEC669F7347A4EA816ECB8E /* SubscriptionTier.swift in Sources */,
+				B7DD151A9ED5EE50E3F831C2 /* TunnelConfigManager.swift in Sources */,
+				3558B3FB988348FBCB408809 /* TunnelProviderMessage.swift in Sources */,
+				48BE1E0A326FC32F018CDEB5 /* VPNDataUseDisclosureView.swift in Sources */,
+				C03F8ACB36AC3551B58901B4 /* VPNManager.swift in Sources */,
+				7C53C48446CC99C0CB7C4917 /* VPNNode.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9EA27B66CE74FF4A9B3D60C2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AC0F1B2E3359732FD4C0DDAD /* AppConstants.swift in Sources */,
+				406905F37888657CA77A3CA4 /* PacketTunnelPlatformInterface.swift in Sources */,
+				F0952850442B71A4C6E2B861 /* PacketTunnelProvider.swift in Sources */,
+				B7CCAE4C71AC60101135AEAC /* SingBoxConfigurationBuilder.swift in Sources */,
+				CE98A4127F42A8A454C212FE /* TunnelConfigManager.swift in Sources */,
+				724397DCC42F134AC4D57DE6 /* TunnelProviderMessage.swift in Sources */,
+				39ED187EAA77FE74746AB5E7 /* VPNNode.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A72B51DE21464C37AFF564E8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				577B2C7E291728A87CBEE126 /* AsterUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D325A925BE5CFDCC3F177DB3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				866CCB8138965EB664D330C2 /* NodeCatalogStoreTests.swift in Sources */,
+				8CB05A86DC8CA57B1CD59E8A /* NodeSubscriptionClientTests.swift in Sources */,
+				1C9F1681AB37A69837A41FE6 /* NodeSubscriptionParserTests.swift in Sources */,
+				9E7E2B6684BB57659B981987 /* TunnelConfigurationTests.swift in Sources */,
+				B04623427BD3971C821DC48A /* TunnelProviderMessageTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		1975EE849A660484A5B02839 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 342EB89C227AB1D16137D7A4 /* PacketTunnel */;
+			targetProxy = E8668B9C3AF04E1DDBBAD9FE /* PBXContainerItemProxy */;
+		};
+		617C1612B439D20EDA93217A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 54586CC0DD147B6213263959 /* Aster */;
+			targetProxy = 1F2EB52D9D9C29FFC5A9D084 /* PBXContainerItemProxy */;
+		};
+		968127B9998E9F8807693C44 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 54586CC0DD147B6213263959 /* Aster */;
+			targetProxy = 38C0AD3DF1897212F5DE2489 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		2EE6067231C989DF34DE7323 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.astervpn.AsterUITests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Aster;
+			};
+			name = Release;
+		};
+		308F057611AE51E831428445 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"Aster/Frameworks\"",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lresolv",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.astervpn.AsterTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Aster.app/Aster";
+			};
+			name = Debug;
+		};
+		35AE7DC426DBEDAEC2E09207 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Aster/Config/PacketTunnel.entitlements;
+				CURRENT_PROJECT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/Aster/Frameworks",
+					"\"Aster/Frameworks\"",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Aster/Sources/PacketTunnel/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lresolv",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.astervpn.Aster.PacketTunnel;
+				PRODUCT_NAME = PacketTunnel;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		398B0AE37B735E0AAAFE72C6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"Aster/Frameworks\"",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lresolv",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.astervpn.AsterTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Aster.app/Aster";
+			};
+			name = Release;
+		};
+		6C7CF58F5D050E2EEA7FCB61 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 53CA8E1265F0A03964DA040D /* Debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Aster/Config/Aster.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Aster/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.astervpn.Aster;
+				PRODUCT_NAME = Aster;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		8B92739D514962E66EE57026 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Aster/Config/PacketTunnel.entitlements;
+				CURRENT_PROJECT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/Aster/Frameworks",
+					"\"Aster/Frameworks\"",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Aster/Sources/PacketTunnel/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lresolv",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.astervpn.Aster.PacketTunnel;
+				PRODUCT_NAME = PacketTunnel;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		9B5D365EBA4FC9AFED908E51 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DA3FC482B24535A005369015 /* Release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Aster/Config/Aster.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Aster/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.astervpn.Aster;
+				PRODUCT_NAME = Aster;
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+		BB4651D34CFBA453C7237E89 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		CDE39EE3BA813B8B7472FF23 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.astervpn.AsterUITests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Aster;
+			};
+			name = Debug;
+		};
+		CF9098EB04EEF6B4E290C712 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2F0172050864A4FA176BBC75 /* Build configuration list for PBXNativeTarget "AsterTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				308F057611AE51E831428445 /* Debug */,
+				398B0AE37B735E0AAAFE72C6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		8B54EB16271A399839EA7CFF /* Build configuration list for PBXProject "Aster" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BB4651D34CFBA453C7237E89 /* Debug */,
+				CF9098EB04EEF6B4E290C712 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		99282DE2DB0A548DFC4AB0F6 /* Build configuration list for PBXNativeTarget "PacketTunnel" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8B92739D514962E66EE57026 /* Debug */,
+				35AE7DC426DBEDAEC2E09207 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A1ED12F3204AE22A7DD34646 /* Build configuration list for PBXNativeTarget "AsterUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CDE39EE3BA813B8B7472FF23 /* Debug */,
+				2EE6067231C989DF34DE7323 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A266ADC4F1AADA151FB01E8C /* Build configuration list for PBXNativeTarget "Aster" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6C7CF58F5D050E2EEA7FCB61 /* Debug */,
+				9B5D365EBA4FC9AFED908E51 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 803B8273E7560208A8C34C3C /* Project object */;
+}

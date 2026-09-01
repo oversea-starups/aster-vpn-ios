@@ -1,0 +1,17 @@
+{
+  "name": "aster-admob-ssv",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test",
+    "check": "node --check src/callback.js && node --check src/key-provider.js && node --check src/service.js && node --check src/store.js && node --check src/server.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "13.0.3"
+  }
+}

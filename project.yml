@@ -1,0 +1,95 @@
+name: Aster
+options:
+  bundleIdPrefix: com.astervpn
+  deploymentTarget:
+    iOS: 16.0
+  xcodeVersion: 15.0
+  groupSortPosition: top
+  generateEmptyDirectories: true
+
+targets:
+  Aster:
+    type: application
+    platform: iOS
+    sources: 
+      - path: Aster/Sources/Aster
+      - path: Aster/Sources/Shared
+      - path: Aster/Resources/Assets.xcassets
+      - path: Aster/Resources/PrivacyInfo.xcprivacy
+    configFiles:
+      Debug: Aster/Config/Debug.xcconfig
+      Release: Aster/Config/Release.xcconfig
+    entitlements:
+      path: Aster/Config/Aster.entitlements
+      properties:
+        com.apple.developer.networking.networkextension:
+          - packet-tunnel-provider
+        com.apple.security.application-groups:
+          - group.com.astervpn.shared
+    dependencies:
+      - target: PacketTunnel
+    preBuildScripts:
+      - path: scripts/validate_release_configuration.sh
+        name: Validate Release Configuration
+        basedOnDependencyAnalysis: false
+    settings:
+      base:
+        PRODUCT_NAME: Aster
+        CURRENT_PROJECT_VERSION: 1
+        MARKETING_VERSION: 1.0.0
+        DEVELOPMENT_TEAM: "" 
+        GENERATE_INFOPLIST_FILE: NO
+        INFOPLIST_FILE: Aster/Resources/Info.plist
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+
+  PacketTunnel:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: Aster/Sources/PacketTunnel
+      - path: Aster/Sources/Shared
+    entitlements:
+      path: Aster/Config/PacketTunnel.entitlements
+      properties:
+        com.apple.developer.networking.networkextension:
+          - packet-tunnel-provider
+        com.apple.security.application-groups:
+          - group.com.astervpn.shared
+    dependencies:
+      - framework: Aster/Frameworks/Libbox.xcframework
+        embed: true
+    settings:
+      base:
+        PRODUCT_NAME: PacketTunnel
+        PRODUCT_BUNDLE_IDENTIFIER: com.astervpn.Aster.PacketTunnel
+        CURRENT_PROJECT_VERSION: 1
+        MARKETING_VERSION: 1.0.0
+        INFOPLIST_FILE: Aster/Sources/PacketTunnel/Info.plist
+        GENERATE_INFOPLIST_FILE: YES
+        SKIP_INSTALL: YES
+        FRAMEWORK_SEARCH_PATHS: $(PROJECT_DIR)/Aster/Frameworks
+        OTHER_LDFLAGS: ["$(inherited)", "-lresolv"]
+
+  AsterTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: Aster/Tests/AsterTests
+    dependencies:
+      - target: Aster
+      - framework: Aster/Frameworks/Libbox.xcframework
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        OTHER_LDFLAGS: ["$(inherited)", "-lresolv"]
+
+  AsterUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: Aster/Tests/AsterUITests
+    dependencies:
+      - target: Aster
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
