@@ -31,7 +31,7 @@ struct VPNDataUseDisclosureView: View {
                         disclosureRow(
                             icon: "iphone",
                             title: "On this device",
-                            detail: "Your chosen location and remaining free time stay on this iPhone so Aster can work as expected."
+                            detail: "Your chosen location is saved on this iPhone so Aster can connect when you ask it to."
                         )
                         disclosureRow(
                             icon: "creditcard.fill",

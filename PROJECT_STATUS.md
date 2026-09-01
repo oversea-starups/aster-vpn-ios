@@ -1,15 +1,15 @@
 # Project Status
 
 > Last verified: 2026-09-01  
-> Evidence cutoff: current workspace, Xcode 17F42 / iOS SDK 26.5, Google Mobile Ads 13.8.0, UMP 3.1.0, current strict-concurrency App/Extension/unit/UI target builds, a completed 45-test unit run, a newly signed arm64 Debug device package, local Clash Meta conversion evidence for 49 deduplicated nodes, release guards, local SSV tests/audit/container evidence, and the owner's report that the pre-bridge-change VPN configuration connected successfully on a real device  
-> Repository history: unavailable; this directory has no Git metadata
+> Evidence cutoff: current workspace, Xcode 17F42 / iOS SDK 26.5, current strict-concurrency App/Extension/unit/UI target builds, release guards, local Clash Meta conversion evidence for 49 deduplicated nodes, and the owner's report that the pre-bridge-change VPN configuration connected successfully on a real device
+> Repository history: Git remote `https://github.com/oversea-starups/aster-vpn-ios.git`; local `main` is synchronized with `origin/main` after a checkpoint and merge commit
 
 ## Project Overview
 
 - **Purpose:** 面向美区 iPhone 用户提供可信的一键 VPN，并通过订阅形成主要商业闭环。
-- **Implemented slice:** 可累计 rewarded time、多线路订阅更新/选择、StoreKit paywall 与到期状态展示、Home/Locations/Account 三 Tab、圆形连接开关、Apple TUN/Libbox bridge、首次使用数据说明和生产配置守卫。
-- **Evidence state:** 当前完整 App target 已严格编译、链接、打包并校验成功，覆盖 streaming 1 MiB hard limit、URL 保留域校验、Rewarded/UI、PacketTunnel、AppIcon、PrivacyInfo、GMA/UMP 和嵌入 Extension；最新 `AsterTests` 与 `AsterUITests` targets 也分别 exit 0。已有 45 个 unit tests 在专用 iOS 18.5 x86_64 simulator 真正执行：44 pass、1 个 Libbox/Go signal-stack 架构限制的显式 skip、0 failure/0 unexpected；新增状态记录过滤、地区标签和缓存迁移用例已编译但尚未取得新的 runtime 证据。AnyTLS 解析、密码凭据和 TLS ALPN builder 测试已通过。Clash Meta 实际配置已转换为 49 个去重节点（VLESS 2、VMess 17、AnyTLS 30），状态记录被过滤，用户标签收敛为地区名，并逐节点完成 catalog 解码、校验与 sing-box JSON 构建。另已使用组织 Team `66B9A952T9`、Network Extension/App Group entitlement 和 Apple Development 身份完成最新 arm64 Debug device package；主 App、Packet Tunnel 与嵌入 frameworks 的 `codesign --verify --deep --strict` exit 0。该包只包含 Google 官方测试广告 ID，已成功安装并启动于 Thomson’s iPhone（iPhone XS Max，iOS 18.7.9），设备进程保持运行。由于 CoreDevice 直接写 App Group 根目录存在兼容性错误，已通过仅 Debug 编译的导入桥将经校验的 catalog/config 从 App 沙盒 Library 写入 App Group；暂存文件已在启动后清理，导入流程完成。当前重构后的包已再次安装并启动，App Library 中不再有暂存 catalog/config。广告 earned callback、时长扣减、线路连接与网络出口仍需用户在设备上交互验证。UI suite 已扩为 9 个，覆盖首次披露、Home、Locations、Account、Reward、Paywall、圆形连接开关、对比度和最大 Dynamic Type 转化入口；首轮执行发现 contrast/state-injection 问题并已修复，但修复后运行被 CoreSimulator UI query、screenshot、shutdown 及全新 iOS 18.5 设备的 LaunchServices migration 卡死阻断，不能标记为 UI runtime-passed。用户报告旧线路真机连接成功，但该记录早于 fd bridge 变更，且未提供设备/OS/网络/出口/DNS 记录，因此只记为历史 user-reported device evidence。
-- **Release decision:** **Not release-ready.** AdMob 与 Apple VPN 审核规则存在首要冲突，且生产节点源、签名、StoreKit、法律材料、公共 fd bridge 真机回归和完整设备矩阵未完成。
+- **Implemented slice:** 多线路订阅更新/选择、StoreKit paywall 与到期状态展示、Home/Locations/Account 三 Tab、圆形连接开关、Apple TUN/Libbox bridge、首次使用数据说明和生产配置守卫；App Store 目标为 StoreKit-only，不包含第三方广告。
+- **Evidence state:** 当前 App target 已重新生成并严格编译、链接、打包成功，且已移除 GMA/UMP、广告标识和激励入口；最新 `AsterTests` 与 `AsterUITests` targets 也分别 exit 0。AnyTLS 解析、密码凭据和 TLS ALPN builder 测试已通过。Clash Meta 实际配置已转换为 49 个去重节点（VLESS 2、VMess 17、AnyTLS 30），状态记录被过滤，用户标签收敛为地区名，并逐节点完成 catalog 解码、校验与 sing-box JSON 构建。另已使用组织 Team `66B9A952T9`、Network Extension/App Group entitlement 和 Apple Development 身份完成 arm64 Debug device package；主 App、Packet Tunnel 与嵌入 frameworks 的 `codesign --verify --deep --strict` exit 0。由于 CoreDevice 直接写 App Group 根目录存在兼容性错误，已通过仅 Debug 编译的导入桥将经校验的 catalog/config 从 App 沙盒 Library 写入 App Group；暂存文件已在启动后清理，导入流程完成。UI runtime 仍被 CoreSimulator UI query、screenshot、shutdown 及 LaunchServices migration 阻断，不能标记为 UI runtime-passed。用户报告旧线路真机连接成功，但该记录早于 fd bridge 变更，且未提供设备/OS/网络/出口/DNS 记录，因此只记为历史 user-reported device evidence。
+- **Release decision:** **Not release-ready.** StoreKit-only 已解决 AdMob 与 Apple VPN 审核规则的产品冲突，但生产节点源、签名、StoreKit sandbox、法律材料、公共 fd bridge 真机回归和完整设备矩阵仍未完成。
 - **Current VPN correction (supersedes the earlier installed-package state):** 用户点击连接后的设备日志已把失败定位为两层 Libbox 兼容问题：空 override options 导致 Go panic，以及旧 archive 未启用 uTLS。当前已用 pinned upstream source 重建 `with_utls,ios,with_low_memory` Libbox，加入 config preflight 和非空 options，并适配新 binding；iPhoneOS App build 与完整 arm64 `build-for-testing` 均 exit 0，新 48 MB Debug 包 nested codesign 验证通过。手机现在被识别但 CoreDevice tunnel unavailable，因此修复包尚未安装，不能标记 device-verified。
 
 ### 2026-09-01 route disappearance incident
@@ -28,14 +28,12 @@
 
 ## Implemented and Build-Verified
 
-### Rewarded access
+### StoreKit-only monetization
 
-- 用户明确选择后才进入 Rewarded Access；广告不会自动弹出，也不会中断正在进行的 VPN 会话。
-- SDK 的 earned-reward callback 才发放 10 分钟；5 分钟冷却、滚动 24 小时最多 4 个奖励/6 次展示、120 分钟余额上限、重复回调和时间回拨保护均已实现。
-- 奖励余额、展示/消费记录和稳定匿名 installation ID 使用 `AfterFirstUnlockThisDeviceOnly` Keychain；安全状态不可读写时 fail closed。
-- 只有 `NEVPNStatus.connected` 且 Extension 返回版本化 `dataPlaneReady=true` 时，非 Pro 用户才开始扣时；余额归零或 ready 超时会断开。
-- Google UMP/GMA 不再在 App 启动时初始化。用户先通过首次使用数据说明，且主动打开 Rewarded Access 后才准备广告 SDK。
-- SSV Node verifier 已实现 Google ECDSA callback 核验、transaction/attempt 双重幂等、滚动 24 小时 4 奖励配额、HMAC 标识符、SQLite 30 天保留。12/12 tests、`npm run check`、官方 registry `npm audit --omit=dev`（0 vulnerabilities）和 non-root container smoke 已通过；公网部署/live callback 未验证。
+- Home and Account no longer expose rewarded access, free-time balance, ad consent or privacy-choice controls.
+- A free user who taps Connect without an active entitlement is taken to the StoreKit paywall; a verified Pro entitlement connects without any timer or ad path.
+- The App Store target no longer links GoogleMobileAds/UserMessagingPlatform, carries AdMob identifiers or includes SKAdNetwork entries. `Backend/AdMobSSV` is retained only as a deferred archival candidate until Product/Legal confirms cleanup.
+- StoreKit purchase, restore and verified entitlement logic remains in scope; ASC product configuration and sandbox lifecycle are still pending.
 
 ### Locations and automatic subscription updates
 
@@ -50,10 +48,9 @@
 ### UI, subscription and review-facing copy
 
 - 根导航固定为 Home、Locations、Account 三个 Tab；Home 与 Account 使用 `ViewThatFits` 的固定版式，仅在小屏或辅助功能字号下回退到隐藏滚动指示器的容器，避免网页式首页滚动。Home 使用圆形电源开关作为唯一主连接动作；Locations 列表仍按数据长度滚动，并只显示地区名。
-- Home 遵循“保护时长 → 状态/圆形开关 → 当前地区 → Pro 主 CTA → Add time 次 CTA”的单任务层级；Pro CTA 使用最醒目的整行按钮，Add time 位于同一容器顶部但保持次级样式。Account 成为唯一的订阅/协议入口，现有连接、线路选择和 rewarded 流程保持不变。状态记录不会进入可选线路列表。
-- Reward 页面先说明精确奖励、频率、余额上限和自愿性质；不诱导点击广告内容。
+- Home 遵循“状态/圆形开关 → 当前地区 → Pro 主 CTA”的单任务层级；Account 成为唯一的订阅/协议入口。状态记录不会进入可选线路列表。
 - Paywall 仅显示 StoreKit 返回的真实产品、价格、trial eligibility 和年度节省；产品不可用时不显示假价格。购买、恢复、verified entitlement 已实现；Account 显示 Aster Pro 的本地化 `Access through <date>` 到期信息，不在缺少 StoreKit 证据时推断续订状态。
-- 首次服务使用前以不可跳过的大尺寸 sheet 展示一次性的 “Before you connect” 数据用途说明；文案使用用户向语言，避免 tunnel extension、entitlement、IP-derived coarse location 等内部术语，按钮为 Continue 而非法律同意。Privacy URL 可用时提供入口，Terms 始终可达，Account 另提供恢复购买、订阅管理和隐私选择。当前仍保留可选广告说明，Apple 5.4 与 AdMob 的产品决策仍未关闭。
+- 首次服务使用前以不可跳过的大尺寸 sheet 展示一次性的 “Before you connect” 数据用途说明；文案使用用户向语言，避免 tunnel extension、entitlement、IP-derived coarse location 等内部术语，按钮为 Continue 而非法律同意。Privacy URL 可用时提供入口，Terms 始终可达，Account 提供恢复购买和订阅管理。已移除可选广告说明。
 - Production Swift sources 扫描未发现 TODO/FIXME/mock/placeholder/coming-soon/not-implemented 等面向用户的半成品标记。Debug 配置中的 Google 官方测试 ID 和保留域名不会通过 Release guard。
 - 系统 UI contrast audit 曾定位到首次披露半透明卡片正文；全局卡片已改为确定的不透明 deep-blue surface，修复后 target build 通过，仍需在健康 UI automation host 重跑确认。
 
@@ -93,14 +90,14 @@ Earlier iOS 18.x attempts failed before any case started. The later dedicated iO
 
 ## Release Blockers
 
-1. **Apple VPN rule vs AdMob — critical product decision.** Apple Guideline 5.4 says VPN apps may not use or disclose VPN-app data to third parties for any purpose. The packaged GMA privacy manifest declares linked coarse location, advertising data, product interaction and device ID, including tracking/third-party advertising. The first-use disclosure is truthful but does not remove this conflict. Recommended App Store path: remove GMA/AdMob from the release target and monetize with StoreKit only. Keeping it means accepting material rejection/compliance risk and cannot be called launch-ready. See [Apple App Review Guidelines](https://developer.apple.com/app-store/review/guidelines/) and [Google GMA iOS data disclosure](https://developers.google.com/admob/ios/privacy/data-disclosure).
+1. **StoreKit/ASC production setup.** The App Store binary is StoreKit-only and no longer contains GMA/UMP/AdMob identifiers. App Store Connect products, subscription group, sandbox purchase/pending/cancel/restore/expiry/refund and final privacy answers remain to be verified. See [Apple App Review Guidelines](https://developer.apple.com/app-store/review/guidelines/).
 2. **Public fd/uTLS bridge device regression.** Source access to `NEPacketTunnelFlow` private implementation has been removed. Device logs isolated nil options and missing uTLS before `openTun`; both are corrected in a pinned uTLS-enabled build whose headers/symbols and App/test builds pass. The corrected signed package is not yet installed because the paired phone's CoreDevice tunnel is unavailable. Re-run the exact line, then retain connect, DNS/HTTPS/exit, lifecycle and Extension resource evidence.
 3. **Secure production location source.** No production `ASTER_NODE_SUBSCRIPTION_URL` is present. A subscription URL embedded in Info.plist is extractable; do not ship a personal/master provider token. Supply a revocable app-specific public bootstrap/control endpoint and test refresh, selection, rollback and token rotation.
-4. **Device runtime and release signing.** Organization Team、Network Extension/App Group capability、development profiles、最新 Debug nested signing、installation and launch on the registered Thomson’s iPhone、以及 49 条线路的 App Group bootstrap 均已验证。VPN permission, rewarded-ad earned callback, balance consumption, location switching and tunnel/network runtime remain unverified. Release Archive/TestFlight signing is also still pending.
+4. **Device runtime and release signing.** Organization Team、Network Extension/App Group capability、development profiles、最新 Debug nested signing、installation and launch on the registered Thomson’s iPhone、以及 49 条线路的 App Group bootstrap 均已验证。VPN permission, location switching and tunnel/network runtime remain unverified. Release Archive/TestFlight signing is also still pending.
 5. **Device QA.** Record Wi-Fi/cellular, DNS and exit IP, background/foreground, network switch, balance exhaustion, Pro no-charge, line switching, cache fallback and resource peak results on supported real iPhones.
 6. **StoreKit production.** App Store Connect monthly/yearly products, subscription group, pricing/trial and sandbox purchase/pending/cancel/restore/expiry/refund remain unverified.
-7. **AdMob/SSV external setup if ads are retained.** Production IDs, UMP message, public SSV deployment, AdMob callback configuration, test-device flow, live signed callback and alerting are missing.
-8. **Legal and review assets.** Reachable Privacy Policy, ASC privacy answers matching aggregated SDK manifests, Terms review, Review Notes, export-compliance answers, screenshots and final localization are missing.
+7. **Deferred backend cleanup.** `Backend/AdMobSSV` is no longer part of the App Store target; Product/Legal must confirm whether to archive/delete it and revoke any unused deployment credentials.
+8. **Legal, localization and review assets.** Reachable Privacy Policy, ASC privacy answers matching the StoreKit-only binary, Terms review, Review Notes, export-compliance answers, screenshots and final localization are missing.
 9. **Libbox license/reproducibility/privacy.** Source revision, Go/gomobile versions, tags and archive checksums are now recorded. Independent clean reproduction, corresponding-source retention, LICENSE/NOTICE/privacy provenance and GPLv3-or-later legal distribution decision are still required.
 10. **Runtime automation environment.** Re-run all 7 current UI cases on a healthy simulator/CI host, including post-fix disclosure contrast, Locations and maximum Dynamic Type reachability. Run the x86_64-skipped Libbox configuration compatibility check on arm64 and retain the signed-device tunnel evidence.
 
@@ -118,11 +115,11 @@ Earlier iOS 18.x attempts failed before any case started. The later dedicated iO
 
 ## Next Recommended Actions
 
-1. Decide the Apple 5.4/AdMob conflict. The release-safe recommendation is StoreKit-only App Store binary.
+1. Configure and sandbox-test StoreKit products/subscription group/offers.
 2. Provide a revocable production locations endpoint; never place a master subscription secret in the app.
 3. Re-run the user's working device scenario with the new public Libbox fd resolver, then record DNS/HTTPS/exit and lifecycle evidence.
-4. Re-run 50 unit + 9 UI tests on healthy CI (including the arm64 Libbox check), then complete the signed two-device network/StoreKit matrix.
-5. Finish ASC, Privacy/Terms, Review Notes, screenshots and Libbox distribution evidence before declaring a release candidate.
+4. Re-run the current unit/UI targets on healthy CI (including the arm64 Libbox check), then complete the signed two-device network matrix.
+5. Complete the English baseline, translate/adapt all supported locales, then finish ASC, Privacy/Terms, Review Notes, screenshots and Libbox distribution evidence before declaring a release candidate.
 
 ## Change Log
 

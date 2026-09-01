@@ -1,15 +1,13 @@
 # TODO
 
 > Last reviewed: 2026-09-01  
-> 只列未完成工作；已实现的 rewarded access、Locations catalog（状态记录过滤、地区标签）、schema v2、三 Tab/圆形连接开关、Account 到期状态、首次数据说明和 entitlement 修复见 `PROJECT_STATUS.md`。
+> 只列未完成工作；当前 App Store 目标为 StoreKit-only，不包含第三方广告；Locations catalog、schema v2、三 Tab/圆形连接开关、Account 到期状态、首次数据说明和 entitlement 修复见 `PROJECT_STATUS.md`。
 
 ## Critical Release Decisions
 
-- [ ] **解决 Apple VPN 规则与 AdMob 的冲突**
-  - **Current:** rewarded client/SSV 已实现，但 GMA privacy manifest 声明 linked coarse location、device ID、advertising data、interaction 和 tracking；Apple Guideline 5.4 对 VPN App 向第三方使用/披露数据有严格禁止。
-  - **Recommended outcome:** App Store Release target 移除 GMA/UMP/AdMob，只保留 StoreKit 订阅；若产品坚持保留广告，必须记录产品/法律接受高审核风险，且不能标记 release-ready。
-  - **Done when:** 产品决策、依赖/target 方案、Privacy/ASC answers 和审核策略一致，并通过 Archive privacy report 审核。
-  - **Spec:** SPEC-0061。
+- [x] **解决 Apple VPN 规则与 AdMob 的冲突**
+  - **Decision:** App Store Release target 移除 GMA/UMP/AdMob，免费用户通过 StoreKit paywall 进入订阅；旧 AdMobSSV 后端暂保留，待 Product/Legal 确认后归档。
+  - **Remaining evidence:** 重新生成工程、完成 Release archive privacy report 和 ASC answers 对齐。
 
 ## High Priority
 
@@ -36,10 +34,15 @@
   - **Dependency:** App Store Connect monthly/yearly products、subscription group、价格/intro offer 和法律 URL。
   - **Done when:** sandbox 覆盖 eligible/ineligible trial、购买、pending、cancel、restore、expiry、refund；Pro 无广告且不扣时；文案与 App Store 配置一致。
 
-- [ ] **部署并验证 SSV（仅在产品保留 AdMob 时）**
+- [ ] **完成本地化多语言翻译与适配**
+  - **Scope:** 以英文为基线，覆盖 `zh-Hans`、`zh-Hant`、`ja`、`es`、`de`、`fr`；首次数据说明、Home、Locations、Account、Paywall、错误与恢复购买文案必须自然、用户向、无技术内部术语。
+  - **Done when:** 所有用户可见字符串进入 `Localizable.strings`/String Catalog；法律 URL、价格、日期和订阅条款按地区核对；最小屏、最大 Dynamic Type、VoiceOver、文本膨胀和截图逐语言验收。
+  - **Owner:** iOS/Product/Localization
+
+- [ ] **归档旧 AdMob SSV（仅在确认无内部实验依赖后）**
   - **Current:** verifier 本地 12/12、audit 0、container smoke 通过。
-  - **Dependency:** Apple 5.4 产品决策、production AdMob IDs、UMP message、public HTTPS hosting。
-  - **Done when:** Google test ad 完整观看只发一次奖励；live signed callback、transaction/attempt 去重、4 rewards/24h、30 日清理和告警可审计。
+  - **Dependency:** Product/Legal 确认 StoreKit-only 后端边界与保留期限。
+  - **Done when:** 确认无内部实验依赖，删除或归档服务、撤销未使用凭据，并在部署记录中保留最终状态。
 
 ## Medium Priority
 
@@ -48,7 +51,7 @@
   - **Done when:** 非敏感 DNS/HTTPS/exit health contract 可区分“系统 connected”和“可用保护”；失败不扣时，UI 可恢复。
 
 - [ ] **完成隐私、凭据和 Archive privacy report**
-  - **Current:** Keychain/App Group/File Protection 边界已实现；首次数据说明已接入。App-owned manifest 声明本身不收集数据，但 GMA/UMP aggregated manifest 仍声明第三方数据行为。
+  - **Current:** Keychain/App Group/File Protection 边界已实现；首次数据说明已接入。当前 App-owned manifest 与 StoreKit-only 二进制需在最终 Archive 中复核。
   - **Done when:** production dependencies 确定后导出 Archive privacy report；ASC privacy answers、Privacy Policy、保留周期、节点凭据和日志策略逐项一致。
 
 - [ ] **完成连接错误状态机与支持入口**
@@ -64,7 +67,7 @@
 
 ## Blocked
 
-- [ ] **AdMob App Store 方案** — Blocked by: Apple 5.4 与 GMA 数据行为冲突；Unblock when: 产品选择 StoreKit-only release，或法律/产品明确接受风险并给出可执行方案；Owner: Product/legal。
+- [x] **AdMob App Store 方案** — Resolved by StoreKit-only Release decision; remaining work is archival cleanup only.
 - [ ] **生产 Locations 验证** — Blocked by: revocable endpoint 未提供；Unblock when: endpoint 与受控节点可用；Owner: Backend/operations。
 - [ ] **签名真机矩阵** — Blocked by: 修复包已签名，但 Thomson’s iPhone 的 CoreDevice tunnel 当前 unavailable；测试广告、VPN 权限、线路连接和网络出口仍需设备端交互，production-like endpoint 也未提供。Unblock when: 解锁并重新建立 USB/device tunnel、安装修复包、完成交互回归并提供受控测试 endpoint；Owner: iOS/operations。
   - Archive gate: `./scripts/validate_signed_archive.sh /absolute/path/to/Aster.xcarchive`；必须在 TestFlight 前通过并保存输出。

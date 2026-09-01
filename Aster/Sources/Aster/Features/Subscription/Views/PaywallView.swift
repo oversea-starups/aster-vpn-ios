@@ -28,7 +28,7 @@ struct PaywallView: View {
 
                         VStack(spacing: 14) {
                             feature("infinity", "Unlimited VPN time")
-            feature("rectangle.slash", "No ads")
+                            feature("rectangle.slash", "No ads")
                             feature("arrow.clockwise", "Continuous protection when you need it")
                         }
                         .asterCard()
