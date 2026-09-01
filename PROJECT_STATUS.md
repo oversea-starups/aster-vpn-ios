@@ -47,12 +47,13 @@
 
 ### UI, subscription and review-facing copy
 
-- 根导航固定为 Home、Locations、Account 三个 Tab；Home 与 Account 使用 `ViewThatFits` 的固定版式，仅在小屏或辅助功能字号下回退到隐藏滚动指示器的容器，避免网页式首页滚动。Home 使用圆形电源开关作为唯一主连接动作；Locations 列表仍按数据长度滚动，并只显示地区名。
+- 根导航固定为 Home、Locations、Account 三个 Tab；Home 与 Account 使用顶部对齐的隐藏滚动指示器容器，避免小屏或大字号下内容被压缩并保留顶部呼吸空间。Home 使用圆形电源开关作为唯一主连接动作；Locations 页顶部为 `VIP` / `Locations` 双 Tab，默认展示真实 StoreKit 套餐列表，第二个 Tab 展示地区选择。
 - Home 遵循“状态/圆形开关 → 当前地区 → Pro 主 CTA”的单任务层级；Account 成为唯一的订阅/协议入口。状态记录不会进入可选线路列表。
 - Paywall 仅显示 StoreKit 返回的真实产品、价格、trial eligibility 和年度节省；产品不可用时不显示假价格。购买、恢复、verified entitlement 已实现；Account 显示 Aster Pro 的本地化 `Access through <date>` 到期信息，不在缺少 StoreKit 证据时推断续订状态。
 - 不在首次启动或首次连接前展示自有隐私说明页/弹窗，避免阻断核心连接路径。Privacy Policy 与 Terms of Use 仅通过 Account/Settings 和 Paywall 法律区域访问。
+- 本轮 UI 调整移除了 Locations 页内部的冗余区域标题；用户可通过顶部 Tab 在套餐与地区之间切换。
 - Production Swift sources 扫描未发现 TODO/FIXME/mock/placeholder/coming-soon/not-implemented 等面向用户的半成品标记。Debug 配置中的 Google 官方测试 ID 和保留域名不会通过 Release guard。
-- 系统 UI contrast audit 曾定位到首次披露半透明卡片正文；全局卡片已改为确定的不透明 deep-blue surface，修复后 target build 通过，仍需在健康 UI automation host 重跑确认。
+- 系统 UI contrast audit 已覆盖当前 Home、Locations、Account 与 Paywall 卡片；全局卡片使用确定的不透明 deep-blue surface，target build 已通过，仍需在健康 UI automation host 重跑确认。
 
 ### VPN and project configuration
 

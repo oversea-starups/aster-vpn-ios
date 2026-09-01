@@ -11,7 +11,7 @@ struct AccountView: View {
                 content
             }
             .navigationTitle("Account")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $showsPaywall) {
                 PaywallView()
             }
@@ -19,14 +19,11 @@ struct AccountView: View {
     }
 
     private var content: some View {
-        ViewThatFits(in: .vertical) {
+        ScrollView {
             accountLayout(compact: false)
-            accountLayout(compact: true)
-            ScrollView {
-                accountLayout(compact: true)
-            }
-            .scrollIndicators(.hidden)
         }
+        .scrollIndicators(.hidden)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
     }
 
     private func accountLayout(compact: Bool) -> some View {
@@ -36,7 +33,7 @@ struct AccountView: View {
             legalActions
         }
         .padding(.horizontal, compact ? 16 : 20)
-        .padding(.vertical, compact ? 12 : 20)
+        .padding(.vertical, compact ? 12 : 12)
         .frame(maxWidth: .infinity, alignment: .top)
     }
 

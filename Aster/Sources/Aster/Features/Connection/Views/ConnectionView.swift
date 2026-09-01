@@ -9,14 +9,11 @@ struct ConnectionView: View {
             ZStack {
                 AsterTheme.background.ignoresSafeArea()
 
-                ViewThatFits(in: .vertical) {
+                ScrollView {
                     homeLayout(compact: false)
-                    homeLayout(compact: true)
-                    ScrollView {
-                        homeLayout(compact: true)
-                    }
-                    .scrollIndicators(.hidden)
                 }
+                .scrollIndicators(.hidden)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             }
             .preferredColorScheme(.dark)
             .sheet(isPresented: $viewModel.showsPaywall) {
@@ -44,7 +41,7 @@ struct ConnectionView: View {
             accessHubCard(compact: compact)
         }
         .padding(.horizontal, compact ? 16 : 20)
-        .padding(.vertical, compact ? 10 : 18)
+        .padding(.vertical, compact ? 10 : 12)
         .frame(maxWidth: .infinity, alignment: .top)
     }
 

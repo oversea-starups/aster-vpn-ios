@@ -30,7 +30,13 @@ final class AsterUITests: XCTestCase {
         let app = launchApp()
         XCTAssertTrue(app.buttons["locationPickerButton"].waitForExistence(timeout: 8))
         app.buttons["locationPickerButton"].tap()
-        XCTAssertTrue(app.staticTexts["Choose a region"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["Locations"].waitForExistence(timeout: 5))
+        app.buttons["Locations"].tap()
+        XCTAssertTrue(
+            app.staticTexts["Locations are temporarily unavailable"].exists ||
+            app.staticTexts["Updated"].exists ||
+            app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH 'location_'" )).firstMatch.exists
+        )
         if #available(iOS 17.0, *) {
             try app.performAccessibilityAudit(for: [.contrast])
         }

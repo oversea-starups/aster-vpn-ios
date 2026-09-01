@@ -11,8 +11,8 @@ Aster 由前台 SwiftUI App 与 Packet Tunnel Extension 组成。App 负责用�
 
 ```mermaid
 flowchart LR
-    U["User"] --> UI["First-use disclosure → Home"]
-    UI --> LOC["Locations tab"]
+    U["User"] --> UI["Home"]
+    UI --> LOC["Locations tab (VIP / Locations)"]
     UI --> ACC["Account tab"]
     UI --> PAY["Paywall"]
 
@@ -104,7 +104,7 @@ The App Store target is StoreKit-only. No third-party advertising SDK, consent f
 
 ## UI and entitlement presentation
 
-- The root is a fixed three-tab shell: Home, Locations and Account. Home and Account use `ViewThatFits` fixed compositions and only fall back to a hidden-indicator scroll container for small screens or accessibility text sizes; the Locations list remains scrollable because its length is data-driven.
+- The root is a three-tab shell: Home, Locations and Account. Home and Account use top-aligned, hidden-indicator scroll containers so content is not vertically compressed on smaller screens or larger accessibility text sizes; Locations remains scrollable because its length is data-driven and starts on the VIP plans tab.
 - Home shows the circular power control, current region and one access surface. The full-width Pro CTA is the strongest conversion action. Account is the single destination for subscription, restore and legal actions. `SubscriptionTier` separates capability tiers from billing cadence; only verified StoreKit products mapped in `AppConfiguration` are surfaced (currently monthly/yearly both map to Pro).
 - Account displays the verified StoreKit entitlement state. For an active subscription with an expiration date it shows a localized neutral `Access through <date>` label; it never claims renewal unless StoreKit supplies that evidence. Free users see a clear upgrade CTA.
 - No custom privacy disclosure sheet is shown on launch or before connection. Privacy Policy and Terms of Use remain available in Account/Settings and the Paywall legal section; Apple’s VPN configuration permission is shown only by the system when connection requires it.

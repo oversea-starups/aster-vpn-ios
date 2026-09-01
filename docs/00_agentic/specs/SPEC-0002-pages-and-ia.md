@@ -2,10 +2,9 @@
 
 ## 页面清单（MVP）
 1. Home Tab（连接页）
-2. Locations Tab（地区选择）
+2. Locations Tab（VIP 套餐 / 地区选择）
 3. Account Tab（订阅、恢复购买、隐私与条款）
 4. Paywall（订阅 sheet）
-5. First-use Data Disclosure（首次使用 sheet）
 
 ## 页面职责
 
@@ -16,7 +15,9 @@
 - 转化顺序：状态与连接价值 → Aster Pro 主 CTA
 
 ### 2) Locations Tab
-- 列表只显示地区名，过滤套餐流量/到期等状态记录
+- 顶部使用两个分段 Tab：`VIP`（默认）与 `Locations`；不额外显示 “Home” 或 “Available locations” 等重复标题。
+- `VIP` 展示 StoreKit 返回的真实套餐名称、价格与升级入口；购买与恢复流程继续由 Paywall/Account 承载。
+- `Locations` 展示可用地区、切换限制、刷新状态和可恢复错误。
 - 连接中不可更换地区；断开后选择即保存并回到 Home
 
 ### 3) Account Tab
@@ -24,9 +25,8 @@
 - 升级、恢复购买、管理订阅
 - Privacy Policy、Terms of Use
 
-### 4–6) Sheets
+### 4–5) Sheets
 - Paywall 只显示 StoreKit 返回的真实方案、价格、试用资格与自动续费说明
-- 首次数据说明以 large 不可跳过 sheet 呈现，Continue 后才刷新线路
 
 ## 关键 UI 文案（英文）
 - Home Title: “Aster”

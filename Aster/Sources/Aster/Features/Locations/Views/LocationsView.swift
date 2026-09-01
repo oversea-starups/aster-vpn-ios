@@ -1,8 +1,12 @@
+import StoreKit
 import SwiftUI
 
 struct LocationsView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject private var store = NodeCatalogStore.shared
+    @StateObject private var subscriptionStore = SubscriptionStore.shared
+    @State private var selectedSection: LocationsSection = .vip
+    @State private var showsPaywall = false
     let canSwitchLocation: Bool
     let showsCloseButton: Bool
 
@@ -17,47 +21,12 @@ struct LocationsView: View {
                 AsterTheme.background.ignoresSafeArea()
                 ScrollView {
                     VStack(alignment: .leading, spacing: 20) {
-                        header
-
-                        if !canSwitchLocation {
-                            Label(
-                                "Disconnect before switching locations.",
-                                systemImage: "info.circle.fill"
-                            )
-                            .font(.subheadline)
-                            .foregroundStyle(.white)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .asterCard()
-                        }
-
-                        if let message = store.userMessage {
-                            VStack(alignment: .leading, spacing: 10) {
-                                Label(message, systemImage: "exclamationmark.triangle.fill")
-                                    .font(.subheadline)
-                                    .foregroundStyle(AsterTheme.warning)
-                                if store.hasUpdateSource {
-                                    Button("Try Again") {
-                                        Task { await store.refresh() }
-                                    }
-                                    .font(.subheadline.weight(.semibold))
-                                    .disabled(store.isRefreshing)
-                                }
-                            }
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .asterCard()
-                        }
-
-                        if store.nodes.isEmpty {
-                            emptyState
+                        sectionPicker
+                        if selectedSection == .vip {
+                            vipPlans
                         } else {
-                            VStack(spacing: 10) {
-                                ForEach(displayNodes) { node in
-                                    locationRow(node)
-                                }
-                            }
+                            locationsContent
                         }
-
-                        updateFooter
                     }
                     .padding(20)
                 }
@@ -76,12 +45,125 @@ struct LocationsView: View {
             .task {
                 await store.refreshIfNeeded()
             }
+            .sheet(isPresented: $showsPaywall) {
+                PaywallView()
+            }
         }
     }
 
-    private var header: some View {
-        Text("Choose a region")
-            .font(.title2.weight(.bold))
+    private enum LocationsSection: Hashable {
+        case vip
+        case locations
+    }
+
+    private var sectionPicker: some View {
+        Picker("Access", selection: $selectedSection) {
+            Text("VIP").tag(LocationsSection.vip)
+            Text("Locations").tag(LocationsSection.locations)
+        }
+        .pickerStyle(.segmented)
+        .accessibilityIdentifier("locationSectionPicker")
+    }
+
+    private var vipPlans: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Aster Pro")
+                    .font(.title2.weight(.bold))
+                Text("Unlimited protection without ads, timers, or interruptions.")
+                    .font(.subheadline)
+                    .foregroundStyle(.white)
+            }
+
+            VStack(spacing: 10) {
+                if subscriptionStore.products.isEmpty {
+                    Text(subscriptionStore.isLoading ? "Loading plans…" : "Plans are temporarily unavailable.")
+                        .font(.subheadline)
+                        .foregroundStyle(.white)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                } else {
+                    ForEach(subscriptionStore.products, id: \.id) { product in
+                        HStack(spacing: 12) {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundStyle(AsterTheme.mint)
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text(product.displayName)
+                                    .font(.headline)
+                                Text(product.description)
+                                    .font(.caption)
+                                    .foregroundStyle(.white)
+                                    .lineLimit(2)
+                            }
+                            Spacer(minLength: 8)
+                            Text(product.displayPrice)
+                                .font(.headline)
+                        }
+                        .padding(14)
+                        .background(.white.opacity(0.06), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                    }
+                }
+            }
+
+            Button("View and choose a plan") {
+                showsPaywall = true
+            }
+            .font(.body.weight(.bold))
+            .foregroundStyle(AsterTheme.navy)
+            .frame(maxWidth: .infinity, minHeight: 48)
+            .background(AsterTheme.mint, in: RoundedRectangle(cornerRadius: 15, style: .continuous))
+            .accessibilityIdentifier("vipUpgradeButton")
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .asterCard()
+        .task {
+            if subscriptionStore.products.isEmpty {
+                await subscriptionStore.loadProducts()
+            }
+        }
+    }
+
+    private var locationsContent: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            if !canSwitchLocation {
+                Label(
+                    "Disconnect before switching locations.",
+                    systemImage: "info.circle.fill"
+                )
+                .font(.subheadline)
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .asterCard()
+            }
+
+            if let message = store.userMessage {
+                VStack(alignment: .leading, spacing: 10) {
+                    Label(message, systemImage: "exclamationmark.triangle.fill")
+                        .font(.subheadline)
+                        .foregroundStyle(AsterTheme.warning)
+                    if store.hasUpdateSource {
+                        Button("Try Again") {
+                            Task { await store.refresh() }
+                        }
+                        .font(.subheadline.weight(.semibold))
+                        .disabled(store.isRefreshing)
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .asterCard()
+            }
+
+            if store.nodes.isEmpty {
+                emptyState
+            } else {
+                VStack(spacing: 10) {
+                    ForEach(displayNodes) { node in
+                        locationRow(node)
+                    }
+                }
+            }
+
+            updateFooter
+        }
     }
 
     private var emptyState: some View {
