@@ -184,7 +184,7 @@ struct PaywallView: View {
         if let trialPeriod = eligibleFreeTrialPeriod(for: product) {
             return "Start \(Self.periodText(trialPeriod, hyphenated: true)) free trial"
         }
-        return "Subscribe with Apple"
+        return "Unlock unlimited protection"
     }
 
     private var legal: some View {

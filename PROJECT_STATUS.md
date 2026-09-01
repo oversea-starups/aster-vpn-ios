@@ -18,6 +18,7 @@
 - **Free-access status correction (2026-09-01):** 非 Pro 用户始终保留免费体验状态卡；卡片按“可用倒计时 / 尚未使用 / 已用完”显示真实数字和状态，不再因一次性体验耗尽而整块消失，也不伪造广告奖励。
 - **StoreKit product loading correction (2026-09-01):** ASC 实际订阅 ID 已核对为 `com.astervpn.Aster.premium.monthly` 与 `com.astervpn.Aster.premium.annual`；AppConfiguration 已从旧的、不存在的 `com.aster.vpn.*` ID 切换，真机 Debug 包已重编译、安装并启动。Paywall 的产品 readback 仍需在真机 Apple ID/Sandbox 中完成一次。
 - **StoreKit diagnostics (2026-09-01):** Debug builds now log the requested/returned product IDs and non-sensitive StoreKit error domain/code, so an empty Paywall can be distinguished from an ASC/Sandbox availability issue without exposing credentials or changing release copy.
+- **Paywall CTA copy (2026-09-02):** The purchase action now says `Unlock unlimited protection`; Apple billing/renewal disclosure remains below the plans, so the CTA leads with the user outcome without hiding subscription terms.
 - **Locations entry correction (2026-09-01):** Locations 页面现在默认显示真实线路列表，而不是 VIP 订阅页；VIP 仍可通过顶部切换进入。该改动已随 17:42 真机包安装并启动。
 
 ### 2026-09-01 route disappearance incident
