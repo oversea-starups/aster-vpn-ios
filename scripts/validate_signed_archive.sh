@@ -75,7 +75,10 @@ do
 done
 
 privacy_url="$(/usr/libexec/PlistBuddy -c 'Print :AsterPrivacyPolicyURL' "$app_info")"
-subscription_url="$(/usr/libexec/PlistBuddy -c 'Print :AsterNodeSubscriptionURL' "$app_info")"
+subscription_url="$(/usr/libexec/PlistBuddy -c 'Print :AsterNodeSubscriptionURL' "$app_info" 2>/dev/null || true)"
+if [[ "$subscription_url" == '$('* || "$subscription_url" == "(null)" ]]; then
+  subscription_url=""
+fi
 
 CONFIGURATION=Release \
 PRIVACY_POLICY_URL="$privacy_url" \

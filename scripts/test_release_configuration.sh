@@ -22,9 +22,9 @@ expect_failure() {
 
 expect_success CONFIGURATION=Debug
 expect_success CONFIGURATION=Release PRIVACY_POLICY_URL=https://privacy.astervpn.com/privacy NODE_SUBSCRIPTION_URL="$production_node_subscription_url"
+expect_success CONFIGURATION=Release PRIVACY_POLICY_URL=https://privacy.astervpn.com/privacy
 expect_failure CONFIGURATION=Release PRIVACY_POLICY_URL=http://privacy.astervpn.com/privacy NODE_SUBSCRIPTION_URL="$production_node_subscription_url"
 expect_failure CONFIGURATION=Release PRIVACY_POLICY_URL=https://localhost/privacy NODE_SUBSCRIPTION_URL="$production_node_subscription_url"
-expect_failure CONFIGURATION=Release PRIVACY_POLICY_URL=https://privacy.astervpn.com/privacy
 expect_failure CONFIGURATION=Release PRIVACY_POLICY_URL=https://privacy.astervpn.com/privacy NODE_SUBSCRIPTION_URL=http://locations.astervpn.com/subscription/token
 expect_failure CONFIGURATION=Release PRIVACY_POLICY_URL=https://privacy.astervpn.com/privacy NODE_SUBSCRIPTION_URL=https://192.168.1.2/subscription/token
 expect_failure CONFIGURATION=Release PRIVACY_POLICY_URL=https://user@privacy.astervpn.com/privacy NODE_SUBSCRIPTION_URL="$production_node_subscription_url"

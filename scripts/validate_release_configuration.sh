@@ -92,11 +92,14 @@ subscription_host="${subscription_host%%\?*}"
 subscription_host="${subscription_host%%:*}"
 subscription_host="$(printf '%s' "$subscription_host" | /usr/bin/tr '[:upper:]' '[:lower:]')"
 
-if [[ ! "$subscription_url" =~ ^https:// ]] || [[ "$subscription_url" == *"@"* ]] || [[ "$subscription_url" == *"#"* ]] || [[ "$subscription_url" == *'$('* ]]; then
-  echo "error: A public HTTPS NODE_SUBSCRIPTION_URL is required for Release builds."
-  invalid=1
-else
-  if is_non_public_host "$subscription_host"; then
+# The current App Store release ships a reviewed catalog in the app bundle.
+# Keep the remote source optional so a future endpoint can be enabled without
+# changing the validation contract again.
+if [[ -n "$subscription_url" && "$subscription_url" != *'$('* ]]; then
+  if [[ ! "$subscription_url" =~ ^https:// ]] || [[ "$subscription_url" == *"@"* ]] || [[ "$subscription_url" == *"#"* ]]; then
+    echo "error: NODE_SUBSCRIPTION_URL must be a public HTTPS URL when configured."
+    invalid=1
+  elif is_non_public_host "$subscription_host"; then
     echo "error: NODE_SUBSCRIPTION_URL must use a public non-placeholder host."
     invalid=1
   fi

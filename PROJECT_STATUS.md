@@ -16,7 +16,7 @@
 
 - **Symptom:** 真机更换/重装 Debug 包后，Locations 为空，用户误以为内置线路被删除。
 - **Root cause:** 旧 Debug 导入桥是一次性 bootstrap；本次 replacement/fresh-install 路径下 App Group 中已没有 catalog，同时没有重新把已校验的 Clash Meta catalog/config 暂存到 App 沙盒，因此 App 只能看到空的持久化目录。不是地区分组或状态记录过滤逻辑删除了线路。
-- **Mitigation:** `node_catalog.json` 现在使用原子写入和 `node_catalog.bak.json` last-known-good 备份；损坏/缺失时保留当前已验证配置并在 UI 显示可恢复提示。每次设备替换/重装都必须重新执行受控导入，生产版本必须由 revocable endpoint 刷新，不得依赖 Debug 内置凭据。
+- **Mitigation:** `node_catalog.json` 现在使用原子写入和 `node_catalog.bak.json` last-known-good 备份；首装时从 App Bundle 的 49 条审核线路初始化 App Group，损坏/缺失时显示可恢复提示。未来远端刷新必须使用可撤销 endpoint，不得依赖个人/master 订阅凭据。
 - **Evidence:** `NodeCatalogPersistence` recovery tests compile with the current test target; the current Thomson iPhone package was re-bootstrapped from the validated local catalog/config. VPN handshake and manual line switching remain unverified.
 
 ### 2026-09-01 VPN startup incident
@@ -95,7 +95,7 @@ Earlier iOS 18.x attempts failed before any case started. The later dedicated iO
 
 1. **StoreKit/ASC production setup.** The App Store binary is StoreKit-only and no longer contains GMA/UMP/AdMob identifiers. App Store Connect products, subscription group, sandbox purchase/pending/cancel/restore/expiry/refund and final privacy answers remain to be verified. See [Apple App Review Guidelines](https://developer.apple.com/app-store/review/guidelines/).
 2. **Public fd/uTLS bridge device regression.** Source access to `NEPacketTunnelFlow` private implementation has been removed. Device logs isolated nil options and missing uTLS before `openTun`; both are corrected in a pinned uTLS-enabled build whose headers/symbols and App/test builds pass. The corrected signed package is not yet installed because the paired phone's CoreDevice tunnel is unavailable. Re-run the exact line, then retain connect, DNS/HTTPS/exit, lifecycle and Extension resource evidence.
-3. **Secure production location source.** No production `ASTER_NODE_SUBSCRIPTION_URL` is present. A subscription URL embedded in Info.plist is extractable; do not ship a personal/master provider token. Supply a revocable app-specific public bootstrap/control endpoint and test refresh, selection, rollback and token rotation.
+3. **Location source governance.** 首发使用 App Bundle 内置的 49 条已审核线路，不依赖 `ASTER_NODE_SUBSCRIPTION_URL`。上线前仍需完成线路授权、轮换和撤销流程；未来启用远端更新时使用可撤销、应用专用的公开 HTTPS endpoint，绝不放入个人/master token。
 4. **Device runtime and release signing.** Organization Team、Network Extension/App Group capability、development profiles、最新 Debug nested signing、installation and launch on the registered Thomson’s iPhone、以及 49 条线路的 App Group bootstrap 均已验证。VPN permission, location switching and tunnel/network runtime remain unverified. Release Archive/TestFlight signing is also still pending.
 5. **Device QA.** Record Wi-Fi/cellular, DNS and exit IP, background/foreground, network switch, balance exhaustion, Pro no-charge, line switching, cache fallback and resource peak results on supported real iPhones.
 6. **StoreKit production.** App Store Connect monthly/yearly products, subscription group, pricing/trial and sandbox purchase/pending/cancel/restore/expiry/refund remain unverified.

@@ -112,8 +112,10 @@ final class NodeCatalogStore: ObservableObject {
     }
 
     private func restoreLastKnownGoodCatalog() {
+        var restoredCatalog = false
         do {
             if let snapshot = try persistence.load() {
+                restoredCatalog = true
                 let realLocations = snapshot.nodes.filter { !VPNNode.isStatusRecord($0.displayName) }
                 if !realLocations.isEmpty {
                     nodes = realLocations
@@ -133,6 +135,10 @@ final class NodeCatalogStore: ObservableObject {
             // The selected tunnel configuration below remains a recoverable
             // fallback while the UI explains why the catalog needs repair.
             restoreMessage = "Saved locations need repair. Your current location will be kept if available."
+        }
+
+        if !restoredCatalog || nodes.isEmpty {
+            restoreBundledCatalogIfAvailable()
         }
 
         let selectedConfiguration: TunnelConfiguration?
@@ -161,6 +167,23 @@ final class NodeCatalogStore: ObservableObject {
 
         if let restoreMessage {
             userMessage = restoreMessage
+        }
+    }
+
+    private func restoreBundledCatalogIfAvailable() {
+        guard nodes.isEmpty,
+              let url = Bundle.main.url(forResource: "node_catalog", withExtension: "json") else {
+            return
+        }
+
+        do {
+            let data = try Data(contentsOf: url, options: [.mappedIfSafe])
+            let snapshot = try JSONDecoder().decode(NodeCatalogSnapshot.self, from: data).validated()
+            try persistence.save(snapshot)
+            nodes = snapshot.nodes
+            lastUpdated = snapshot.updatedAt
+        } catch {
+            restoreMessage = "The built-in VPN locations couldn't be verified."
         }
     }
 

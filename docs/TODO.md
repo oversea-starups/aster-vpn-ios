@@ -13,9 +13,9 @@
 
 - [ ] **提供安全的生产 Locations endpoint**
   - **Decision (2026-09-01):** 首发版本先采用安装包内置的已审核 catalog，不依赖远端接口；待用户量和线路运维需求达到阈值后，再切换为可撤销的公开 HTTPS 更新。
-  - **Current:** HTTPS fetch、VLESS/VMess/AnyTLS parser、原子 primary + validated backup catalog、6 小时/前台刷新和 Locations UI 已 build-verified；内置 catalog 加载机制和实际清单仍待接入。Release 尚无 `ASTER_NODE_SUBSCRIPTION_URL`。2026-09-01 的真机线路消失已定位为 replacement install 后未重新执行一次性 Debug bootstrap，而不是过滤器删除线路；本次包已重新导入经验证的 catalog/config。Clash Meta AnyTLS password is handled in the dedicated credential field。
+  - **Current:** 49 条经校验的 VLESS/VMess/AnyTLS 线路已从本机 Clash Meta 配置转换并随 App 打包；首次启动会写入 App Group，之后可选地接入 HTTPS 更新。Clash Meta AnyTLS password is handled in the dedicated credential field。
   - **Constraint:** URL 会出现在 Info.plist，不能使用个人或 master provider subscription token。
-  - **Blocker:** 仓库当前没有经批准可发布的 catalog/节点凭据。不能凭空生成或把个人/master 订阅凭据写入 App Store 包；需要产品/运营提供可公开发布的固定节点清单。收到清单后接入首装内置资源，并关闭远端刷新路径。
+  - **Blocker:** 上线前仍需确认这 49 条线路的运营授权、轮换和撤销流程；代码层面已完成内置资源接入。
   - **Outcome:** revocable、app-specific 的公开 bootstrap/control endpoint；服务端负责撤销、轮换和最小暴露。
   - **Done when:** 至少 3 个受控节点可刷新/选择；错误更新不覆盖缓存；token 轮换、节点删除、schema v1→v2 和重放场景通过。
   - **Specs:** SPEC-0058、SPEC-0059、SPEC-0062。

@@ -12,7 +12,7 @@
 | iOS automated suite | 59 methods (50 unit, 9 UI); latest `AsterTests` and `AsterUITests` targets each exit 0 | Existing unit `.xcresult`: 44 pass + 1 named x86_64 Libbox skip, 0 failures/unexpected; new parser/region/cache/recovery and Account/tab/control cases await runtime; post-fix UI runtime still CoreSimulator-blocked |
 | Monetization | StoreKit products, purchase, restore and verified entitlement; no third-party ad SDK in the App Store binary | Build-verified; ASC sandbox pending |
 | SSV verifier | 12/12 Node tests, syntax check, official registry audit 0, non-root container smoke | Local test-verified; deployment/live callback pending |
-| Locations | HTTPS bounded client, VLESS/VMess/AnyTLS parser, status-record filtering, region-only labels, schema v2, last-known-good cache, auto/manual refresh, selection and legacy-current preservation | Build-verified; new parser/region cases and production endpoint/device switching pending |
+| Locations | Bundled 49-node catalog, optional HTTPS client for future updates, VLESS/VMess/AnyTLS parser, status-record filtering, region-only labels, schema v2, last-known-good cache and selection | Bundle/build-verified; live tunnel and future feed switching pending |
 | StoreKit/paywall | Dynamic products/prices/trial eligibility, purchase, restore, verified entitlement and truthful copy | Build-verified; ASC sandbox pending |
 | VPN | Apple TUN/Libbox bridge and readiness contract build; private KVC removed; public Libbox fd binding source/symbol guarded; post-change PacketTunnel compile/link passed | Owner's prior connection predates bridge change; device regression/network matrix missing |
 | Copy | English product surfaces contain no TODO/FIXME/mock/placeholder/coming-soon/not-implemented markers; no fake price/latency/recommendation | Static/build-verified; final runtime/localization review pending |
@@ -40,9 +40,9 @@ Sources: [Apple App Review Guidelines](https://developer.apple.com/app-store/rev
 
 `PacketTunnelPlatformInterface` no longer reads or dynamically selects any `NEPacketTunnelFlow` implementation detail. It uses only the generated and exported `LibboxGetTunnelFileDescriptor()` binding; Release guards inspect both framework slices and reject the former private-access patterns. The post-change PacketTunnel target compiles and links, but the owner's successful device test predates this change. Re-run it on-device and pin the bundled framework's matching source revision before submission.
 
-### 3. Production location source is absent
+### 3. Bundled location source is now the release source of truth
 
-Release requires `ASTER_NODE_SUBSCRIPTION_URL`, but no production URL is stored in the repository. This is intentional: a URL in Info.plist can be extracted. Use a revocable app-specific public endpoint, not a personal/master subscription token.
+The current release includes a reviewed, validated catalog in the app bundle and seeds the App Group on first launch, so a fresh install does not depend on a network endpoint. `ASTER_NODE_SUBSCRIPTION_URL` remains optional for a later revocable, app-specific update service; never embed a personal/master provider token.
 
 ## Copy and UX Audit
 
@@ -74,7 +74,7 @@ Release requires `ASTER_NODE_SUBSCRIPTION_URL`, but no production URL is stored 
 - [x] Resolve AdMob/Apple 5.4 product decision: App Store binary is StoreKit-only; backend AdMobSSV is retained only as deferred code until separately retired.
 - [x] Remove private Packet Flow KVC/selector access and guard the public Libbox fd binding.
 - [ ] Device-regress the public fd bridge on the owner's previously working route, then complete the network matrix.
-- [ ] Supply revocable production locations endpoint and verify three controlled nodes.
+- [x] Bundle the reviewed location catalog and seed it on first launch; endpoint refresh remains a future migration.
 - [ ] Execute and archive 59/59 XCTest results on healthy CI; run the x86_64-skipped Libbox check on arm64/device.
 - [ ] Complete organization signing, Network Extension approval, App Group and signed Archive/TestFlight checks.
 - [ ] Configure and sandbox-test StoreKit products/subscription group/offers.

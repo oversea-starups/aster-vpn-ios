@@ -44,7 +44,7 @@ flowchart LR
 | --- | --- | --- | --- |
 | `AsterApp` | First-use disclosure sheet, tab-root composition, foreground catalog refresh | `@AppStorage` disclosure acknowledgement | Build-verified |
 | Connection | Status hierarchy, selected location, circular connect/disconnect control, access gates and recoverable messages | None | Build-verified; latest UI runtime pending |
-| Locations | Restore catalog/current config, fetch, parse, install last-known-good, select one node | `node_catalog.json`, `tunnel_config.json` | Build/unit-bundle verified; live feed/device switching pending |
+| Locations | Restore bundled/cache catalog, optionally fetch, parse, install last-known-good, select one node | `node_catalog.json`, `tunnel_config.json` | Bundle/build verified; live tunnel and future feed switching pending |
 | Account | Pro status/expiration, upgrade/restore, privacy and legal entry points | StoreKit system state | Build-verified; StoreKit sandbox pending |
 | Subscription | Load real StoreKit products/eligibility, buy, restore, observe entitlement | StoreKit system state | Build-verified; sandbox pending |
 | `VPNManager` | Manage provider preferences/session/status and readiness | System VPN preferences | Build-verified; owner reports existing-line connection |
@@ -54,7 +54,7 @@ flowchart LR
 
 ## Location Catalog Flow
 
-1. `AppConfiguration` accepts only a public HTTPS `AsterNodeSubscriptionURL`; Release must inject `ASTER_NODE_SUBSCRIPTION_URL`.
+1. 首发版本从 App Bundle 读取审核后的 `node_catalog.json` 并写入 App Group；`AsterNodeSubscriptionURL` 仅在未来启用远端更新时接受公开 HTTPS 地址。
 2. `URLSessionNodeSubscriptionClient` uses an ephemeral session, no cache/cookies, bounded timeouts, 1 MB limit, HTTP 200 and same-host HTTPS redirects.
 3. `NodeSubscriptionParser` accepts plain/Base64 lines and a maximum of 200 supported VLESS/VMess/AnyTLS entries. It rejects invalid/duplicate fields, insecure flags, unsupported transport, new VLESS without TLS/Reality and AnyTLS without TLS.
 4. Each node becomes a validated `VPNNode`; the opaque stable ID is derived from normalized connection fields and does not contain the UUID.
@@ -100,7 +100,7 @@ The App Store target is StoreKit-only. No third-party advertising SDK, consent f
 - `project.yml` is the target/build-setting/entitlement SSOT; run `./setup.sh` after every change.
 - Both App and Extension declare `packet-tunnel-provider` and `group.com.astervpn.shared` through XcodeGen properties. Release tests verify the generated entitlement plists.
 - Debug and Release use the same StoreKit-only product surface. Release rejects unsafe Privacy URL and unsafe/missing locations URL.
-- Required Release inputs include `ASTER_PRIVACY_POLICY_URL` and `ASTER_NODE_SUBSCRIPTION_URL`.
+- Required Release input is `ASTER_PRIVACY_POLICY_URL`; `ASTER_NODE_SUBSCRIPTION_URL` is optional while the bundled catalog is the source of truth.
 
 ## UI and entitlement presentation
 

@@ -9,7 +9,7 @@
 
 ## Source and transport
 
-- Release requires a build-controlled public HTTPS `ASTER_NODE_SUBSCRIPTION_URL`.
+- 首发 Release 使用安装包内置、审核后的 `node_catalog.json`；`ASTER_NODE_SUBSCRIPTION_URL` 仅作为未来远端更新的可选配置。
 - The App rejects userinfo, password, fragment, placeholder interpolation, localhost, private/link-local/documentation/reserved hosts.
 - Fetch uses an ephemeral URLSession with no cookies/cache, bounded request/resource timeout, HTTP 200 and a streaming hard stop at 1 MiB (including chunked/unknown-length responses).
 - Redirects are allowed only to the same host over HTTPS.

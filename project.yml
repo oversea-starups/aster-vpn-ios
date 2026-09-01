@@ -16,6 +16,7 @@ targets:
       - path: Aster/Sources/Shared
       - path: Aster/Resources/Assets.xcassets
       - path: Aster/Resources/PrivacyInfo.xcprivacy
+      - path: Aster/Resources/node_catalog.json
     configFiles:
       Debug: Aster/Config/Debug.xcconfig
       Release: Aster/Config/Release.xcconfig
