@@ -62,7 +62,7 @@ The current release includes a reviewed, validated catalog in the app bundle and
 | Unit/UI automation | 50 unit + 9 UI must execute, 0 failures/unexpected skips other than the documented x86_64 Libbox limitation; `.xcresult` archived |
 | First run | Data-use disclosure is complete/reachable on smallest supported screen and largest Dynamic Type; no external ad request before opt-in |
 | Locations | Live feed add/remove/rename/rotation; 3 nodes switch; malformed/empty/oversized/offline updates preserve last-known-good |
-| Free VPN | Reward adds exactly 10 minutes once; time begins only after ready; zero disconnects; relaunch cannot restore spent time |
+| Free VPN | One-time allowance totals exactly 10 minutes of Protected usage; time begins only after ready, pauses on disconnect, resumes on reconnect, and relaunch cannot reset consumed time |
 | Pro VPN | Verified entitlement hides/disables ad path and never consumes free balance |
 | Network | Wi-Fi/cellular, DNS/exit, background/foreground, network switch, reconnect, sleep/wake and disconnect on two supported iPhones |
 | StoreKit | Eligible/ineligible trial, purchase, pending, cancel, restore, expiry and refund match UI/entitlement |

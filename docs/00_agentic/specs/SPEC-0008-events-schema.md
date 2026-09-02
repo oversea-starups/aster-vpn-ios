@@ -36,5 +36,5 @@
 
 ## 口径说明
 - connect_success 仅计入建立隧道成功且完成握手。
-- demo_end: timeout 指 10 分钟自动结束。
+- demo_end: timeout 指累计 10 分钟 Protected 使用时长耗尽后自动结束；断开期间不计时。
 - paywall_view 仅在实际展示时记录。

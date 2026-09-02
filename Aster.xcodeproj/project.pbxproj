@@ -19,7 +19,6 @@
 		36673C5E0E8FDE2125813080 /* FreeExperienceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA44BFADBEE922C04DCE758 /* FreeExperienceStore.swift */; };
 		39ED187EAA77FE74746AB5E7 /* VPNNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4787FA4008F71F1F50F9B93 /* VPNNode.swift */; };
 		406905F37888657CA77A3CA4 /* PacketTunnelPlatformInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019F9B1F9B0C6AA41E99A96B /* PacketTunnelPlatformInterface.swift */; };
-		4A7D9B3C1E6F8A20D5C4B7E1 /* LibboxTunnelFileDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F2C8A1D7B4E9036C1A5D8F2 /* LibboxTunnelFileDescriptor.m */; };
 		577B2C7E291728A87CBEE126 /* AsterUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277FAF0601E4CF1B4520AE72 /* AsterUITests.swift */; };
 		57DDCC6EA1DB119468CBDE33 /* SingBoxConfigurationBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF748C525CF17B618C37C69A /* SingBoxConfigurationBuilder.swift */; };
 		71BC6F7E9E1341402F3BF168 /* NodeSubscriptionParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E5E2A58D63A2E30360DC48 /* NodeSubscriptionParser.swift */; };
@@ -35,6 +34,7 @@
 		9E7E2B6684BB57659B981987 /* TunnelConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86FDF0682B26C61B4C3BA99 /* TunnelConfigurationTests.swift */; };
 		9EAB285CBD1786C49C48FFD2 /* NodeCatalogPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BD3C93F56E4E05369A3A9B /* NodeCatalogPersistence.swift */; };
 		9FE94CB83BB4A8E22B0B408A /* AsterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F8512335A44BEAAA3F5292 /* AsterApp.swift */; };
+		A1A1C0364911296CBB6CF240 /* LibboxTunnelFileDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 7576CB276C20E3B2718B444F /* LibboxTunnelFileDescriptor.m */; };
 		A1BAE2BAE9419D9149F78A51 /* NodeSubscriptionClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ED03547E4A788ADB13416C8 /* NodeSubscriptionClient.swift */; };
 		AA3DFDF08E95AA94F685C9D4 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 0ECECDCDAB6407C344734EAE /* FirebaseCore */; };
 		AC0F1B2E3359732FD4C0DDAD /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3265B0717E7791763953ED97 /* AppConstants.swift */; };
@@ -48,6 +48,7 @@
 		CE27140185CAB84E7C454690 /* AsterTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83262FA47F740C03E2583B5D /* AsterTabView.swift */; };
 		CE98A4127F42A8A454C212FE /* TunnelConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C78EBA9F647215EF0C1415C /* TunnelConfigManager.swift */; };
 		D05395AD6E455B42BA60AB65 /* LocationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF1622B7E45D16533B35705A /* LocationsView.swift */; };
+		DE0E3DD473014FCC859D5F74 /* SubscriptionPlanComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3217E009F6044935A12E40B /* SubscriptionPlanComponents.swift */; };
 		DE9A0ABF1567ED4264607487 /* SubscriptionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C12B056DAC016E26F287DB /* SubscriptionStore.swift */; };
 		E1D837B2FB78EE8513DF3974 /* AsterTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF336426AB983585DA0A937C /* AsterTheme.swift */; };
 		E6758F209D8484D172C30052 /* AppConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490D01248336AA31FFBCF7C3 /* AppConfiguration.swift */; };
@@ -131,7 +132,6 @@
 		2577F9EB2CBACE073C9F06E5 /* FreeExperienceStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeExperienceStoreTests.swift; sourceTree = "<group>"; };
 		277FAF0601E4CF1B4520AE72 /* AsterUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsterUITests.swift; sourceTree = "<group>"; };
 		318DA523A3AD242DF45FF1AC /* Libbox.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Libbox.xcframework; path = Aster/Frameworks/Libbox.xcframework; sourceTree = "<group>"; };
-		5F2C8A1D7B4E9036C1A5D8F2 /* LibboxTunnelFileDescriptor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LibboxTunnelFileDescriptor.m; sourceTree = "<group>"; };
 		3265B0717E7791763953ED97 /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
 		35F2D11518BE3ACA2A2DFF69 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		37F8512335A44BEAAA3F5292 /* AsterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsterApp.swift; sourceTree = "<group>"; };
@@ -142,25 +142,27 @@
 		595DED849E42F7456CF78E1B /* NodeSubscriptionParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeSubscriptionParserTests.swift; sourceTree = "<group>"; };
 		596D0F5E16DE3867076D9F53 /* node_catalog.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = node_catalog.json; sourceTree = "<group>"; };
 		6B8E4D76E45903038E6A9BFE /* PacketTunnelProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketTunnelProvider.swift; sourceTree = "<group>"; };
-		6D62455EB61919A91016A83D /* PacketTunnel.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PacketTunnel.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		6D62455EB61919A91016A83D /* PacketTunnel.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = PacketTunnel.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		7576CB276C20E3B2718B444F /* LibboxTunnelFileDescriptor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LibboxTunnelFileDescriptor.m; sourceTree = "<group>"; };
 		796A0FD64092A2D96C0AA3E5 /* SubscriptionTier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionTier.swift; sourceTree = "<group>"; };
 		7CD4E4DA2990FC755F7E10B2 /* AsterAnalytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsterAnalytics.swift; sourceTree = "<group>"; };
 		7DA44BFADBEE922C04DCE758 /* FreeExperienceStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeExperienceStore.swift; sourceTree = "<group>"; };
-		828277D1355C9CFEAE7CD85B /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		828277D1355C9CFEAE7CD85B /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		83262FA47F740C03E2583B5D /* AsterTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsterTabView.swift; sourceTree = "<group>"; };
 		8EE4027C7951423819B7ADA7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		91E5E2A58D63A2E30360DC48 /* NodeSubscriptionParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeSubscriptionParser.swift; sourceTree = "<group>"; };
 		941376CEB75AFF673BD25CF3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		AE8E0B34BD179B3C124BC7DD /* NodeCatalogStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeCatalogStore.swift; sourceTree = "<group>"; };
+		B3217E009F6044935A12E40B /* SubscriptionPlanComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionPlanComponents.swift; sourceTree = "<group>"; };
 		B4787FA4008F71F1F50F9B93 /* VPNNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNNode.swift; sourceTree = "<group>"; };
 		BAD72DC9EE623B3B51DECBD5 /* VPNManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNManager.swift; sourceTree = "<group>"; };
 		C11CF738CED603802C4400C8 /* ConnectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionViewModel.swift; sourceTree = "<group>"; };
-		CDF5B95C40E49420E3973C0D /* Aster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Aster.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CDF5B95C40E49420E3973C0D /* Aster.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Aster.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D14471986EF3717E42FA1F53 /* ConnectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionView.swift; sourceTree = "<group>"; };
 		D85951A3C0700BE58D8C5A0B /* DebugDeviceImportBootstrap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugDeviceImportBootstrap.swift; sourceTree = "<group>"; };
 		DA3FC482B24535A005369015 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		E3C4ECA08358469345A7C1D8 /* TunnelProviderMessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TunnelProviderMessageTests.swift; sourceTree = "<group>"; };
-		E92B11D5DBB88607660CAD4E /* AsterTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper; path = AsterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E92B11D5DBB88607660CAD4E /* AsterTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = AsterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF1622B7E45D16533B35705A /* LocationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsView.swift; sourceTree = "<group>"; };
 		F4C2B4F1B8262FD4AA384618 /* NodeSubscriptionClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeSubscriptionClientTests.swift; sourceTree = "<group>"; };
 		F86FDF0682B26C61B4C3BA99 /* TunnelConfigurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TunnelConfigurationTests.swift; sourceTree = "<group>"; };
@@ -246,6 +248,7 @@
 			isa = PBXGroup;
 			children = (
 				211100A854B39EC7AA20D646 /* PaywallView.swift */,
+				B3217E009F6044935A12E40B /* SubscriptionPlanComponents.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -503,8 +506,8 @@
 			isa = PBXGroup;
 			children = (
 				941376CEB75AFF673BD25CF3 /* Info.plist */,
+				7576CB276C20E3B2718B444F /* LibboxTunnelFileDescriptor.m */,
 				019F9B1F9B0C6AA41E99A96B /* PacketTunnelPlatformInterface.swift */,
-				5F2C8A1D7B4E9036C1A5D8F2 /* LibboxTunnelFileDescriptor.m */,
 				6B8E4D76E45903038E6A9BFE /* PacketTunnelProvider.swift */,
 			);
 			name = PacketTunnel;
@@ -645,6 +648,9 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
+					54586CC0DD147B6213263959 = {
+						DevelopmentTeam = "";
+					};
 					E93B746D0679D7AC19BB8772 = {
 						TestTargetID = 54586CC0DD147B6213263959;
 					};
@@ -707,7 +713,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/bin/bash\n\nset -eu\n\nif [[ \"${CONFIGURATION:-}\" != \"Release\" ]]; then\n  exit 0\nfi\n\nrepository_root=\"$(cd \"$(dirname \"$0\")/..\" && pwd)\"\ninvalid=0\n\nis_non_public_host() {\n  local host=\"$1\"\n  local a b c d\n\n  case \"$host\" in\n    \"\"|\\[*|localhost|*.localhost|*.local|*.internal|example|*.example|example.com|*.example.com|example.net|*.example.net|example.org|*.example.org|*.invalid|*.test)\n      return 0\n      ;;\n  esac\n\n  if [[ \"$host\" =~ ^([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+)$ ]]; then\n    a=\"${BASH_REMATCH[1]}\"\n    b=\"${BASH_REMATCH[2]}\"\n    c=\"${BASH_REMATCH[3]}\"\n    d=\"${BASH_REMATCH[4]}\"\n    if (( a > 255 || b > 255 || c > 255 || d > 255 )); then\n      return 0\n    fi\n    if (( a == 0 || a == 10 || a == 127 || a >= 224 ||\n          (a == 100 && b >= 64 && b <= 127) ||\n          (a == 169 && b == 254) ||\n          (a == 172 && b >= 16 && b <= 31) ||\n          (a == 192 && b == 168) ||\n          (a == 192 && b == 0 && c == 2) ||\n          (a == 198 && (b == 18 || b == 19 || b == 51)) ||\n          (a == 203 && b == 0 && c == 113) )); then\n      return 0\n    fi\n  fi\n\n  return 1\n}\n\nplatform_interface=\"$repository_root/Aster/Sources/PacketTunnel/PacketTunnelPlatformInterface.swift\"\nif /usr/bin/grep -Eq 'value\\(forKeyPath|socket\\.fileDescriptor|NSSelectorFromString' \"$platform_interface\"; then\n  echo \"error: PacketTunnelPlatformInterface must not access private NetworkExtension implementation details.\"\n  invalid=1\nfi\n\nfor libbox_header in \\\n  \"$repository_root/Aster/Frameworks/Libbox.xcframework/ios-arm64/Libbox.framework/Headers/Libbox.objc.h\" \\\n  \"$repository_root/Aster/Frameworks/Libbox.xcframework/ios-arm64_x86_64-simulator/Libbox.framework/Headers/Libbox.objc.h\"\ndo\n  if ! /usr/bin/grep -Fq 'FOUNDATION_EXPORT int32_t LibboxGetTunnelFileDescriptor(void);' \"$libbox_header\"; then\n    echo \"error: Libbox public tunnel file-descriptor binding is missing from $libbox_header\"\n    invalid=1\n  fi\ndone\n\nfor libbox_binary in \\\n  \"$repository_root/Aster/Frameworks/Libbox.xcframework/ios-arm64/Libbox.framework/Libbox\" \\\n  \"$repository_root/Aster/Frameworks/Libbox.xcframework/ios-arm64_x86_64-simulator/Libbox.framework/Libbox\"\ndo\n  if ! /usr/bin/strings \"$libbox_binary\" | /usr/bin/grep -Eq -- '-tags=with_utls,ios(,iossimulator)?,with_low_memory'; then\n    echo \"error: Libbox must be built with uTLS and Network Extension low-memory tags: $libbox_binary\"\n    invalid=1\n  fi\ndone\n\nprivacy_url=\"${PRIVACY_POLICY_URL:-}\"\nprivacy_host=\"${privacy_url#https://}\"\nprivacy_host=\"${privacy_host%%/*}\"\nprivacy_host=\"${privacy_host%%\\?*}\"\nprivacy_host=\"${privacy_host%%:*}\"\nprivacy_host=\"$(printf '%s' \"$privacy_host\" | /usr/bin/tr '[:upper:]' '[:lower:]')\"\n\nif [[ ! \"$privacy_url\" =~ ^https:// ]] || [[ \"$privacy_url\" == *\"@\"* ]] || [[ \"$privacy_url\" == *\"#\"* ]] || [[ \"$privacy_url\" == *'$('* ]]; then\n  echo \"error: A public HTTPS PRIVACY_POLICY_URL is required for Release builds.\"\n  invalid=1\nelse\n  if is_non_public_host \"$privacy_host\"; then\n    echo \"error: PRIVACY_POLICY_URL must not use a local or reserved placeholder host.\"\n    invalid=1\n  fi\nfi\n\nsubscription_url=\"${NODE_SUBSCRIPTION_URL:-}\"\nsubscription_host=\"${subscription_url#https://}\"\nsubscription_host=\"${subscription_host%%/*}\"\nsubscription_host=\"${subscription_host%%\\?*}\"\nsubscription_host=\"${subscription_host%%:*}\"\nsubscription_host=\"$(printf '%s' \"$subscription_host\" | /usr/bin/tr '[:upper:]' '[:lower:]')\"\n\n# The current App Store release ships a reviewed catalog in the app bundle.\n# Keep the remote source optional so a future endpoint can be enabled without\n# changing the validation contract again.\nif [[ -n \"$subscription_url\" && \"$subscription_url\" != *'$('* ]]; then\n  if [[ ! \"$subscription_url\" =~ ^https:// ]] || [[ \"$subscription_url\" == *\"@\"* ]] || [[ \"$subscription_url\" == *\"#\"* ]]; then\n    echo \"error: NODE_SUBSCRIPTION_URL must be a public HTTPS URL when configured.\"\n    invalid=1\n  elif is_non_public_host \"$subscription_host\"; then\n    echo \"error: NODE_SUBSCRIPTION_URL must use a public non-placeholder host.\"\n    invalid=1\n  fi\nfi\n\nexit \"$invalid\"\n";
+			shellScript = "#!/bin/bash\n\nset -eu\n\nif [[ \"${CONFIGURATION:-}\" != \"Release\" ]]; then\n  exit 0\nfi\n\nrepository_root=\"$(cd \"$(dirname \"$0\")/..\" && pwd)\"\ninvalid=0\n\nis_non_public_host() {\n  local host=\"$1\"\n  local a b c d\n\n  case \"$host\" in\n    \"\"|\\[*|localhost|*.localhost|*.local|*.internal|example|*.example|example.com|*.example.com|example.net|*.example.net|example.org|*.example.org|*.invalid|*.test)\n      return 0\n      ;;\n  esac\n\n  if [[ \"$host\" =~ ^([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+)$ ]]; then\n    a=\"${BASH_REMATCH[1]}\"\n    b=\"${BASH_REMATCH[2]}\"\n    c=\"${BASH_REMATCH[3]}\"\n    d=\"${BASH_REMATCH[4]}\"\n    if (( a > 255 || b > 255 || c > 255 || d > 255 )); then\n      return 0\n    fi\n    if (( a == 0 || a == 10 || a == 127 || a >= 224 ||\n          (a == 100 && b >= 64 && b <= 127) ||\n          (a == 169 && b == 254) ||\n          (a == 172 && b >= 16 && b <= 31) ||\n          (a == 192 && b == 168) ||\n          (a == 192 && b == 0 && c == 2) ||\n          (a == 198 && (b == 18 || b == 19 || b == 51)) ||\n          (a == 203 && b == 0 && c == 113) )); then\n      return 0\n    fi\n  fi\n\n  return 1\n}\n\nplatform_interface=\"$repository_root/Aster/Sources/PacketTunnel/PacketTunnelPlatformInterface.swift\"\nif /usr/bin/grep -Eq 'value\\(forKeyPath|socket\\.fileDescriptor|NSSelectorFromString' \"$platform_interface\"; then\n  echo \"error: PacketTunnelPlatformInterface must not access private NetworkExtension implementation details.\"\n  invalid=1\nfi\n\nfor libbox_header in \\\n  \"$repository_root/Aster/Frameworks/Libbox.xcframework/ios-arm64/Libbox.framework/Headers/Libbox.objc.h\" \\\n  \"$repository_root/Aster/Frameworks/Libbox.xcframework/ios-arm64_x86_64-simulator/Libbox.framework/Headers/Libbox.objc.h\"\ndo\n  if ! /usr/bin/grep -Fq 'FOUNDATION_EXPORT int32_t LibboxGetTunnelFileDescriptor(void);' \"$libbox_header\"; then\n    echo \"error: Libbox public tunnel file-descriptor binding is missing from $libbox_header\"\n    invalid=1\n  fi\ndone\n\nfor libbox_binary in \\\n  \"$repository_root/Aster/Frameworks/Libbox.xcframework/ios-arm64/Libbox.framework/Libbox\" \\\n  \"$repository_root/Aster/Frameworks/Libbox.xcframework/ios-arm64_x86_64-simulator/Libbox.framework/Libbox\"\ndo\n  if ! /usr/bin/strings \"$libbox_binary\" | /usr/bin/grep -Eq -- '-tags=with_gvisor,with_utls,with_clash_api,ios(,iossimulator)?,with_low_memory'; then\n    echo \"error: Libbox must be built with gVisor, uTLS, internal Clash bootstrap and Network Extension low-memory tags: $libbox_binary\"\n    invalid=1\n  fi\ndone\n\nprivacy_url=\"${PRIVACY_POLICY_URL:-}\"\nprivacy_host=\"${privacy_url#https://}\"\nprivacy_host=\"${privacy_host%%/*}\"\nprivacy_host=\"${privacy_host%%\\?*}\"\nprivacy_host=\"${privacy_host%%:*}\"\nprivacy_host=\"$(printf '%s' \"$privacy_host\" | /usr/bin/tr '[:upper:]' '[:lower:]')\"\n\nif [[ ! \"$privacy_url\" =~ ^https:// ]] || [[ \"$privacy_url\" == *\"@\"* ]] || [[ \"$privacy_url\" == *\"#\"* ]] || [[ \"$privacy_url\" == *'$('* ]]; then\n  echo \"error: A public HTTPS PRIVACY_POLICY_URL is required for Release builds.\"\n  invalid=1\nelse\n  if is_non_public_host \"$privacy_host\"; then\n    echo \"error: PRIVACY_POLICY_URL must not use a local or reserved placeholder host.\"\n    invalid=1\n  fi\nfi\n\nsubscription_url=\"${NODE_SUBSCRIPTION_URL:-}\"\nsubscription_host=\"${subscription_url#https://}\"\nsubscription_host=\"${subscription_host%%/*}\"\nsubscription_host=\"${subscription_host%%\\?*}\"\nsubscription_host=\"${subscription_host%%:*}\"\nsubscription_host=\"$(printf '%s' \"$subscription_host\" | /usr/bin/tr '[:upper:]' '[:lower:]')\"\n\n# The current App Store release ships a reviewed catalog in the app bundle.\n# Keep the remote source optional so a future endpoint can be enabled without\n# changing the validation contract again.\nif [[ -n \"$subscription_url\" && \"$subscription_url\" != *'$('* ]]; then\n  if [[ ! \"$subscription_url\" =~ ^https:// ]] || [[ \"$subscription_url\" == *\"@\"* ]] || [[ \"$subscription_url\" == *\"#\"* ]]; then\n    echo \"error: NODE_SUBSCRIPTION_URL must be a public HTTPS URL when configured.\"\n    invalid=1\n  elif is_non_public_host \"$subscription_host\"; then\n    echo \"error: NODE_SUBSCRIPTION_URL must use a public non-placeholder host.\"\n    invalid=1\n  fi\nfi\n\nexit \"$invalid\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -734,6 +740,7 @@
 				71BC6F7E9E1341402F3BF168 /* NodeSubscriptionParser.swift in Sources */,
 				747D8AA9B1ED869FB5BD6A3B /* PaywallView.swift in Sources */,
 				57DDCC6EA1DB119468CBDE33 /* SingBoxConfigurationBuilder.swift in Sources */,
+				DE0E3DD473014FCC859D5F74 /* SubscriptionPlanComponents.swift in Sources */,
 				DE9A0ABF1567ED4264607487 /* SubscriptionStore.swift in Sources */,
 				EEEC669F7347A4EA816ECB8E /* SubscriptionTier.swift in Sources */,
 				B7DD151A9ED5EE50E3F831C2 /* TunnelConfigManager.swift in Sources */,
@@ -748,7 +755,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AC0F1B2E3359732FD4C0DDAD /* AppConstants.swift in Sources */,
-				4A7D9B3C1E6F8A20D5C4B7E1 /* LibboxTunnelFileDescriptor.m in Sources */,
+				A1A1C0364911296CBB6CF240 /* LibboxTunnelFileDescriptor.m in Sources */,
 				406905F37888657CA77A3CA4 /* PacketTunnelPlatformInterface.swift in Sources */,
 				F0952850442B71A4C6E2B861 /* PacketTunnelProvider.swift in Sources */,
 				B7CCAE4C71AC60101135AEAC /* SingBoxConfigurationBuilder.swift in Sources */,
@@ -847,7 +854,6 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = Aster/Config/PacketTunnel.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 66B9A952T9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/Aster/Frameworks",
 					"\"Aster/Frameworks\"",
@@ -903,10 +909,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Aster/Config/Aster.entitlements;
-				CODE_SIGN_STYLE = Manual;
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 66B9A952T9;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Aster/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -920,7 +925,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.astervpn.Aster;
 				PRODUCT_NAME = Aster;
-				PROVISIONING_PROFILE_SPECIFIER = "Aster Device Debug";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -928,20 +932,13 @@
 		8B92739D514962E66EE57026 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CODE_SIGN_ENTITLEMENTS = Aster/Config/PacketTunnel.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 66B9A952T9;
-				ENABLE_CODE_COVERAGE = NO;
-				ENABLE_TESTABILITY = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/Aster/Frameworks",
 					"\"Aster/Frameworks\"",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
-				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
 				INFOPLIST_FILE = Aster/Sources/PacketTunnel/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -955,7 +952,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.astervpn.Aster.PacketTunnel;
 				PRODUCT_NAME = PacketTunnel;
-				PROVISIONING_PROFILE_SPECIFIER = "Aster PacketTunnel Device Debug";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -970,7 +966,7 @@
 				CODE_SIGN_ENTITLEMENTS = Aster/Config/Aster.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 66B9A952T9;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Aster/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

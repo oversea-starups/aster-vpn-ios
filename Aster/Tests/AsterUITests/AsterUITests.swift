@@ -32,6 +32,7 @@ final class AsterUITests: XCTestCase {
         app.buttons["locationPickerButton"].tap()
         let locationsSegment = app.segmentedControls.buttons["Locations"]
         XCTAssertTrue(locationsSegment.waitForExistence(timeout: 5))
+        XCTAssertTrue(locationsSegment.isSelected)
         locationsSegment.tap()
         XCTAssertTrue(
             app.staticTexts["Locations are temporarily unavailable"].exists ||
@@ -46,8 +47,11 @@ final class AsterUITests: XCTestCase {
     func testTabNavigationAndAccountSurface() {
         let app = launchApp()
         XCTAssertTrue(app.tabBars.buttons["Home"].waitForExistence(timeout: 8))
-        XCTAssertTrue(app.tabBars.buttons["Locations"].exists)
+        XCTAssertTrue(app.tabBars.buttons["VIP"].exists)
         XCTAssertTrue(app.tabBars.buttons["Account"].exists)
+        app.tabBars.buttons["VIP"].tap()
+        XCTAssertTrue(app.segmentedControls.buttons["VIP"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.segmentedControls.buttons["VIP"].isSelected)
         app.tabBars.buttons["Account"].tap()
         XCTAssertTrue(app.navigationBars["Account"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.staticTexts["Free plan"].exists || app.staticTexts["Aster Pro"].exists)

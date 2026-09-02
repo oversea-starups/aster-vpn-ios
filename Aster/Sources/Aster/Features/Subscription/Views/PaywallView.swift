@@ -40,10 +40,23 @@ struct PaywallView: View {
                         } else {
                             VStack(spacing: 12) {
                                 ForEach(store.products, id: \.id) { product in
-                                    planCard(product)
+                                    SubscriptionPlanCard(
+                                        product: product,
+                                        isSelected: selectedProductID == product.id,
+                                        isBestValue: isBestValue(product),
+                                        onSelect: { selectedProductID = product.id }
+                                    )
                                 }
                             }
-                            purchaseButton
+                            SubscriptionPurchaseButton(
+                                product: selectedProduct,
+                                isLoading: store.isLoading,
+                                eligibleProductIDs: store.freeTrialEligibleProductIDs,
+                                action: {
+                                    guard let product = selectedProduct else { return }
+                                    Task { _ = await store.purchase(product) }
+                                }
+                            )
                         }
 
                         Button("Restore Purchases") {
@@ -111,80 +124,8 @@ struct PaywallView: View {
         .accessibilityIdentifier("loadingSubscriptionOptions")
     }
 
-    private func planCard(_ product: Product) -> some View {
-        Button {
-            selectedProductID = product.id
-        } label: {
-            HStack(spacing: 14) {
-                Image(systemName: selectedProductID == product.id ? "checkmark.circle.fill" : "circle")
-                    .font(.title3)
-                    .foregroundStyle(selectedProductID == product.id ? AsterTheme.mint : .secondary)
-
-                VStack(alignment: .leading, spacing: 3) {
-                    HStack(spacing: 8) {
-                        Text(product.displayName)
-                            .font(.headline)
-                        if isBestValue(product) {
-                            Text("BEST VALUE")
-                                .font(.caption2.weight(.heavy))
-                                .foregroundStyle(AsterTheme.navy)
-                                .padding(.horizontal, 7)
-                                .padding(.vertical, 4)
-                                .background(AsterTheme.mint, in: Capsule())
-                        }
-                    }
-                    Text(product.description)
-                        .font(.caption)
-                        .foregroundStyle(.white)
-                        .lineLimit(2)
-                }
-
-                Spacer()
-                Text(product.displayPrice)
-                    .font(.headline)
-            }
-            .padding(16)
-            .background(
-                selectedProductID == product.id ? AsterTheme.mint.opacity(0.10) : .white.opacity(0.05),
-                in: RoundedRectangle(cornerRadius: 18, style: .continuous)
-            )
-            .overlay {
-                RoundedRectangle(cornerRadius: 18, style: .continuous)
-                    .stroke(selectedProductID == product.id ? AsterTheme.mint : .white.opacity(0.10), lineWidth: 1.5)
-            }
-        }
-        .buttonStyle(.plain)
-        .accessibilityValue(selectedProductID == product.id ? "Selected" : "Not selected")
-    }
-
-    private var purchaseButton: some View {
-        Button {
-            guard let product = selectedProduct else { return }
-            Task { _ = await store.purchase(product) }
-        } label: {
-            HStack(spacing: 10) {
-                if store.isLoading { ProgressView().tint(AsterTheme.navy) }
-                Text(purchaseTitle)
-                    .font(.headline)
-            }
-            .frame(maxWidth: .infinity, minHeight: 56)
-        }
-        .buttonStyle(.plain)
-        .foregroundStyle(AsterTheme.navy)
-        .background(AsterTheme.mint, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
-        .disabled(store.isLoading || selectedProduct == nil)
-    }
-
     private var selectedProduct: Product? {
         store.products.first(where: { $0.id == selectedProductID }) ?? store.products.first
-    }
-
-    private var purchaseTitle: String {
-        guard let product = selectedProduct else { return "Choose a plan" }
-        if let trialPeriod = eligibleFreeTrialPeriod(for: product) {
-            return "Start \(Self.periodText(trialPeriod, hyphenated: true)) free trial"
-        }
-        return "Unlock unlimited protection"
     }
 
     private var legal: some View {
@@ -227,20 +168,17 @@ struct PaywallView: View {
     }
 
     private func isBestValue(_ product: Product) -> Bool {
-        guard
-            product.id == AppConfiguration.yearlyProductID,
-            let monthly = store.products.first(where: { $0.id == AppConfiguration.monthlyProductID })
-        else {
-            return false
-        }
-        return Self.yearlyPlanIsBetterValue(
-            yearlyPrice: product.price,
-            monthlyPrice: monthly.price
+        SubscriptionPlanPresentation.isBestValue(
+            product,
+            products: store.products
         )
     }
 
     static func yearlyPlanIsBetterValue(yearlyPrice: Decimal, monthlyPrice: Decimal) -> Bool {
-        yearlyPrice < monthlyPrice * 12
+        SubscriptionPlanPresentation.yearlyPlanIsBetterValue(
+            yearlyPrice: yearlyPrice,
+            monthlyPrice: monthlyPrice
+        )
     }
 
     private static func periodText(

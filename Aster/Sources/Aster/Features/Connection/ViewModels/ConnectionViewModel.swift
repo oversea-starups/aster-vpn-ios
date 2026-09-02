@@ -132,7 +132,12 @@ final class ConnectionViewModel: ObservableObject {
         subscriptionStore.$isPro
             .sink { [weak self] isPro in
                 guard let self else { return }
+                let wasPro = self.isPro
                 self.isPro = isPro
+                if isPro, !wasPro {
+                    self.pendingFreeExperience = false
+                    self.freeExperience.pauseUsage()
+                }
             }
             .store(in: &cancellables)
 
@@ -186,6 +191,9 @@ final class ConnectionViewModel: ObservableObject {
         )
         switch presentationState {
         case .protected, .connecting, .verifying, .disconnecting, .reconnecting:
+            if presentationState == .protected, !isPro {
+                freeExperience.pauseUsage()
+            }
             vpnManager.disconnect()
         case .unavailable, .disconnected:
             guard isEntitlementReady else {
@@ -251,6 +259,7 @@ final class ConnectionViewModel: ObservableObject {
     }
 
     private func updatePresentationState() {
+        let previousState = presentationState
         switch vpnStatus {
         case .invalid: presentationState = .unavailable
         case .disconnected: presentationState = .disconnected
@@ -261,14 +270,27 @@ final class ConnectionViewModel: ObservableObject {
         @unknown default: presentationState = .unavailable
         }
 
-        if presentationState == .protected, pendingFreeExperience, !isPro {
+        if previousState == .protected, presentationState != .protected, !isPro {
+            freeExperience.pauseUsage()
+        }
+
+        guard presentationState == .protected, previousState != .protected else { return }
+        if !isPro {
+            let hadClaimed = freeExperience.hasBeenClaimed
             pendingFreeExperience = false
-            _ = freeExperience.startWhenReady()
-            AsterAnalytics.log(AsterAnalytics.Event.demoStart, parameters: ["location": selectedLocationName])
-        } else if presentationState == .protected {
+            guard freeExperience.startWhenReady() else { return }
+            if !hadClaimed {
+                AsterAnalytics.log(AsterAnalytics.Event.demoStart, parameters: ["location": selectedLocationName])
+            } else {
+                AsterAnalytics.log(
+                    AsterAnalytics.Event.connectSuccess,
+                    parameters: ["location": selectedLocationName, "is_demo": true]
+                )
+            }
+        } else {
             AsterAnalytics.log(
                 AsterAnalytics.Event.connectSuccess,
-                parameters: ["location": selectedLocationName, "is_demo": !isPro]
+                parameters: ["location": selectedLocationName, "is_demo": false]
             )
         }
     }

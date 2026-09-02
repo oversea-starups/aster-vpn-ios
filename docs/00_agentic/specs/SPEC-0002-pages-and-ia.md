@@ -15,7 +15,8 @@
 - 转化顺序：状态与连接价值 → Aster Pro 主 CTA
 - 首页垂直顺序：连接状态/按钮 → 当前地区 → Pro 升级区域；VPN 系统授权延迟至用户首次点击连接。
 
-### 2) Locations Tab
+### 2) VIP Tab
+- 底部第二个 Tab 文案为 `VIP`。进入该 Tab 时，顶部两个分段 Tab 默认选中 `VIP`；从 Home 的当前地区入口进入时，默认选中 `Locations`。
 - 顶部使用两个分段 Tab：`VIP`（默认）与 `Locations`；不额外显示 “Home” 或 “Available locations” 等重复标题。
 - `VIP` 进入后直接加载并展示 StoreKit 返回的真实套餐名称、描述和本地化价格；选择套餐后可直接发起 Apple 购买，不增加“查看套餐”中间按钮。恢复购买仍由 Account 承载；StoreKit 原生试用只对符合资格的用户显示。
 - `Locations` 展示可用地区、切换限制、刷新状态和可恢复错误。

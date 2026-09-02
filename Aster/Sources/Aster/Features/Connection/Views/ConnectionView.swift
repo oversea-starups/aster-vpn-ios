@@ -19,7 +19,10 @@ struct ConnectionView: View {
                 PaywallView()
             }
             .sheet(isPresented: $viewModel.showsLocations) {
-                LocationsView(canSwitchLocation: viewModel.canSwitchLocation)
+                LocationsView(
+                    canSwitchLocation: viewModel.canSwitchLocation,
+                    initialSection: .locations
+                )
             }
             .task {
                 await viewModel.refreshLocationsIfNeeded()
@@ -254,19 +257,19 @@ struct ConnectionView: View {
 
     private var freeExperienceTitle: String {
         if viewModel.freeExperienceRemainingSeconds > 0 {
-            return "Free protection"
+            return "Free protection time"
         }
         return viewModel.freeExperienceHasBeenClaimed ? "Free time used" : "10 minutes included"
     }
 
     private var freeExperienceDetail: String {
         if viewModel.freeExperienceRemainingSeconds > 0 {
-            return "\(viewModel.formattedFreeExperienceRemaining) remaining"
+            return "\(viewModel.formattedFreeExperienceRemaining) remaining · pauses when disconnected"
         }
         if viewModel.freeExperienceHasBeenClaimed {
             return "Upgrade to Pro for unlimited protection."
         }
-        return "Your first connection includes 10 minutes of protection."
+        return "10 minutes of protection time, counted only while connected."
     }
 
     private var statusColor: Color {

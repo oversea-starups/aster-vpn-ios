@@ -1,7 +1,7 @@
 # TODO
 
 > Last reviewed: 2026-09-02
-> 只列未完成工作；当前 App Store 目标为 StoreKit-only，不包含第三方广告；Locations catalog、schema v2、三 Tab/圆形连接开关、Account 法律入口和 entitlement 修复见 `PROJECT_STATUS.md`。
+> 只列未完成工作；当前 App Store 目标为 StoreKit-only，不包含第三方广告；Locations catalog、schema v2、Home/VIP/Account 三 Tab、VIP/Locations 子 Tab、圆形连接开关、Account 法律入口和 entitlement 修复见 `PROJECT_STATUS.md`。
 
 ## Critical Release Decisions
 
@@ -64,7 +64,7 @@
   - **P1 可信状态反馈：**显示 `Connecting → Protected` 的阶段变化、最近一次连接地区和可恢复错误；不展示未经真实数据支持的速度、延迟或“最快”承诺。
   - **P1 温和留存：**仅在用户主动断开、连接失败或连续多次成功连接后提供下一步建议（重连、切换地区、升级）；不使用推送骚扰或 VPN 连接中的插屏。
   - **P1 可度量漏斗：**记录匿名的首次启动、首次点击 Connect、系统授权结果、连接 ready、paywall 查看、购买/恢复结果和 D1/D7 回访；不记录浏览内容、完整节点凭据或流量内容。
-  - **MRR 决策（2026-09-01）：**当前版本不增加每日签到或可累计免费时长。首发采用一次性、封顶 10 分钟的首次连接体验，再引导 StoreKit 原生订阅/优惠；该体验与 StoreKit trial eligibility 分开记录，避免形成可刷取的免费余额状态机。是否扩大体验范围必须由 cohort 数据证明激活率是主要瓶颈后再评估。
+  - **MRR 决策（2026-09-02）：**当前版本不增加每日签到或可领取免费时长。首发采用一次性、封顶 10 分钟的 Protected 使用时长（只在 VPN 受保护期间累计，断开暂停），再引导 StoreKit 原生订阅/优惠；该体验与 StoreKit trial eligibility 分开记录，避免形成可刷取的免费余额状态机。是否扩大体验范围必须由 cohort 数据证明激活率是主要瓶颈后再评估。
   - **Done when:** 先建立 1 周基线，再一次只改一个变量；以首次 ready 连接率、首次连接耗时、paywall→购买率、D1/D7 留存和退款率共同评估，不只看点击率。
 
 - [ ] **补真实 traffic-ready 证据**
@@ -99,4 +99,4 @@
 ## Deferred / Won't Do
 
 - **流媒体解锁、广告拦截、杀毒、复杂分流、家庭共享、企业多租户** — Decision: ADR-0001。
-- **长期免费、每日签到和可累计余额** — 不做；首发仅保留一次性 10 分钟体验，避免与 Apple 原生试用叠加并控制成本。
+- **长期免费、每日签到和可领取余额** — 不做；首发仅保留一次性 10 分钟 Protected 使用时长，避免与 Apple 原生试用叠加并控制成本。

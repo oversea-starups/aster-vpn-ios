@@ -13,7 +13,7 @@ Date: 2026-09-01
 ## Narrative and claim ledger
 
 1. Public Wi‑Fi protection in one tap — supported by the Home connection flow and product brief.
-2. One-time 10-minute free experience — supported by the current `FreeExperienceStore` implementation and ASC Description/Promotional Text.
+2. One-time 10-minute protected-usage allowance — supported by the current `FreeExperienceStore` implementation and ASC Description/Promotional Text; the clock pauses when disconnected.
 3. Region selection — supported by the current Locations catalog and Home location card.
 
 No competitor names, prices, rankings, ratings, speed guarantees, permanent-free claims, or unsupported privacy absolutes are used in the creative.

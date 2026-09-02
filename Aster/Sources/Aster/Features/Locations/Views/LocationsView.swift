@@ -1,20 +1,28 @@
 import StoreKit
 import SwiftUI
 
+enum LocationsSection: Hashable {
+    case vip
+    case locations
+}
+
 struct LocationsView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject private var store = NodeCatalogStore.shared
     @StateObject private var subscriptionStore = SubscriptionStore.shared
-    // The page is entered to choose a region; keep the actual location list
-    // as the default instead of forcing a subscription upsell first.
-    @State private var selectedSection: LocationsSection = .locations
+    @State private var selectedSection: LocationsSection
     @State private var selectedProductID: String? = AppConfiguration.yearlyProductID
     let canSwitchLocation: Bool
     let showsCloseButton: Bool
 
-    init(canSwitchLocation: Bool, showsCloseButton: Bool = true) {
+    init(
+        canSwitchLocation: Bool,
+        showsCloseButton: Bool = true,
+        initialSection: LocationsSection = .vip
+    ) {
         self.canSwitchLocation = canSwitchLocation
         self.showsCloseButton = showsCloseButton
+        _selectedSection = State(initialValue: initialSection)
     }
 
     var body: some View {
@@ -37,7 +45,7 @@ struct LocationsView: View {
                 .scrollIndicators(.hidden)
             }
             .preferredColorScheme(.dark)
-            .navigationTitle("Locations")
+            .navigationTitle(selectedSection == .vip ? "VIP" : "Locations")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 if showsCloseButton {
@@ -50,11 +58,6 @@ struct LocationsView: View {
                 await store.refreshIfNeeded()
             }
         }
-    }
-
-    private enum LocationsSection: Hashable {
-        case vip
-        case locations
     }
 
     private var sectionPicker: some View {
@@ -76,7 +79,7 @@ struct LocationsView: View {
                     .foregroundStyle(.white)
             }
 
-            VStack(spacing: 10) {
+            VStack(spacing: 12) {
                 if subscriptionStore.products.isEmpty {
                     Text(subscriptionStore.isLoading ? "Loading plans…" : "Plans are temporarily unavailable.")
                         .font(.subheadline)
@@ -84,60 +87,28 @@ struct LocationsView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                 } else {
                     ForEach(subscriptionStore.products, id: \.id) { product in
-                        Button {
-                            selectedProductID = product.id
-                        } label: {
-                            HStack(spacing: 12) {
-                                Image(systemName: selectedProductID == product.id ? "checkmark.circle.fill" : "circle")
-                                    .foregroundStyle(selectedProductID == product.id ? AsterTheme.mint : .secondary)
-                                VStack(alignment: .leading, spacing: 3) {
-                                    Text(product.displayName)
-                                        .font(.headline)
-                                    Text(product.description)
-                                        .font(.caption)
-                                        .foregroundStyle(.white)
-                                        .lineLimit(2)
-                                }
-                                Spacer(minLength: 8)
-                                Text(product.displayPrice)
-                                    .font(.headline)
-                            }
-                            .padding(14)
-                            .background(
-                                selectedProductID == product.id ? AsterTheme.mint.opacity(0.10) : .white.opacity(0.06),
-                                in: RoundedRectangle(cornerRadius: 16, style: .continuous)
-                            )
-                            .overlay {
-                                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                                    .stroke(
-                                        selectedProductID == product.id ? AsterTheme.mint : .white.opacity(0.10),
-                                        lineWidth: 1.5
-                                    )
-                            }
-                        }
-                        .buttonStyle(.plain)
-                        .accessibilityValue(selectedProductID == product.id ? "Selected" : "Not selected")
+                        SubscriptionPlanCard(
+                            product: product,
+                            isSelected: selectedProductID == product.id,
+                            isBestValue: SubscriptionPlanPresentation.isBestValue(
+                                product,
+                                products: subscriptionStore.products
+                            ),
+                            onSelect: { selectedProductID = product.id }
+                        )
                     }
                 }
             }
 
             if let selectedProduct {
-                Button {
-                    Task { _ = await subscriptionStore.purchase(selectedProduct) }
-                } label: {
-                    HStack(spacing: 10) {
-                        if subscriptionStore.isLoading {
-                            ProgressView().tint(AsterTheme.navy)
-                        }
-                        Text(purchaseTitle(for: selectedProduct))
-                            .font(.headline)
+                SubscriptionPurchaseButton(
+                    product: selectedProduct,
+                    isLoading: subscriptionStore.isLoading,
+                    eligibleProductIDs: subscriptionStore.freeTrialEligibleProductIDs,
+                    action: {
+                        Task { _ = await subscriptionStore.purchase(selectedProduct) }
                     }
-                    .frame(maxWidth: .infinity, minHeight: 52)
-                }
-                .buttonStyle(.plain)
-                .foregroundStyle(AsterTheme.navy)
-                .background(AsterTheme.mint, in: RoundedRectangle(cornerRadius: 15, style: .continuous))
-                .disabled(subscriptionStore.isLoading)
+                )
                 .accessibilityIdentifier("vipPurchaseButton")
             }
 
@@ -166,25 +137,6 @@ struct LocationsView: View {
 
     private var selectedProduct: Product? {
         subscriptionStore.products.first(where: { $0.id == selectedProductID }) ?? subscriptionStore.products.first
-    }
-
-    private func purchaseTitle(for product: Product) -> String {
-        guard
-            subscriptionStore.freeTrialEligibleProductIDs.contains(product.id),
-            let period = product.subscription?.introductoryOffer?.period
-        else {
-            return "Subscribe with Apple"
-        }
-
-        let unit: String
-        switch period.unit {
-        case .day: unit = "day"
-        case .week: unit = "week"
-        case .month: unit = "month"
-        case .year: unit = "year"
-        @unknown default: unit = "period"
-        }
-        return "Start a \(period.value)-\(unit) free trial"
     }
 
     private var locationsContent: some View {

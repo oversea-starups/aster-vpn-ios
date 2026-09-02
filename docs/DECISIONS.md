@@ -164,7 +164,7 @@
 
 ## ADR-0018: StoreKit-only 首发与连接优先体验
 
-- **Decision:** App Store 首发版本不集成第三方广告、UMP、rewarded access、广告标识或追踪；免费用户获得一次性、封顶 10 分钟的首次连接体验，Pro 通过 StoreKit 订阅获得持续保护。StoreKit 的产品价格和 introductory-offer eligibility 是唯一试用/价格来源。
+- **Decision:** App Store 首发版本不集成第三方广告、UMP、rewarded access、广告标识或追踪；免费用户获得一次性、封顶 10 分钟的 Protected 使用时长，时长仅在 VPN 处于 Protected 时累计、断开即暂停，Pro 通过 StoreKit 订阅获得持续保护。StoreKit 的产品价格和 introductory-offer eligibility 是唯一试用/价格来源。
 - **Reason:** VPN 数据与第三方广告披露存在 Apple Guideline 5.4 风险；连接价值必须先被体验，且自定义免费余额会与 Apple 原生试用和反滥用状态复杂度冲突。
 - **Impact:** 连接流程不再依赖广告或自定义隐私弹窗；Privacy Policy/Terms 从 Account/Settings 与 Paywall 访问；Apple VPN 授权仅在首次点击连接时触发。
 - **Evidence:** `Aster/Sources/Aster/Core/Services/FreeExperienceStore.swift`；`SubscriptionStore.swift`；`AsterApp.swift`；`PROJECT_STATUS.md`。

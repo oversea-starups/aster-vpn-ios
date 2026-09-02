@@ -2,8 +2,9 @@ import Combine
 import Foundation
 import Security
 
-/// A one-time, ten-minute first-connection experience. The claim is kept in
-/// Keychain so deleting and reinstalling the app cannot reset the allowance.
+/// A one-time, ten-minute allowance measured only while the VPN is in use.
+/// The claim is kept in Keychain so deleting and reinstalling the app cannot
+/// reset the allowance.
 @MainActor
 final class FreeExperienceStore: ObservableObject {
     static let shared = FreeExperienceStore()
@@ -16,7 +17,8 @@ final class FreeExperienceStore: ObservableObject {
     private let keychain: FreeExperienceClaiming
     private let now: () -> Date
     private var ticker: Task<Void, Never>?
-    private var endDate: Date?
+    private var consumedSeconds: TimeInterval = 0
+    private var activeSince: Date?
 
     init(
         defaults: UserDefaults = .standard,
@@ -30,45 +32,117 @@ final class FreeExperienceStore: ObservableObject {
     }
 
     var canStartOrContinue: Bool {
-        isActive || (!keychain.hasClaimed && remainingSeconds > 0)
+        remainingSeconds > 0
     }
 
     var hasBeenClaimed: Bool { keychain.hasClaimed }
 
     func startWhenReady() -> Bool {
         refresh()
-        guard !keychain.hasClaimed, remainingSeconds > 0 else { return false }
-        keychain.markClaimed()
-        let expiry = now().addingTimeInterval(Self.duration)
-        endDate = expiry
-        defaults.set(expiry.timeIntervalSince1970, forKey: Keys.expiration)
+        guard remainingSeconds > 0 else { return false }
+        if !keychain.hasClaimed {
+            keychain.markClaimed()
+        }
+        guard activeSince == nil else { return true }
+        activeSince = now()
+        persist()
         isActive = true
         startTicker()
         return true
     }
 
+    /// Pauses the allowance when the protected connection ends. Time spent
+    /// disconnected is never deducted from the user's free allowance.
+    func pauseUsage() {
+        guard activeSince != nil else {
+            isActive = false
+            ticker?.cancel()
+            ticker = nil
+            return
+        }
+
+        consumedSeconds = currentConsumedSeconds()
+        activeSince = nil
+        persist()
+        refresh()
+    }
+
     func refresh() {
-        guard let endDate else {
-            remainingSeconds = keychain.hasClaimed ? 0 : Int(Self.duration)
+        guard activeSince != nil else {
+            remainingSeconds = max(0, Int(ceil(Self.duration - consumedSeconds)))
             isActive = false
             return
         }
-        let remaining = max(0, Int(ceil(endDate.timeIntervalSince(now()))))
+
+        let consumed = currentConsumedSeconds()
+        let remaining = max(0, Int(ceil(Self.duration - consumed)))
         remainingSeconds = remaining
         isActive = remaining > 0
         if remaining == 0 {
+            consumedSeconds = Self.duration
+            activeSince = nil
+            persist()
             ticker?.cancel()
             ticker = nil
+        } else {
+            // Checkpoint the ledger periodically so a terminated app cannot
+            // charge wall-clock time for a session that may have disconnected
+            // while the app was not running. At most one ticker interval is
+            // left uncheckpointed.
+            consumedSeconds = consumed
+            activeSince = now()
+            persist()
         }
     }
 
     deinit { ticker?.cancel() }
 
     private func restore() {
-        let timestamp = defaults.double(forKey: Keys.expiration)
-        if timestamp > 0 { endDate = Date(timeIntervalSince1970: timestamp) }
+        if let value = defaults.object(forKey: Keys.consumed) as? NSNumber {
+            consumedSeconds = min(Self.duration, max(0, value.doubleValue))
+        } else if let legacyExpiration = defaults.object(forKey: Keys.legacyExpiration) as? NSNumber,
+                  legacyExpiration.doubleValue > 0 {
+            // Migrate the previous wall-clock implementation conservatively:
+            // preserve the amount that had already elapsed, then pause it.
+            let legacyRemaining = max(
+                0,
+                min(Self.duration, Date(timeIntervalSince1970: legacyExpiration.doubleValue).timeIntervalSince(now()))
+            )
+            consumedSeconds = Self.duration - legacyRemaining
+            defaults.set(consumedSeconds, forKey: Keys.consumed)
+            defaults.removeObject(forKey: Keys.legacyExpiration)
+        } else if keychain.hasClaimed {
+            // A claimed allowance without a local ledger is treated as spent;
+            // this preserves the anti-reset guarantee across reinstall or
+            // storage corruption.
+            consumedSeconds = Self.duration
+        }
+
+        if let timestamp = defaults.object(forKey: Keys.activeSince) as? NSNumber,
+           timestamp.doubleValue > 0 {
+            // The previous process may have been terminated while the tunnel
+            // disconnected. Resume accounting only after the live connection
+            // reports Protected again; keep the last persisted usage and
+            // discard the stale wall-clock anchor.
+            activeSince = nil
+            defaults.removeObject(forKey: Keys.activeSince)
+        }
         refresh()
         if isActive { startTicker() }
+    }
+
+    private func currentConsumedSeconds() -> TimeInterval {
+        let activeElapsed = activeSince.map { max(0, now().timeIntervalSince($0)) } ?? 0
+        return min(Self.duration, consumedSeconds + activeElapsed)
+    }
+
+    private func persist() {
+        defaults.set(consumedSeconds, forKey: Keys.consumed)
+        if let activeSince {
+            defaults.set(activeSince.timeIntervalSince1970, forKey: Keys.activeSince)
+        } else {
+            defaults.removeObject(forKey: Keys.activeSince)
+        }
     }
 
     private func startTicker() {
@@ -83,7 +157,11 @@ final class FreeExperienceStore: ObservableObject {
         }
     }
 
-    private enum Keys { static let expiration = "aster.free_experience.expiration" }
+    private enum Keys {
+        static let consumed = "aster.free_experience.consumed_seconds"
+        static let activeSince = "aster.free_experience.active_since"
+        static let legacyExpiration = "aster.free_experience.expiration"
+    }
 }
 
 protocol FreeExperienceClaiming: AnyObject {

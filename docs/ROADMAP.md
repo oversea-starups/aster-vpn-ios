@@ -37,7 +37,7 @@
 
 - [x] StoreKit 2 client product, entitlement, purchase and restore state。
 - [x] Account entitlement surface with localized expiration-date display。
-- [x] StoreKit-only subscription, one-time ten-minute first-connection experience and Firebase Analytics funnel events。
+- [x] StoreKit-only subscription, one-time ten-minute Protected-usage allowance and Firebase Analytics funnel events。
 - [ ] StoreKit sandbox verification。
 - [ ] Paywall purchase/restore/expiry device evidence。
 - [x] Publish Privacy/Terms and App Privacy labels；minimal Firebase funnel events are integrated。

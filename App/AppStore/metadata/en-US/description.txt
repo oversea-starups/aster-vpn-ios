@@ -2,7 +2,7 @@ Protect your connection on public Wi-Fi with a VPN you can start in one tap.
 
 Aster VPN keeps the core flow simple: choose a region, connect, and see whether your iPhone is protected. No account is required.
 
-New users can use a one-time 10-minute connected trial before subscribing.
+New users can use a one-time 10-minute allowance of protected VPN time before subscribing. The clock pauses when you disconnect.
 
 What you can do
 • Connect and disconnect from one clear screen
@@ -16,7 +16,7 @@ How it works
 2. Tap Connect and allow iOS to add the VPN configuration.
 3. Watch the status change to Protected, then disconnect whenever you are done.
 
-After the one-time trial, an active subscription is required to connect to VPN servers. Subscription prices and periods are shown before purchase. Subscriptions renew automatically unless canceled at least 24 hours before the current period ends. You can manage or cancel them in your Apple Account settings.
+After the one-time allowance is used, an active subscription is required to connect to VPN servers. Subscription prices and periods are shown before purchase. Subscriptions renew automatically unless canceled at least 24 hours before the current period ends. You can manage or cancel them in your Apple Account settings.
 
 While connected, the VPN service processes network addresses and data packets, plus the operational information needed to provide and secure the service. Read the in-app disclosure and Privacy Policy for details.
 

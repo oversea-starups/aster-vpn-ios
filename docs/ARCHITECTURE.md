@@ -73,7 +73,7 @@ flowchart LR
 
 ## Connection and Time Flow
 
-1. App restores StoreKit entitlement. Pro users can connect; free users can use the one-time ten-minute first-connection experience, then are guided to upgrade.
+1. App restores StoreKit entitlement. Pro users can connect; free users can use a one-time ten-minute protected-usage allowance. The allowance starts only after readiness, accumulates only while Protected, pauses on disconnect, and then guides the user to upgrade.
 2. The user chooses a location while disconnected. Catalog selection persists the exact validated current config.
 3. `VPNManager` requires a valid `tunnel_config.json`, then calls `startVPNTunnel()`.
 4. Extension builds structured sing-box JSON, starts Libbox and applies Apple network settings through the platform interface.
@@ -105,7 +105,7 @@ The App Store target is StoreKit-only. No third-party advertising SDK, consent f
 
 ## UI and entitlement presentation
 
-- The root is a three-tab shell: Home, Locations and Account. Home and Account use top-aligned, hidden-indicator scroll containers so content is not vertically compressed on smaller screens or larger accessibility text sizes; Locations remains scrollable because its length is data-driven and starts on the VIP plans tab.
+- The root is a three-tab shell: Home, VIP and Account. Home and Account use top-aligned, hidden-indicator scroll containers so content is not vertically compressed on smaller screens or larger accessibility text sizes; the VIP tab remains scrollable because its length is data-driven and starts on the VIP plans sub-tab. Home's location entry opens the same screen on the Locations sub-tab.
 - Home shows the circular power control, current region, and the Pro value/upgrade surface in that order. This keeps the frequent connection/location actions above the conversion surface while leaving the upgrade reason visible at the bottom of the same scroll path. Account is the single destination for subscription, restore and legal actions. `SubscriptionTier` separates capability tiers from billing cadence; only verified StoreKit products mapped in `AppConfiguration` are surfaced (currently monthly/yearly both map to Pro).
 - `VPNManager` does not load or save a `NETunnelProviderManager` during app initialization. The first load/save (and therefore Apple's VPN authorization prompt for a fresh install) is deferred until the user taps Connect; subsequent launches reuse the saved manager without presenting a launch-time prompt.
 - The Locations VIP tab loads verified StoreKit products on entry and renders localized names, descriptions, and prices directly; selecting a card is enough to prepare the purchase CTA, with no intermediate “view plans” action. Introductory trial copy is shown only when StoreKit reports eligibility for that product.

@@ -69,7 +69,7 @@
 
 ### StoreKit-only 首发与免费体验边界
 
-- **Current rule:** App Store target 不包含广告 SDK、UMP、rewarded balance、广告标识或追踪；免费用户仅获得一次性、封顶 10 分钟的首次连接体验，Pro 通过 StoreKit 订阅获得持续保护。
+- **Current rule:** App Store target 不包含广告 SDK、UMP、rewarded balance、广告标识或追踪；免费用户仅获得一次性、封顶 10 分钟的 Protected 使用时长，时长只在 VPN 受保护期间累计并在断开时暂停，Pro 通过 StoreKit 订阅获得持续保护。
 - **Trial rule:** 产品价格、展示价格和 introductory-offer eligibility 以 StoreKit/ASC 返回为准；不额外叠加每日签到、可累计免费时长或自定义试用余额。
 - **Measurement:** Firebase Analytics 仅记录最小化的启动、连接、paywall、购买/恢复事件，不记录浏览内容、目标 URL、DNS 或数据包载荷。
 - **Evidence:** `FreeExperienceStore.swift`；`SubscriptionStore.swift`；`AsterAnalytics.swift`；ASC App Privacy labels published 2026-09-01。
