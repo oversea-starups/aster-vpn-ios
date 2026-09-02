@@ -2,7 +2,7 @@
 
 Aster VPN 是一个面向美区 iPhone 用户的轻量 VPN。产品只围绕一个核心任务：**一键连接 VPN，在公共或不可信网络下提供隐私与安全访问**。
 
-> 当前阶段：StoreKit-only 订阅、内置 49 条线路目录、状态记录过滤、地区标签、Home/VIP/Account 三 Tab 与 VIP/Locations 子 Tab、圆形连接开关、Account 到期状态、一次性 10 分钟 Protected 使用时长、Firebase Analytics 与 Apple TUN/Libbox bridge 已实现。免费时长只在 VPN 处于 Protected 时累计，断开后暂停。当前严格 App/Extension、50-unit 和 9-UI target builds 全部通过；已有 45 unit 实际执行为 44 pass + 1 个明确 x86_64 架构 skip，新增解析/缓存/恢复用例尚未 runtime 执行，UI 修复后运行仍被本机 CoreSimulator query/screenshot/shutdown/clean-device migration 故障阻塞。用户报告旧线路真机连接成功，但该证据早于公共 fd bridge 变更；线路切换、生产配置、StoreKit sandbox、Libbox 来源和上线合规仍需证据。App Store Connect 1.0 当前仍为 `REJECTED`。详见 [PROJECT_STATUS.md](PROJECT_STATUS.md)。
+> 当前阶段：StoreKit-only 订阅、内置 48 条真实线路目录、Home/VIP/Account 三 Tab 与 VIP/Locations 子 Tab、圆形连接开关、Account 到期状态、一次性 10 分钟 Protected 使用时长、Firebase Analytics 与 Apple TUN/Libbox bridge 已实现。免费时长只在 VPN 处于 Protected 时累计，断开后暂停。当前严格 App/Extension、50-unit 和 9-UI target builds 全部通过；已有 45 unit 实际执行为 44 pass + 1 个明确 x86_64 架构 skip，新增解析/缓存/恢复用例尚未 runtime 执行，UI 修复后运行仍被本机 CoreSimulator query/screenshot/shutdown/clean-device migration 故障阻塞。用户报告旧线路真机连接成功，但该证据早于公共 fd bridge 变更；线路切换、生产配置、StoreKit sandbox、Libbox 来源和上线合规仍需证据。App Store Connect 1.0 当前仍为 `REJECTED`。详见 [PROJECT_STATUS.md](PROJECT_STATUS.md)。
 
 ## 产品边界
 

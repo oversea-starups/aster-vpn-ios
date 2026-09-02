@@ -13,9 +13,9 @@
 
 - [ ] **提供安全的生产 Locations endpoint**
   - **Decision (2026-09-01):** 首发版本先采用安装包内置的已审核 catalog，不依赖远端接口；待用户量和线路运维需求达到阈值后，再切换为可撤销的公开 HTTPS 更新。
-  - **Current:** 49 条经校验的 VLESS/VMess/AnyTLS 线路已从本机 Clash Meta 配置转换并随 App 打包；首次启动会写入 App Group，之后可选地接入 HTTPS 更新。Clash Meta AnyTLS password is handled in the dedicated credential field。
+  - **Current:** 48 条经校验的真实 VLESS/VMess/AnyTLS 线路已从本机 Clash Meta 配置转换并随 App 打包；`Home` 等状态/伪线路已移除，首选线路为已完成本机 AnyTLS + HTTPS 探测的 443 端口节点。首次启动会写入 App Group，之后可选地接入 HTTPS 更新。Clash Meta AnyTLS password is handled in the dedicated credential field。
   - **Constraint:** URL 会出现在 Info.plist，不能使用个人或 master provider subscription token。
-  - **Blocker:** 上线前仍需确认这 49 条线路的运营授权、轮换和撤销流程；代码层面已完成内置资源接入。
+  - **Blocker:** 上线前仍需确认这 48 条线路的运营授权、轮换和撤销流程；代码层面已完成内置资源接入。
   - **Outcome:** revocable、app-specific 的公开 bootstrap/control endpoint；服务端负责撤销、轮换和最小暴露。
   - **Done when:** 至少 3 个受控节点可刷新/选择；错误更新不覆盖缓存；token 轮换、节点删除、schema v1→v2 和重放场景通过。
   - **Specs:** SPEC-0058、SPEC-0059、SPEC-0062。

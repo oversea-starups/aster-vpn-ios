@@ -1,7 +1,30 @@
 {
   "schemaVersion": 1,
-  "updatedAt": 809932158.357329,
+  "updatedAt": 810012317.767323,
   "nodes": [
+    {
+      "id": "node-d0bd3d1cd0e298bef7eadd2f",
+      "displayName": "United States",
+      "configuration": {
+        "schemaVersion": 2,
+        "nodeID": "node-d0bd3d1cd0e298bef7eadd2f",
+        "serverAddress": "anyus01.huyan.world",
+        "serverPort": 443,
+        "uuid": "00000000-0000-0000-0000-000000000000",
+        "protocolKind": "anytls",
+        "transport": "tcp",
+        "tlsEnabled": true,
+        "serverName": "vip.tszjdzhengshu.com",
+        "websocketHeaders": {},
+        "tlsALPN": [
+          "h2",
+          "http/1.1"
+        ],
+        "vmessSecurity": "auto",
+        "vmessAlterID": 0,
+        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9"
+      }
+    },
     {
       "id": "node-18c65150539e844344e69581",
       "displayName": "Hong Kong",
@@ -48,29 +71,6 @@
         "nodeID": "node-3488eb1d7410c31a1483de94",
         "serverAddress": "any01hk.tingmo.world",
         "serverPort": 31033,
-        "uuid": "00000000-0000-0000-0000-000000000000",
-        "protocolKind": "anytls",
-        "transport": "tcp",
-        "tlsEnabled": true,
-        "serverName": "vip.tszjdzhengshu.com",
-        "websocketHeaders": {},
-        "tlsALPN": [
-          "h2",
-          "http/1.1"
-        ],
-        "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9"
-      }
-    },
-    {
-      "id": "node-d0bd3d1cd0e298bef7eadd2f",
-      "displayName": "United States",
-      "configuration": {
-        "schemaVersion": 2,
-        "nodeID": "node-d0bd3d1cd0e298bef7eadd2f",
-        "serverAddress": "anyus01.huyan.world",
-        "serverPort": 443,
         "uuid": "00000000-0000-0000-0000-000000000000",
         "protocolKind": "anytls",
         "transport": "tcp",
@@ -1042,25 +1042,6 @@
         "vmessSecurity": "auto",
         "vmessAlterID": 0,
         "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9"
-      }
-    },
-    {
-      "id": "node-b7498e6a28bae6c8677881b8",
-      "displayName": "Home",
-      "configuration": {
-        "schemaVersion": 2,
-        "nodeID": "node-b7498e6a28bae6c8677881b8",
-        "serverAddress": "603diya.donghui.tech",
-        "serverPort": 34638,
-        "uuid": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
-        "protocolKind": "vmess",
-        "transport": "tcp",
-        "tlsEnabled": false,
-        "websocketHeaders": {},
-        "tlsALPN": [],
-        "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": ""
       }
     }
   ]

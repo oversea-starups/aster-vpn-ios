@@ -1,20 +1,20 @@
 # Project Status
 
 > Last verified: 2026-09-02
-> Evidence cutoff: current workspace, Xcode 17F42 / iOS SDK 26.5, current strict-concurrency App/Extension/unit/UI target builds, release guards, local Clash Meta conversion evidence for 49 deduplicated nodes, and device logs from the latest connection regression investigation
+> Evidence cutoff: current workspace, Xcode 17F42 / iOS SDK 26.5, current strict-concurrency App/Extension/unit/UI target builds, release guards, local Clash Meta conversion evidence for 48 bundled nodes, and device logs from the latest connection regression investigation
 > Repository history: Git remote `https://github.com/oversea-starups/aster-vpn-ios.git`; local `main` is synchronized with `origin/main` after a checkpoint and merge commit
 
 ## Project Overview
 
 - **Purpose:** 面向美区 iPhone 用户提供可信的一键 VPN，并通过订阅形成主要商业闭环。
 - **Implemented slice:** 多线路订阅更新/选择、StoreKit paywall 与到期状态展示、Home/VIP/Account 三 Tab、圆形连接开关、Apple TUN/Libbox bridge、Account/Settings 法律入口和生产配置守卫；App Store 目标为 StoreKit-only，不包含第三方广告。
-- **Evidence state:** 当前 App target 已重新生成并严格编译、链接、打包成功，且已移除 GMA/UMP、广告标识和激励入口；最新 `AsterTests` 与 `AsterUITests` targets 也分别 exit 0。AnyTLS 解析、密码凭据和 TLS ALPN builder 测试已通过。Clash Meta 实际配置已转换为 49 个去重节点（VLESS 2、VMess 17、AnyTLS 30），状态记录被过滤，用户标签收敛为地区名，并逐节点完成 catalog 解码、校验与 sing-box JSON 构建。另已使用组织 Team `66B9A952T9`、Network Extension/App Group entitlement 和 Apple Development 身份完成 arm64 Debug device package；主 App、Packet Tunnel 与嵌入 frameworks 的 `codesign --verify --deep --strict` exit 0。由于 CoreDevice 直接写 App Group 根目录存在兼容性错误，已通过仅 Debug 编译的导入桥将经校验的 catalog/config 从 App 沙盒 Library 写入 App Group；暂存文件已在启动后清理，导入流程完成。UI runtime 仍被 CoreSimulator UI query、screenshot、shutdown 及 LaunchServices migration 阻断，不能标记为 UI runtime-passed。用户报告旧线路真机连接成功，但该记录早于 fd bridge 变更，且未提供设备/OS/网络/出口/DNS 记录，因此只记为历史 user-reported device evidence。
+- **Evidence state:** 当前 App target 已重新生成并严格编译、链接、打包成功，且已移除 GMA/UMP、广告标识和激励入口；最新 `AsterTests` 与 `AsterUITests` targets 也分别 exit 0。AnyTLS 解析、密码凭据和 TLS ALPN builder 测试已通过。Clash Meta 实际配置已转换为 48 个去重节点（VLESS 2、VMess 17、AnyTLS 29），移除了 `Home` 等状态/伪线路，首选线路调整为本机完成 AnyTLS + HTTPS 探测的 443 端口节点，并逐节点完成 catalog 解码、校验与 sing-box JSON 构建。另已使用组织 Team `66B9A952T9`、Network Extension/App Group entitlement 和 Apple Development 身份完成 arm64 Debug device package；主 App、Packet Tunnel 与嵌入 frameworks 的 `codesign --verify --deep --strict` exit 0。由于 CoreDevice 直接写 App Group 根目录存在兼容性错误，已通过仅 Debug 编译的导入桥将经校验的 catalog/config 从 App 沙盒 Library 写入 App Group；暂存文件已在启动后清理，导入流程完成。UI runtime 仍被 CoreSimulator UI query、screenshot、shutdown 及 LaunchServices migration 阻断，不能标记为 UI runtime-passed。用户报告旧线路真机连接成功，但该记录早于 fd bridge 变更，且未提供设备/OS/网络/出口/DNS 记录，因此只记为历史 user-reported device evidence。
 - **Release decision:** **Not release-ready.** StoreKit-only 已解决 AdMob 与 Apple VPN 审核规则的产品冲突；双语隐私政策/服务条款已发布，App Store Connect App Privacy 标签已发布并与当前 Firebase Analytics、无广告、无账号实现对齐；公共 fd bridge 的真机启动回归已完成，但生产节点治理、Release 签名、StoreKit sandbox、真实远端流量和完整设备矩阵仍未完成。
 - **ASC/ASO snapshot (2026-09-01):** 已通过 ASC 读取并更新 15 个 listing locales（`en-US`、`zh-Hans`、`zh-Hant`、`ja`、`ko`、`de-DE`、`fr-FR`、`es-MX`、`it`、`pt-BR`、`nl-NL`、`pl`、`ru`、`tr`、`vi`）的 Name/Subtitle/Keywords/Promotional Text/Description；当前版本 `1.0` 仍为 `REJECTED`。销售地区 v2 读取显示 `CHN` 已为 `available=false`、`USA` 为 `available=true`，未重复写入其他地区。鉴于产品尚未上线，美国区订阅价格已从月 `$4.99`/年 `$39.99` 调整为月 `$8.99`/年 `$59.99` 并完成 price-point readback；`en-US` 的 3 张 1320×2868 截图已上传并回读为 `COMPLETE`。素材与限制见 `App/AppStore/creative/README.md`，定价建议与多语言扩展方案见 `docs/00_agentic/ASO-2026-09.md`。
 - **Firebase privacy consistency note (2026-09-01):** 已接入 Firebase iOS SDK 12.18.0 的 `FirebaseCore` 与 `FirebaseAnalyticsCore`，配置文件随 App 包分发；未接入广告 SDK，也不启用 IDFA 收集。ASC Privacy answers 已按该数据收集事实发布，隐私政策和 Apple VPN Guideline 5.4 需继续保持一致，不能恢复“无第三方分析 SDK”的旧承诺。
 - **Current VPN correction (supersedes the earlier installed-package state):** 用户点击连接后的设备日志已把失败定位为三层 Libbox 兼容问题：空 override options 导致 Go panic，旧 archive 未启用 uTLS，以及精简构建移除了 `with_clash_api`，导致 `startOrReloadService` 创建内部 clash-server 失败。当前已用 pinned upstream source 重建 `with_gvisor,with_utls,with_clash_api,ios,with_low_memory` Libbox（Clash API 仅作为内部启动依赖，不对外暴露），加入 config preflight 和非空 options，并将 Provider 启动工作移出 XPC 主线程。历史可用实现还把平台对象同时作为内部 command-server handler 与 platform interface；当前修复已恢复该连接方式，并清理短路径下的 stale `command.sock`。最新 gVisor-enabled 包已在 Thomson’s iPhone 上启动 AnyTLS/VMess 配置，Libbox service 与 iOS `NESMVPNSessionStateRunning` 均已出现；真实远端握手、DNS/HTTPS/出口与持续连接稳定性仍待验证。
 - **Current connection UX/reliability correction (2026-09-01):** 连接图标已改为静态状态图标，不再使用无限循环旋转；连接尝试增加 25 秒超时并在失败后回到可重试状态。连接前会幂等修复 App Group 中缺失/中断的 `tunnel_config.json`，首次无选中配置时优先选择内置 AnyTLS 线路（保留 VMess/VLESS 供手动选择），并只复用匹配当前 Packet Tunnel bundle ID 的系统 VPN manager。源码与 arm64 device build 均通过；17:37 的安装/启动记录属于上一轮回归，最新 gVisor-enabled 包的设备启动证据见下方 2026-09-02 条目；VPN 远端握手、DNS/HTTPS/出口仍待完成。
-- **Traffic path correction (2026-09-01):** 对比旧版可用的 sing-box 配置，补回 `remote-dns`、53 端口 `hijack-dns`、`prefer_ipv4`、IPv6 TUN 地址、gVisor stack 和默认接口自动探测。设备日志曾报告 iOS 对 MTU 9000 返回 `Invalid argument`，因此当前 builder 使用平台兼容的 MTU 1500；真实出口仍需用户在修复包上重连后验证。
+- **Traffic path correction (2026-09-01):** 对比旧版可用的 sing-box 配置，补回 `remote-dns`、53 端口 `hijack-dns`、`prefer_ipv4`、IPv6 TUN 地址、gVisor stack 和默认接口自动探测。设备日志曾报告 iOS 对 MTU 9000 返回 `Invalid argument`，因此当前 builder 使用平台兼容的 MTU 1500；本轮将首选线路切换为已完成本机 AnyTLS + HTTPS 探测的 443 端口节点，真实出口仍需用户在修复包上重连后验证。
 - **Free-access status correction (2026-09-02):** 非 Pro 用户始终保留免费体验状态卡；卡片按“可用倒计时 / 尚未使用 / 已用完”显示真实数字和状态。倒计时只累计 VPN 处于 Protected 的使用时间，断开后暂停；不再因一次性体验耗尽而整块消失，也不伪造广告奖励。
 - **StoreKit product loading correction (2026-09-01):** ASC 实际订阅 ID 已核对为 `com.astervpn.Aster.premium.monthly` 与 `com.astervpn.Aster.premium.annual`；AppConfiguration 已从旧的、不存在的 `com.aster.vpn.*` ID 切换，真机 Debug 包已重编译、安装并启动。Paywall 的产品 readback 仍需在真机 Apple ID/Sandbox 中完成一次。
 - **StoreKit diagnostics (2026-09-01):** Debug builds now log the requested/returned product IDs and non-sensitive StoreKit error domain/code, so an empty Paywall can be distinguished from an ASC/Sandbox availability issue without exposing credentials or changing release copy.
@@ -28,7 +28,7 @@
 
 - **Symptom:** 真机更换/重装 Debug 包后，Locations 为空，用户误以为内置线路被删除。
 - **Root cause:** 旧 Debug 导入桥是一次性 bootstrap；本次 replacement/fresh-install 路径下 App Group 中已没有 catalog，同时没有重新把已校验的 Clash Meta catalog/config 暂存到 App 沙盒，因此 App 只能看到空的持久化目录。不是地区分组或状态记录过滤逻辑删除了线路。
-- **Mitigation:** `node_catalog.json` 现在使用原子写入和 `node_catalog.bak.json` last-known-good 备份；首装时从 App Bundle 的 49 条审核线路初始化 App Group，损坏/缺失时显示可恢复提示。未来远端刷新必须使用可撤销 endpoint，不得依赖个人/master 订阅凭据。
+- **Mitigation:** `node_catalog.json` 现在使用原子写入和 `node_catalog.bak.json` last-known-good 备份；首装时从 App Bundle 的 48 条真实审核线路初始化 App Group，损坏/缺失时显示可恢复提示。未来远端刷新必须使用可撤销 endpoint，不得依赖个人/master 订阅凭据。
 - **Evidence:** `NodeCatalogPersistence` recovery tests compile with the current test target; the current Thomson iPhone package was re-bootstrapped from the validated local catalog/config. VPN handshake and manual line switching remain unverified.
 
 ### 2026-09-01 VPN startup incident
@@ -37,6 +37,12 @@
 - **Observed failure 2:** 改为非空 options 并加入预检后，`LibboxCheckConfig` 明确返回 `uTLS is not included in this build`；真实线路包含 TLS fingerprint，旧 archive 只有 `ios` tag。
 - **Implemented correction:** 启动前 `LibboxCheckConfig`、非空 `LibboxOverrideOptions`、pinned uTLS/low-memory Libbox、更新后的多 DNS iterator 和可选 platform hooks；日志只保留生命周期阶段和脱敏配置。
 - **Evidence:** iPhoneOS App build 与 arm64 App/unit/UI `build-for-testing` exit 0；source/toolchain/tags/checksum 见 `docs/00_agentic/LIBBOX_PROVENANCE.md`；48 MB signed Debug package `codesign --verify --deep --strict` exit 0。CoreDevice tunnel 当前不可用，因此安装、连接、DNS/HTTPS/出口和资源占用仍未验证。
+
+## Bundled location correction (2026-09-02)
+
+- 内置 `node_catalog.json` 已移除 `Home` 等状态/伪线路，保留 48 条真实 VLESS/VMess/AnyTLS 节点。
+- 首选线路调整为本机完成 AnyTLS + HTTPS 探测的 443 端口节点。
+- 设备 App Group 已重新导入 48 条目录和对应的 AnyTLS 443 配置；暂存文件已由 Debug 导入桥消费。
 
 ## Implemented and Build-Verified
 
@@ -89,7 +95,7 @@
 | Current strict App target build | Exit 0; latest Aster, PacketTunnel, AppIcon/resources, PrivacyInfo and GMA/UMP compiled/linked; embedded Extension validated | Current build/link/package-verified |
 | Privacy disclosure UX/copy slice | Pre-use disclosure changed to large-only presentation, user-facing copy, and `Continue`; Home remains focused on connection while legal links stay in Account/Paywall | Simulator App build-verified; current UI runtime remains blocked by CoreSimulator infrastructure |
 | Signed arm64 Debug device package | Team `66B9A952T9`; App/PacketTunnel Network Extension + App Group entitlement packaged; nested strict codesign verification exit 0; official Google test ad IDs confirmed | Signed/build/install/launch verified; process remained present on Thomson’s iPhone |
-| Clash Meta location conversion | Actual local Clash Meta profile converted to 49 deduplicated VLESS/VMess/AnyTLS nodes; catalog/config decoded and every node built as sing-box JSON | Local conversion/parser/builder verified; validated device bootstrap completed; live tunnel handshake pending |
+| Clash Meta location conversion | Actual local Clash Meta profile converted to 48 bundled VLESS/VMess/AnyTLS nodes after removing `Home`/status records; catalog/config decoded and every node built as sing-box JSON | Local conversion/parser/builder verified; validated device bootstrap completed; live tunnel handshake pending |
 | Device location state | Generated catalog/config were transferred to the app sandbox, validated by the app, written to App Group, and staging files were removed after launch | Device bootstrap verified without exposing credentials; line selection and network runtime pending |
 | Current XCTest target builds | `AsterTests` and `AsterUITests` each exit 0 against the latest App module | Current test-bundle compile/link-verified |
 | Reproducible quality gate | `scripts/run_quality_gate.sh`; rejects missing destination, inventory drift, shipping markers, SSV/audit failure and any XCTest skip/failure | Script/self-test verified; healthy arm64 CI run pending |
@@ -107,8 +113,8 @@ Earlier iOS 18.x attempts failed before any case started. The later dedicated iO
 
 1. **StoreKit/ASC production setup.** The App Store binary is StoreKit-only and no longer contains GMA/UMP/AdMob identifiers. Online products are configured, but sandbox purchase/pending/cancel/restore/expiry/refund and final privacy answers still need device evidence. See [Apple App Review Guidelines](https://developer.apple.com/app-store/review/guidelines/).
 2. **Public fd/uTLS bridge traffic regression.** Source access to `NEPacketTunnelFlow` private implementation has been removed. Device logs isolated nil options, missing uTLS and missing gVisor before `openTun`; all are corrected in a pinned gVisor/uTLS-enabled build whose headers/symbols and App/test builds pass. The corrected signed package is installed and reaches `Libbox service started` plus iOS `NESMVPNSessionStateRunning` on the paired phone. The remaining evidence is remote handshake, DNS/HTTPS/exit, lifecycle and Extension resource behavior.
-3. **Location source governance.** 首发使用 App Bundle 内置的 49 条已审核线路，不依赖 `ASTER_NODE_SUBSCRIPTION_URL`。上线前仍需完成线路授权、轮换和撤销流程；未来启用远端更新时使用可撤销、应用专用的公开 HTTPS endpoint，绝不放入个人/master token。
-4. **Device runtime and release signing.** Organization Team、Network Extension/App Group capability、development profiles、最新 Debug nested signing、installation and launch on the registered Thomson’s iPhone、以及 49 条线路的 App Group bootstrap 均已验证；最新包的 Packet Tunnel bootstrap 与 iOS connected/Running 状态也已确认。VPN permission、远端握手、location switching、DNS/HTTPS/出口、持续稳定性和完整设备矩阵仍未完成。Release Archive/TestFlight signing is also still pending.
+3. **Location source governance.** 首发使用 App Bundle 内置的 48 条已审核真实线路，不依赖 `ASTER_NODE_SUBSCRIPTION_URL`。上线前仍需完成线路授权、轮换和撤销流程；未来启用远端更新时使用可撤销、应用专用的公开 HTTPS endpoint，绝不放入个人/master token。
+4. **Device runtime and release signing.** Organization Team、Network Extension/App Group capability、development profiles、最新 Debug nested signing、installation and launch on the registered Thomson’s iPhone、以及 48 条线路的 App Group bootstrap 均已验证；最新包的 Packet Tunnel bootstrap 与 iOS connected/Running 状态也已确认。VPN permission、远端握手、location switching、DNS/HTTPS/出口、持续稳定性和完整设备矩阵仍未完成。Release Archive/TestFlight signing is also still pending.
 5. **Device QA.** Record Wi-Fi/cellular, DNS and exit IP, background/foreground, network switch, balance exhaustion, Pro no-charge, line switching, cache fallback and resource peak results on supported real iPhones.
 6. **StoreKit production.** App Store Connect monthly/yearly products, subscription group, pricing/trial and sandbox purchase/pending/cancel/restore/expiry/refund remain unverified.
 7. **Deferred backend cleanup.** `Backend/AdMobSSV` is no longer part of the App Store target; Product/Legal must confirm whether to archive/delete it and revoke any unused deployment credentials.
