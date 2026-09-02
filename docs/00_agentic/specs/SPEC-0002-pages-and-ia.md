@@ -2,7 +2,7 @@
 
 ## 页面清单（MVP）
 1. Home Tab（连接页）
-2. Locations Tab（VIP 套餐 / 地区选择）
+2. VIP Tab（VIP 套餐 / 地区选择）
 3. Account Tab（订阅、恢复购买、隐私与条款）
 4. Paywall（订阅 sheet）
 

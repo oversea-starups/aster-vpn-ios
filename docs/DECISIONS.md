@@ -24,6 +24,14 @@
 | ADR-0016 | Packet Tunnel 只使用公开 Libbox fd resolver | 2026-08-28 | Active | KVC access to Packet Flow implementation details |
 | ADR-0018 | StoreKit-only 首发与连接优先体验 | 2026-09-01 | Active | ADR-0007, ADR-0014 |
 | ADR-0019 | App Privacy 标签与 Firebase Analytics 对齐 | 2026-09-01 | Active | None |
+| ADR-0020 | VIP 子 Tab 复用 Paywall 套餐呈现并按入口设置默认页 | 2026-09-02 | Active | None |
+
+## ADR-0020: VIP 子 Tab 复用 Paywall 套餐呈现并按入口设置默认页
+
+- **Decision:** 底部第二个 Tab 文案固定为 `VIP`；进入该 Tab 时默认选中 `VIP` 子 Tab。首页当前地区入口打开同一页面时默认选中 `Locations`。VIP 套餐卡片和购买按钮与首页 Paywall sheet 复用同一 SwiftUI 组件和按钮文案。
+- **Reason:** 统一购买体验、避免 CTA 文案分叉，并让不同入口保留清晰的用户意图。
+- **Impact:** `LocationsView` 接收入口初始子 Tab；底部 Tab 重新选择时重置到 VIP；StoreKit eligibility 决定试用文案，未选择套餐时显示选择计划，其他情况显示 `Unlock unlimited protection`。
+- **Evidence:** `Aster/Sources/Aster/App/AsterTabView.swift`; `Aster/Sources/Aster/Features/Connection/Views/ConnectionView.swift`; `Aster/Sources/Aster/Features/Locations/Views/LocationsView.swift`; `Aster/Sources/Aster/Features/Subscription/Views/SubscriptionPlanComponents.swift`; `docs/00_agentic/specs/SPEC-0002-pages-and-ia.md`。
 
 ## ADR-0001: 单产品单核心任务
 

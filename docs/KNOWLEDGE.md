@@ -1,9 +1,15 @@
 # Project Knowledge
 
-> Last verified: 2026-09-01  
+> Last verified: 2026-09-02
 > 稳定知识放这里；进度见 `PROJECT_STATUS.md`，任务见 `TODO.md`，理由见 `DECISIONS.md`。
 
 ## Technical Knowledge
+
+### Shared subscription presentation
+
+- **Pattern:** Keep `SubscriptionPlanCard` and `SubscriptionPurchaseButton` as the single presentation/CTA implementation used by both the Paywall sheet and the VIP sub-tab.
+- **Rule:** Button copy must remain outcome-led and StoreKit-aware: choose a plan before selection, an eligible introductory-trial label when StoreKit reports eligibility, and `Unlock unlimited protection` otherwise.
+- **Evidence:** `Aster/Sources/Aster/Features/Subscription/Views/SubscriptionPlanComponents.swift`; `PaywallView.swift`; `LocationsView.swift`.
 
 ### App 与 Extension 的配置契约
 
