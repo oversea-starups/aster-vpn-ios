@@ -114,6 +114,7 @@ Next action:
 - App Group、provider bundle ID、entitlements 和 Developer Portal 完全一致。
 - 输入配置经过 schema/version/范围校验；写入原子化；错误可诊断。
 - UI 状态不依赖显示字符串；系统状态与流量可用性分开。
+- 启用 `includeAllNetworks`/`enforceRoutes` 的全隧道必须在 App 调用 `startVPNTunnel` 前解析代理 hostname；把数值 IPv4/IPv6 写入 App Group，Extension 只用数值地址拨号并保留原 hostname 作为 TLS/SNI，且只用数值地址生成代理端点 `/32`/`/128` excluded routes。`openTun` 阶段禁止再次解析代理 hostname；系统 connected 后必须用匿名 HTTPS data-plane probe 验证真实流量，成功才进入 Protected。
 - 覆盖权限拒绝、节点不可达、DNS 失败、超时、网络切换、前后台、重连和用户断开。
 - 在目标设备上记录 Extension 内存/CPU，不依赖固定预算传言。
 - 日志只包含生命周期、非敏感错误码和相关 ID；所有凭据脱敏。
