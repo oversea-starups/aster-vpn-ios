@@ -49,7 +49,7 @@ enum AsterStorePurchaseError: Error, LocalizedError {
         case .backendAccountMismatch:
             return "服务器订阅信息与当前账号不一致，请重新登录。"
         case .transactionAccountMismatch:
-            return "该 App Store 订阅已绑定到另一个 Aster VPN 账号。"
+            return "该 App Store 订阅已绑定到另一个 ClashX VPN 账号。"
         case .unverifiedTransaction:
             return "无法验证 App Store 交易，未同步订阅权益。"
         case .inactiveAccount:
@@ -60,7 +60,7 @@ enum AsterStorePurchaseError: Error, LocalizedError {
             if successful > 0 {
                 return "已恢复 \(successful) 笔订阅，但仍有交易未能同步，请稍后重试。"
             }
-            return "没有可恢复的订阅，或订阅属于其他 Aster VPN 账号。"
+            return "没有可恢复的订阅，或订阅属于其他 ClashX VPN 账号。"
         }
     }
 }

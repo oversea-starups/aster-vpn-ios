@@ -1,6 +1,6 @@
 # TODO
 
-> Last reviewed: 2026-09-02
+> Last reviewed: 2026-09-04
 > 只列未完成工作；当前 App Store 目标为 StoreKit-only，不包含第三方广告；Locations catalog、schema v2、Home/VIP/Account 三 Tab、VIP/Locations 子 Tab、圆形连接开关、Account 法律入口和 entitlement 修复见 `PROJECT_STATUS.md`。
 
 ## Critical Release Decisions
@@ -13,18 +13,25 @@
 
 - [ ] **提供安全的生产 Locations endpoint**
   - **Decision (2026-09-01):** 首发版本先采用安装包内置的已审核 catalog，不依赖远端接口；待用户量和线路运维需求达到阈值后，再切换为可撤销的公开 HTTPS 更新。
-  - **Current:** 48 条经校验的真实 VLESS/VMess/AnyTLS 线路已从本机 Clash Meta 配置转换并随 App 打包；`Home` 等状态/伪线路已移除，首选线路为已完成本机 AnyTLS + HTTPS 探测的 443 端口节点。首次启动会写入 App Group，之后可选地接入 HTTPS 更新。Clash Meta AnyTLS password is handled in the dedicated credential field。
+  - **Current:** 当前内置 37 条经校验的真实线路（AnyTLS 32、VLESS Reality 2、VMess 3）已从最新订阅快照转换并随 App 打包；`Home`、流量/到期说明和客户端升级提示等状态/伪线路已移除。Reality 的 `insecure=1` 只在 Reality 配置中保留为显式兼容字段，普通 TLS 仍拒绝该标志；AnyTLS password 使用专用凭据字段。首选线路是已完成本机 AnyTLS + HTTPS 探测的 443 端口节点。
   - **Constraint:** URL 会出现在 Info.plist，不能使用个人或 master provider subscription token。
-  - **Blocker:** 上线前仍需确认这 48 条线路的运营授权、轮换和撤销流程；代码层面已完成内置资源接入。
+  - **Blocker:** 上线前仍需确认这 37 条线路的运营授权、轮换和撤销流程；代码层面已完成内置资源接入。
   - **Outcome:** revocable、app-specific 的公开 bootstrap/control endpoint；服务端负责撤销、轮换和最小暴露。
   - **Done when:** 至少 3 个受控节点可刷新/选择；错误更新不覆盖缓存；token 轮换、节点删除、schema v1→v2 和重放场景通过。
   - **Specs:** SPEC-0058、SPEC-0059、SPEC-0062。
 
 - [ ] **完成签名真机连接与线路切换矩阵**
-  - **Current:** 真机日志已定位并修复三层兼容问题：`startOrReloadService(nil options)` 的 Go panic、旧 archive 缺少 uTLS，以及精简构建缺少 Libbox 内部所需的 `with_clash_api`。已加入 preflight/非空 options、以 pinned commit 重建 `with_gvisor,with_utls,with_clash_api,ios,with_low_memory` Libbox，并将 Provider 启动工作移出 XPC 主线程；连接图标改为静态状态图标，连接超时收敛到可重试状态，连接前幂等修复 App Group 配置，首次默认优先 AnyTLS 线路。历史可用实现把平台对象同时作为 command-server handler 与 platform interface，当前已恢复；运行目录改为短路径并清理 stale socket。另补回旧版已验证的 remote DNS、53 端口 hijack、IPv6 TUN、MTU/gVisor 和默认接口自动探测；MTU 已从设备报错的 9000 收敛为 1500。2026-09-02 又发现同步 Libbox 桥接在首个默认接口回调前释放就绪信号，可能导致扩展停在 `Default interface monitor requested` 并被系统判为 `Plugin failed`；现改为先 signal 再进入 Libbox listener，并从 detached Swift task 等待 NetworkExtension 网络设置回调。随后日志明确暴露旧二进制缺少 gVisor，已完成包含 gVisor 的替换构建；最新包含 VIP Tab/子 Tab 调整的 Debug 包已安装并启动到 Thomson’s iPhone。真实远端握手、DNS/HTTPS 出口、免费时长在新包上的行为与多线路矩阵仍待继续验证。
-  - **Dependency:** 在 Thomson’s iPhone 完成 VPN 系统权限与真实线路交互；多线路测试还需要安全的生产前 endpoint。
+  - **DNS follow-up (2026-09-03):** builder 现使用经 `proxy` detour 的 TCP `1.1.1.1:53`，并继续由 53 端口 `hijack-dns` 接管应用解析，避免 TCP-only 线路依赖 UDP 直连 DNS 时出现“系统 connected 但网页无法打开”。DNS 修复包已完成完整 profile entitlements 重签、严格校验、真机安装和启动；用户随后确认最新全隧道包可正常使用，但独立出口/DNS 和多线路矩阵仍待设备现场回归。
+  - **Full-tunnel follow-up (2026-09-04):** App 的 `NETunnelProviderProtocol` 现明确启用 `includeAllNetworks`、关闭 `excludeLocalNetworks` 并启用 `enforceRoutes`；加载旧 manager 时自动迁移保存，代理端点仍通过 `/32`/`/128` excluded routes 保持物理链路。已使用全新 DerivedData 完成 arm64 `build-for-testing`，重新组装并严格签名真机包（排除测试插件/框架），CoreDevice 安装和启动均成功；用户随后确认当前包已可正常使用。独立 DNS 泄漏、出口 IP、网络切换和多线路矩阵仍需补齐。
+  - **Full-tunnel bootstrap correction (2026-09-04):** 真机 logarchive 进一步确认：`includeAllNetworks` 在扩展启动前已启用独占 NECP 策略，PacketTunnel 内对线路 hostname 的 `getaddrinfo` 因此失败，随后 HTTPS probe 被 `Path was denied by NECP policy` 拒绝。现由主 App 在 `startVPNTunnel` 前预解析线路的 IPv4/IPv6 地址并写入 App Group；sing-box 用数值 IP 拨号但保留原 hostname 作为 TLS/SNI，PacketTunnel 仅消费数值地址生成 `/32`/`/128` 排除路由，不再在全隧道启动阶段做 DNS。新增配置校验与 builder 用例，arm64 `build-for-testing` 已通过；修复包已安装到 Thomson’s iPhone，日志确认预解析地址数量 1、IPv4 排除路由 1、HTTPS data-plane probe 返回 200，用户随后确认正常使用。独立 DNS/出口和多线路仍是 QA 记录项。
+  - **Current:** 真机日志已定位并修复三层兼容问题：`startOrReloadService(nil options)` 的 Go panic、旧 archive 缺少 uTLS，以及精简构建缺少 Libbox 内部所需的 `with_clash_api`。已加入 preflight/非空 options、以 pinned commit 重建 `with_gvisor,with_utls,with_clash_api,ios,with_low_memory` Libbox，并将 Provider 启动工作移出 XPC 主线程；连接图标改为静态状态图标，连接超时收敛到可重试状态，连接前幂等修复 App Group 配置，首次默认优先 AnyTLS 线路。历史可用实现把平台对象同时作为 command-server handler 与 platform interface，当前已恢复；运行目录改为短路径并清理 stale socket。另补回旧版已验证的 remote DNS、53 端口 hijack、IPv6 TUN、MTU/gVisor 和默认接口自动探测；MTU 已从设备报错的 9000 收敛为 1500。现已加入代理端点 DNS 解析后的 /32、/128 excluded routes，避免全隧道路由递归回代理自身；App 在系统 `.connected` 后还会发起匿名 HTTPS data-plane probe，只有真实 HTTP 2xx/3xx 成功才进入 Protected。针对 Safari 目标站点在 TCP 已建立后 TLS ServerHello 缺失，TUN route 还显式拒绝 `protocol=quic` 并启用 `tls_record_fragment`。PacketTunnel 的 Libbox debug callback 现在仅输出 DNS/dial/TLS/route/error 类别和长度，不输出原始消息。Reality/AnyTLS/VMess 的配置字段与任意合法端口均由协议专属 builder 保留。用户已确认最新包可正常使用；独立目标网页、出口/DNS、后台恢复、网络切换和多线路矩阵仍待真机 QA 记录。
+  - **Dependency:** 在 Thomson’s iPhone 完成 VPN 系统权限与真实线路交互；多线路测试还需要安全的生产前 endpoint。当前 TCP-only 出口的 route 已拒绝 UDP/443，修复 Safari/HTTP3 长时间等待问题后仍需现场回归。
   - **Done when:** 先在用户原设备/线路回归公共 fd resolver；再用两台支持版本 iPhone 覆盖 Wi-Fi/蜂窝、连接/断开、DNS/出口变化、三条线路、后台/前台、网络切换、缓存回退、余额耗尽、Pro 不扣时；日志不含凭据。
   - **Specs:** SPEC-0001、SPEC-0054、SPEC-0056、SPEC-0060、SPEC-0062。
+
+- [ ] **完成线路协议级健康检查**
+  - **Current:** Locations 已加入每条节点的并发 endpoint preflight（TLS 节点完成 server hello，明文节点完成 TCP），只展示当前端点可达的线路；用户只看到序号和 location，协议与端口不进入 UI。Mac 端按 App 同构 sing-box 参数完成了样本级真实 HTTPS 验证：AnyTLS/VLESS Reality 成功，当前三条 VMess 返回连接拒绝。该层仍不宣称 Thomson iPhone 上的协议认证或真实出口成功，选中线路仍必须通过 PacketTunnel 的匿名 HTTPS data-plane probe。
+  - **Done when:** 在真机受控网络上对 AnyTLS、VLESS Reality、VMess 分别完成协议握手、DNS/出口和目标网页回归；将通过/失败按节点 ID、协议、端口和时间记录，不记录凭据或流量内容。
 
 - [ ] **在健康 CI/Simulator 执行完整 XCTest**
   - **Current:** 最新 App、50 unit target 与 9 UI target 均严格 compile/link exit 0；已有 45 unit 执行为 44 pass、1 个明确的 x86_64 Libbox/Go signal-stack skip，0 failure/0 unexpected；新增状态记录/地区标签/缓存迁移/恢复用例尚未 runtime 执行。UI 首轮发现 disclosure contrast 与状态注入问题并已修复，suite 已扩展 Locations、Account、圆形连接开关与最大 Dynamic Type；修复后 CoreSimulator UI query、screenshot、shutdown 及全新 iOS 18.5 设备 migration 同时异常，尚无当前 UI pass evidence。
@@ -47,9 +54,9 @@
   - **Owner:** iOS/Product/Localization
 
 - [ ] **按 ASO 数据迭代名称、关键词与价格**
-  - **Current:** 2026-09-01 已写入 3 个现有 ASC locales 的用户意图文案；没有搜索量/排名数据，因此排序是可验证假设。美国区价格已设置为月 `$8.99`、年 `$59.99`。
+  - **Current:** 2026-09-01 已写入 3 个现有 ASC locales 的用户意图文案；没有搜索量/排名数据，因此排序是可验证假设。2026-09-02 已为 175 个销售地区提交月 `$12.99`、年 `$79.99` 的新用户价格计划；旧价格对现有订阅者保留。
   - **Plan:** 先建立 7–14 天转化基线，再一次只测试一个变量；后续价格变更需结合首次连接率、paywall→购买、退款和续订数据。
-  - **Evidence/Spec:** `docs/00_agentic/ASO-2026-09.md`；App Store Connect readback 2026-09-01。
+  - **Evidence/Spec:** `docs/00_agentic/ASO-2026-09.md`；App Store Connect readback 2026-09-02。
 
 - [ ] **归档旧 AdMob SSV（仅在确认无内部实验依赖后）**
   - **Current:** verifier 本地 12/12、audit 0、container smoke 通过。
@@ -68,8 +75,8 @@
   - **Done when:** 先建立 1 周基线，再一次只改一个变量；以首次 ready 连接率、首次连接耗时、paywall→购买率、D1/D7 留存和退款率共同评估，不只看点击率。
 
 - [ ] **补真实 traffic-ready 证据**
-  - **Current:** Provider readiness 只证明 Libbox 启动与 Apple network settings 应用，不证明远端握手、DNS 或 HTTPS 出口。
-  - **Done when:** 非敏感 DNS/HTTPS/exit health contract 可区分“系统 connected”和“可用保护”；失败不扣时，UI 可恢复。
+  - **Current:** Provider readiness 仍只证明 Libbox 启动与 Apple network settings 应用；新增的 App-side anonymous HTTPS probe 会在 connected 后验证真实数据面，失败时保持 verifying 并断开，不将失败连接计入 Protected/体验时长。最新包已通过该探针且用户确认正常使用；仍需在受控真机矩阵中独立记录 DNS 泄漏、出口 IP、断网/恢复与持续连接。
+  - **Done when:** 在真机上记录 probe 成功、DNS 无泄漏、出口 IP 改变、断网/恢复和至少三条线路的结果；失败不扣时，UI 可恢复。
 
 - [ ] **完成隐私、凭据和 Archive privacy report**
   - **Current:** Keychain/App Group/File Protection 边界已实现；Privacy Policy/Terms 通过 Account/Settings 和 Paywall 法律区域访问；ASC App Privacy answers 已发布。当前 App-owned manifest 与 StoreKit-only 二进制需在最终 Archive 中复核。

@@ -54,7 +54,16 @@ struct PaywallView: View {
                                 eligibleProductIDs: store.freeTrialEligibleProductIDs,
                                 action: {
                                     guard let product = selectedProduct else { return }
-                                    Task { _ = await store.purchase(product) }
+                                    // StoreKit publishes the new entitlement while UIKit is
+                                    // still completing the purchase sheet transition. Dismiss
+                                    // on the next run-loop turn instead of from an entitlement
+                                    // observer, which avoids a navigation-bar assertion/crash.
+                                    Task { @MainActor in
+                                        guard await store.purchase(product) else { return }
+                                        try? await Task.sleep(for: .milliseconds(250))
+                                        guard !Task.isCancelled else { return }
+                                        dismiss()
+                                    }
                                 }
                             )
                         }
@@ -84,9 +93,6 @@ struct PaywallView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Close") { dismiss() }
                 }
-            }
-            .onChange(of: store.isPro) { isPro in
-                if isPro { dismiss() }
             }
             .onChange(of: store.products.map(\.id)) { productIDs in
                 if !productIDs.contains(selectedProductID), let first = productIDs.first {

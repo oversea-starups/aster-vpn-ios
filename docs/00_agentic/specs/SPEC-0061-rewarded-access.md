@@ -14,8 +14,8 @@
 - 未加载、展示失败、提前关闭或重复回调不得发放。
 - 余额最多 120 分钟；不足以容纳完整 10 分钟时不得展示广告。
 - 奖励账本使用 this-device-only Keychain 持久化并一次性迁移旧 UserDefaults；存储不可用时不得展示广告或重置配额。
-- 只有 VPN 系统状态进入 connected 且 Packet Tunnel 通过版本化 IPC 返回 `dataPlaneReady=true` 后才开始扣时；断开、连接中、Provider 未 ready 和 Pro 状态不扣时。
-- connected 后最多探测 Provider ready 5 秒；无法确认时必须提示并断开，不能显示 Protected 或继续扣时。
+- 只有 VPN 系统状态进入 connected、Packet Tunnel 通过版本化 IPC 返回 provider-local readiness，且 App 的匿名 HTTPS data-plane probe 成功后才开始扣时；断开、连接中、Provider 未 ready、探测失败和 Pro 状态不扣时。
+- connected 后最多等待 Provider ready，再执行有限次数的真实 HTTPS data-plane probe；任一阶段无法确认时必须提示并断开，不能显示 Protected 或继续扣时。
 
 ## Frequency and abuse controls
 

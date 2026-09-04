@@ -33,6 +33,13 @@
 - **Impact:** `LocationsView` 接收入口初始子 Tab；底部 Tab 重新选择时重置到 VIP；StoreKit eligibility 决定试用文案，未选择套餐时显示选择计划，其他情况显示 `Unlock unlimited protection`。
 - **Evidence:** `Aster/Sources/Aster/App/AsterTabView.swift`; `Aster/Sources/Aster/Features/Connection/Views/ConnectionView.swift`; `Aster/Sources/Aster/Features/Locations/Views/LocationsView.swift`; `Aster/Sources/Aster/Features/Subscription/Views/SubscriptionPlanComponents.swift`; `docs/00_agentic/specs/SPEC-0002-pages-and-ia.md`。
 
+## ADR-0021: StoreKit 购买完成后延迟 Paywall dismiss
+
+- **Decision:** Paywall 不再监听 `isPro` 并在 entitlement 发布的同一更新帧调用 dismiss；购买函数确认 verified Pro 后，等待一个短事务再执行一次 dismiss。VIP 子 Tab 不通过视图 identity 重建 NavigationStack，而是用 reset token 更新子 Tab 状态。
+- **Reason:** 真机崩溃报告为 UIKit `UINavigationBar` 布局阶段的 `SIGABRT`，时间点与购买成功后的 StoreKit entitlement 更新、sheet 关闭和 Tab/Navigaton transition 重合。把状态更新和 UIKit transition 解耦，避免重复 dismiss 和整棵导航树销毁。
+- **Boundary:** 这修复的是已观察到的 UI transition crash，不替代真机 StoreKit Sandbox 购买/恢复/退款生命周期验证；线路协议认证和真实网页访问仍需设备证据。
+- **Evidence:** `Aster/Sources/Aster/Features/Subscription/Views/PaywallView.swift`; `Aster/Sources/Aster/App/AsterTabView.swift`; `Aster/Sources/Aster/Features/Locations/Views/LocationsView.swift`; `/tmp/aster-crashes-current/Aster-2026-09-02-224655.ips`。
+
 ## ADR-0001: 单产品单核心任务
 
 - **Decision:** Aster 只优化“一键连接 VPN，在公共/不可信网络下保护隐私与安全访问”；优先交付“开关 → 连接 → 状态反馈 → 订阅理由”。
@@ -103,10 +110,29 @@
 
 ## ADR-0009: 扣时与 Protected 状态要求 Provider readiness
 
-- **Decision:** 系统 `.connected` 之后必须通过版本化 provider message 获得 `dataPlaneReady=true`，才显示 Protected 并开始免费余额扣时；5 秒内无法确认则提示并断开。
+- **Decision:** 系统 `.connected` 之后必须通过版本化 provider message 获得 provider-local readiness，并再通过 App 的匿名 HTTPS data-plane probe，才显示 Protected 并开始免费余额扣时；本地 readiness 在 5 秒内无法确认，或后续真实请求探测失败，则提示并断开。
 - **Reason:** NetworkExtension 状态只说明系统生命周期，不能证明 Extension 已完成引擎启动和网络设置；直接扣时会让用户为不可用阶段付出余额。
-- **Boundary:** readiness 不携带配置、凭据或流量内容，也不等同于远端握手、DNS 或出口流量证明，后者仍须真机 probe。
+- **Boundary:** readiness 不携带配置、凭据或流量内容；provider-local readiness 不等同于远端握手、DNS 或出口流量证明，App probe 只能确认至少一个真实 HTTPS 请求经过当前隧道，DNS 泄漏、出口 IP、切网和持续流量仍须真机证据。
 - **Evidence:** `TunnelProviderMessage.swift`；`VPNManager.swift`；`PacketTunnelProvider.swift`；`TunnelProviderMessageTests.swift`。
+
+## ADR-0020: TCP-only exits reject browser QUIC
+
+- **Decision:** 对 TCP-only 的 AnyTLS/VLESS/VMess 出口，在 sing-box TUN route 中拒绝 UDP/443。iOS Safari 会优先尝试 HTTP/3/QUIC；若将该 datagram 交给不支持 UDP 的出口，浏览器会等待重试并造成网页不可用，快速拒绝可让其按标准回落 TCP。
+- **Evidence:** Thomson iPhone 日志中 tunnel/interface/HTTPS probe 均成功，但 Safari 的 UDP/443 QUIC 连接在 `utun6` 上连续 PTO 后失败；同一页面的 TCP fallback 长时间未完成 TLS server hello。修复包仍需重新安装后做真实网页回归。
+
+## ADR-0022: DNS must use a TCP proxy detour
+
+- **Decision:** The tunnel DNS resolver is `tcp` to the literal `1.1.1.1:53` with `detour: "proxy"`; port 53 requests from the TUN are still intercepted by `hijack-dns`.
+- **Reason:** Every currently supported catalog data plane is TCP-based. A UDP resolver that is left on the physical interface can fail during TUN setup or bypass the selected node, producing a misleading connected state followed by hostname lookup failures. The literal IP avoids a bootstrap hostname dependency, while the proxy detour keeps DNS on the authenticated outbound path.
+- **Boundary:** This proves the DNS request is routed through the selected sing-box outbound; it does not prove a node's protocol authentication, DNS response correctness on every upstream, exit IP, or access to a particular target site. Those remain device-level traffic evidence.
+- **Evidence:** `Aster/Sources/Shared/Models/SingBoxConfigurationBuilder.swift`; `Aster/Tests/AsterTests/TunnelConfigurationTests.swift`; local sing-box 1.14 configuration check; 2026-09-03 arm64 device build/install.
+
+## ADR-0023: Pre-resolve the proxy endpoint before exclusive full-tunnel startup
+
+- **Decision:** The main App resolves each selected proxy hostname before calling `startVPNTunnel`, persists numeric IPv4/IPv6 answers in the App Group configuration, and keeps the original hostname only for TLS/SNI. The Packet Tunnel uses those numeric answers for sing-box dialing and `/32`/`/128` physical-route exclusions; it never calls DNS for the proxy endpoint during `openTun`.
+- **Reason:** With `includeAllNetworks=true` and `enforceRoutes=true`, iOS applies an exclusive NECP policy before the extension can install its route exemption. Resolving the proxy hostname from inside `openTun` is therefore denied, creating a bootstrap deadlock where the tunnel reports connected but no HTTPS traffic can pass.
+- **Boundary:** Endpoint answers are refreshed on every user-initiated connect and are derived connection state, not a replacement for subscription integrity. DNS/exit-IP, target-site access, address-family failover and network-switch behavior still require signed-device evidence.
+- **Evidence:** `VPNManager.swift`; `TunnelConfigManager.swift`; `SingBoxConfigurationBuilder.swift`; `PacketTunnelPlatformInterface.swift`; 2026-09-04 Thomson’s iPhone log with pre-resolved endpoint count=1, IPv4 exclusion=1 and HTTPS data-plane probe status 200.
 
 ## ADR-0010: 奖励账本与 SSV 身份采用 Keychain fail-closed
 
@@ -134,7 +160,8 @@
 
 - **Decision:** 首发 App 从 bundle 内置的已审核 `node_catalog.json` 初始化 App Group；只有显式选中的验证节点写入 Extension 契约 `tunnel_config.json`。远端公开 HTTPS 更新保留为后续迁移，必须可撤销且不得携带个人/master subscription token。
 - **Reason:** 线路运营需要远程更新，但未验证响应不能破坏已能连接的配置。Catalog 与 Extension 的最小当前配置分离，可限制数据面复杂度和故障半径。
-- **Guardrails:** ephemeral session、同 host HTTPS redirect、1 MB/200 node 上限、拒绝 insecure 新 VLESS、稳定 opaque ID、6 小时/前台刷新、原子 primary + validated backup、失败保留 last-known-good；现有有效配置作为 “Current Location” 保留。Debug device import 是一次性 QA bridge，replacement/fresh install 不得假设其 catalog 仍存在。
+- **Guardrails:** ephemeral session、同 host HTTPS redirect、1 MB/200 node 上限、拒绝普通 TLS 的 insecure 新 VLESS（仅按订阅明确要求保留经过 schema 校验的 Reality `tls.insecure`）、稳定 opaque ID、6 小时/前台刷新、原子 primary + validated backup、失败保留 last-known-good；现有有效配置作为 “Current Location” 保留。Debug device import 是一次性 QA bridge，replacement/fresh install 不得假设其 catalog 仍存在。
+- **Reachability filter:** Locations 进入时按节点执行有界 TCP/TLS endpoint preflight，只在列表中展示当前端点可达的线路；UI 只呈现序号和 location，协议/端口保留在内部配置。该检查不宣称协议认证或真实出口成功；Mac 同构 sing-box 样本验证了 AnyTLS/VLESS Reality 可出站、当前 VMess 样本拒绝连接，最终仍以 Packet Tunnel 的 HTTPS data-plane probe 和真机目标网页回归为准。
 - **Security boundary:** Info.plist URL 可被提取；不得嵌入个人/master subscription secret，生产必须使用 revocable app-specific endpoint。当前没有 feed 签名，TLS 与 build-controlled endpoint 是现阶段完整性边界。
 - **Evidence:** `NodeSubscriptionClient.swift`；`NodeSubscriptionParser.swift`；`NodeCatalogStore.swift`；`NodeCatalogPersistence.swift`；`LocationsView.swift`；`SPEC-0062`。
 

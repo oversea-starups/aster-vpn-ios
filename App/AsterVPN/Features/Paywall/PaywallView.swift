@@ -82,7 +82,7 @@ struct PaywallView: View {
             Text(
                 isGuest
                     ? "无需注册即可购买。付款由 Apple 安全处理，购买后立即为当前游客身份开通权益。"
-                    : "付款由 Apple 安全处理。购买成功后，Aster VPN 服务器验证交易并开通权益。"
+                    : "付款由 Apple 安全处理。购买成功后，ClashX VPN 服务器验证交易并开通权益。"
             )
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
@@ -117,7 +117,7 @@ struct PaywallView: View {
                 .font(.headline)
                 .foregroundStyle(coordinator.hasServerAuthorizedAccess ? .green : .orange)
 
-                Text(subscription.planName ?? "Aster VPN 订阅")
+                Text(subscription.planName ?? "ClashX VPN 订阅")
                     .font(.subheadline.weight(.semibold))
                 Text("剩余流量：\(formattedBytes(subscription.remainingTraffic))")
                     .font(.footnote)

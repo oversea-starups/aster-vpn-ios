@@ -41,7 +41,7 @@ struct AppConfiguration: Equatable {
 
         guard let apiURL = validatedHTTPURL(apiValue),
               !tunnelIdentifier.isEmpty else {
-            preconditionFailure("Aster VPN build configuration is incomplete")
+            preconditionFailure("ClashX VPN build configuration is incomplete")
         }
 
         let defaultSiteURL = originURL(for: apiURL)

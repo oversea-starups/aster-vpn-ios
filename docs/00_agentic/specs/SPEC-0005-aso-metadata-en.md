@@ -1,7 +1,7 @@
 # SPEC-0005 — App Store Metadata (EN)
 
 ## App Name（30）
-- Aster VPN
+- ClashX VPN: Free Fast Privacy
 
 ## Subtitle（30）
 - Fast Private VPN
@@ -10,7 +10,7 @@
 - vpn,secure,private,proxy,fast,wireguard,privacy,protect,anonymous,public wifi
 
 ## Description（简版）
-Aster VPN keeps your internet private with one tap. Connect fast, stay protected on public Wi‑Fi, and enjoy a stable, ad‑free VPN experience.
+ClashX VPN keeps your internet private with one tap. Connect fast, stay protected on public Wi‑Fi, and enjoy a stable, ad‑free VPN experience.
 
 ## 截图卖点（脚本）
 1. "One‑Tap Secure VPN"

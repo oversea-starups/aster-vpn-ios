@@ -183,6 +183,26 @@ final class NodeCatalogStoreTests: XCTestCase {
         XCTAssertEqual(persistence.snapshot?.nodes, [location])
     }
 
+    func testReachabilityPreflightExposesOnlyReachableNodes() async {
+        let first = makeNode(id: "first", name: "United States", host: "us.example.com")
+        let second = makeNode(id: "second", name: "Germany", host: "de.example.com")
+        let store = NodeCatalogStore(
+            subscriptionURL: nil,
+            persistence: MemoryNodeCatalogPersistence(
+                snapshot: NodeCatalogSnapshot(updatedAt: Date(), nodes: [first, second])
+            ),
+            loadSelectedConfiguration: { first.configuration },
+            saveSelectedConfiguration: { _ in },
+            reachabilityChecker: StubNodeReachabilityChecker(reachableIDs: [first.id])
+        )
+
+        XCTAssertTrue(store.reachableNodes.isEmpty)
+        await store.checkReachabilityIfNeeded()
+
+        XCTAssertEqual(store.reachableNodes, [first])
+        XCTAssertFalse(store.isCheckingReachability)
+    }
+
     func testFilePersistenceRecoversPreviousCatalogAfterPrimaryCorruption() throws {
         let directory = FileManager.default.temporaryDirectory
             .appendingPathComponent("AsterCatalogTests-\(UUID().uuidString)", isDirectory: true)
@@ -269,6 +289,14 @@ private struct StubNodeSubscriptionFetcher: NodeSubscriptionFetching, @unchecked
 
     func fetch(from url: URL) async throws -> Data {
         try result.get()
+    }
+}
+
+private struct StubNodeReachabilityChecker: NodeReachabilityChecking {
+    let reachableIDs: Set<String>
+
+    func reachableNodeIDs(for nodes: [VPNNode]) async -> Set<String> {
+        reachableIDs.intersection(nodes.map(\.id))
     }
 }
 

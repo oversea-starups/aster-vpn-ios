@@ -1,6 +1,6 @@
 # Project Knowledge
 
-> Last verified: 2026-09-02
+> Last verified: 2026-09-04
 > 稳定知识放这里；进度见 `PROJECT_STATUS.md`，任务见 `TODO.md`，理由见 `DECISIONS.md`。
 
 ## Technical Knowledge
@@ -34,9 +34,17 @@
 ### VPN 状态不是流量可用性
 
 - **Problem:** `NEVPNStatus.connected` 只说明系统 tunnel session 状态，不能证明握手、DNS 和出口流量正常。
-- **Solution:** 把状态证据分层：system session、provider/core ready、traffic probe、user-visible state。当前版本已实现版本化 provider/core readiness 与 5 秒 fail-closed；traffic probe 仍缺。
+- **Solution:** 把状态证据分层：system session、provider/core ready、traffic probe、user-visible state。当前版本已实现版本化 provider/core readiness 与 5 秒 fail-closed，并在 system connected 后执行匿名 HTTPS 2xx/3xx data-plane probe；只有探针成功才进入 Protected。
 - **Reusable scenario:** 所有 connect success 埋点、UI 状态和真机验收。
-- **Evidence:** `TunnelProviderMessage.swift`、`VPNManager.swift`、`PacketTunnelProvider.swift`；仍没有远端握手、DNS/出口流量探测证据。
+- **Evidence:** `TunnelProviderMessage.swift`、`VPNManager.swift`、`PacketTunnelProvider.swift`；2026-09-04 真机探针返回 200，用户确认最新包可正常使用；独立 DNS/出口 IP 和多设备流量矩阵仍未完成。
+
+### 全隧道启动的代理端点 DNS 引导
+
+- **Problem:** `includeAllNetworks`/`enforceRoutes` 会在 Packet Tunnel 安装物理端点排除路由前启用独占 NECP 策略；此时 Extension 内对代理 hostname 做 `getaddrinfo` 会被拒绝，表现为系统显示 connected 但 HTTPS 不通。
+- **Solution:** 主 App 在调用 `startVPNTunnel` 前解析选中线路的 IPv4/IPv6 地址，将受校验的数值地址写入 App Group `tunnel_config.json`。sing-box 使用数值地址拨号，同时保留原 hostname 作为 TLS/SNI；PacketTunnel 只用数值地址生成代理端点 `/32`/`/128` excluded routes，禁止在全隧道启动阶段再次解析代理 hostname。
+- **Verification:** 每次用户发起连接都刷新解析结果；配置校验限制为合法数值 IPv4/IPv6 且最多 32 个地址；App 在系统 connected 后必须完成匿名 HTTPS 2xx/3xx data-plane probe，成功才进入 Protected。解析失败、探针失败和保存失败都进入可恢复错误并断开。
+- **Reusable scenario:** 任何启用 full-tunnel 的 Network Extension/代理内核组合，都应先完成“物理链路可达性 → 隧道启动 → 真实数据面探针”的分层验证，不要把系统 connected 当作网页可用性证明。
+- **Evidence:** `VPNManager.swift`、`TunnelConfigManager.swift`、`SingBoxConfigurationBuilder.swift`、`PacketTunnelPlatformInterface.swift`、`PacketTunnelProvider.swift`；2026-09-04 真机日志记录 pre-resolved endpoint count=1、IPv4 exclusion=1、HTTPS data-plane probe status=200，随后用户确认最新包可正常使用。
 
 ### Libbox 在 Apple 平台需要显式 TUN bridge
 

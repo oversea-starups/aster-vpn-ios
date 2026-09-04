@@ -31,6 +31,14 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
             do {
                 let configuration = try TunnelConfigManager.loadConfig()
                 loadedConfiguration = configuration
+                if configuration.resolvedServerAddresses.isEmpty {
+                    // Legacy configs may already contain a numeric endpoint;
+                    // accept that without reintroducing DNS inside the
+                    // full-tunnel extension.
+                    self.platformInterface.setEndpointAddress(configuration.serverAddress)
+                } else {
+                    self.platformInterface.setEndpointAddresses(configuration.resolvedServerAddresses)
+                }
                 PacketTunnelLog.logger.notice(
                     "Selected location protocol=\(configuration.protocolKind.rawValue, privacy: .public) port=\(configuration.serverPort, privacy: .public) tls=\(configuration.tlsEnabled, privacy: .public)"
                 )

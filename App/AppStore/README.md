@@ -5,7 +5,7 @@ App Store Connect state must still be queried before any upload.
 
 Current live record (2026-08-04):
 
-- App: `Aster VPN: Private Network` (`6797934807`)
+- App: `ClashX VPN: Free Fast Privacy` (`6797934807`)
 - Bundle ID: `com.astervpn.Aster`
 - Version: `1.0` (`fa188c39-d929-455b-ae15-beb4eb12b894`)
 - Locales: `en-US`, `zh-Hant`, `zh-Hans`

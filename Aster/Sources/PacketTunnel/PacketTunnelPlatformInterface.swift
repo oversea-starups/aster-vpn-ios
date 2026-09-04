@@ -2,6 +2,7 @@ import Foundation
 @preconcurrency import Libbox
 import Network
 import NetworkExtension
+import Darwin
 
 final class PacketTunnelPlatformInterface: NSObject,
     LibboxPlatformInterfaceProtocol,
@@ -9,9 +10,24 @@ final class PacketTunnelPlatformInterface: NSObject,
     private unowned let tunnel: NEPacketTunnelProvider
     private var networkSettings: NEPacketTunnelNetworkSettings?
     private var pathMonitor: NWPathMonitor?
+    private var endpointAddresses: [String] = []
 
     init(tunnel: NEPacketTunnelProvider) {
         self.tunnel = tunnel
+    }
+
+    /// The proxy endpoint must stay reachable through the physical interface.
+    /// Once the TUN default route is installed, excluding the resolved /32 or
+    /// /128 prevents the tunnel from recursively trying to reach itself.
+    func setEndpointAddress(_ address: String) {
+        endpointAddresses = address.isEmpty ? [] : [address]
+    }
+
+    /// Receives addresses resolved by the containing app before the exclusive
+    /// full-tunnel policy is enabled. This method deliberately accepts only
+    /// numeric addresses; `resolvedEndpointRoutes()` never performs DNS.
+    func setEndpointAddresses(_ addresses: [String]) {
+        endpointAddresses = addresses
     }
 
     func openTun(
@@ -48,7 +64,10 @@ final class PacketTunnelPlatformInterface: NSObject,
 
     func underNetworkExtension() -> Bool { true }
 
-    func includeAllNetworks() -> Bool { false }
+    // The app configures NETunnelProviderProtocol as a full-tunnel profile.
+    // Keep Libbox's platform view in sync so its route calculation does not
+    // preserve a split-tunnel interpretation on iOS.
+    func includeAllNetworks() -> Bool { true }
 
     func localDNSTransport() -> (any LibboxLocalDNSTransportProtocol)? { nil }
 
@@ -66,7 +85,15 @@ final class PacketTunnelPlatformInterface: NSObject,
         throw PacketTunnelPlatformError.connectionOwnerUnavailable
     }
 
-    func send(_ notification: LibboxNotification?) throws {}
+    func send(_ notification: LibboxNotification?) throws {
+        // Notifications may contain user-facing text or URLs. Keep only the
+        // stable type identifier in diagnostics; traffic content and node
+        // details must never be written to the device log.
+        guard let notification else { return }
+        PacketTunnelLog.logger.notice(
+            "Libbox notification type=\(notification.typeName, privacy: .public) id=\(notification.typeID, privacy: .public)"
+        )
+    }
 
     // The command server expects a handler even though Aster does not expose
     // a user-facing Clash/API control plane. Keep these callbacks local to the
@@ -83,7 +110,31 @@ final class PacketTunnelPlatformInterface: NSObject,
         LibboxSystemProxyStatus()
     }
     func setSystemProxyEnabled(_ enabled: Bool) throws {}
-    func writeDebugMessage(_ message: String?) {}
+    func writeDebugMessage(_ message: String?) {
+        // Libbox routes its debug stream through this callback. Do not emit
+        // the raw message: it can include destinations, URLs or credentials.
+        // Preserve only a coarse category so a real-device failure can be
+        // distinguished between DNS, dial, TLS and routing layers.
+        guard let message, !message.isEmpty else { return }
+        let lowercased = message.lowercased()
+        let category: String
+        if lowercased.contains("dns") {
+            category = "dns"
+        } else if lowercased.contains("tls") || lowercased.contains("handshake") {
+            category = "tls"
+        } else if lowercased.contains("dial") || lowercased.contains("connect") {
+            category = "dial"
+        } else if lowercased.contains("route") || lowercased.contains("tun") {
+            category = "route"
+        } else if lowercased.contains("error") || lowercased.contains("fail") {
+            category = "error"
+        } else {
+            category = "other"
+        }
+        PacketTunnelLog.logger.notice(
+            "Libbox diagnostic category=\(category, privacy: .public) length=\(message.count, privacy: .public)"
+        )
+    }
 
     func cancelNotification(_ identifier: String?, typeID: Int32) throws {}
 
@@ -203,6 +254,7 @@ final class PacketTunnelPlatformInterface: NSObject,
         pathMonitor?.cancel()
         pathMonitor = nil
         networkSettings = nil
+        endpointAddresses = []
     }
 
     private func makeNetworkSettings(
@@ -210,6 +262,10 @@ final class PacketTunnelPlatformInterface: NSObject,
     ) throws -> NEPacketTunnelNetworkSettings {
         let settings = NEPacketTunnelNetworkSettings(tunnelRemoteAddress: "127.0.0.1")
         settings.mtu = NSNumber(value: options.getMTU())
+        // Resolve once for both address families. Apart from avoiding duplicate
+        // DNS work, this keeps IPv4/IPv6 exclusions from being built from two
+        // different resolver snapshots while the interface is coming up.
+        let endpointRoutes = resolvedEndpointRoutes()
 
         let dnsIterator = try options.getDNSServerAddress()
         var dnsServers: [String] = []
@@ -240,10 +296,14 @@ final class PacketTunnelPlatformInterface: NSObject,
                     from: options.getInet4RouteAddress(),
                     defaultsWhenEmpty: options.getAutoRoute()
                 )
-                ipv4.excludedRoutes = Self.ipv4Routes(
+                var excludedRoutes = Self.ipv4Routes(
                     from: options.getInet4RouteExcludeAddress(),
                     defaultsWhenEmpty: false
                 )
+                excludedRoutes.append(contentsOf: endpointRoutes.ipv4.map {
+                    NEIPv4Route(destinationAddress: $0, subnetMask: "255.255.255.255")
+                })
+                ipv4.excludedRoutes = excludedRoutes
                 settings.ipv4Settings = ipv4
             }
         }
@@ -265,10 +325,14 @@ final class PacketTunnelPlatformInterface: NSObject,
                     from: options.getInet6RouteAddress(),
                     defaultsWhenEmpty: options.getAutoRoute()
                 )
-                ipv6.excludedRoutes = Self.ipv6Routes(
+                var excludedRoutes = Self.ipv6Routes(
                     from: options.getInet6RouteExcludeAddress(),
                     defaultsWhenEmpty: false
                 )
+                excludedRoutes.append(contentsOf: endpointRoutes.ipv6.map {
+                    NEIPv6Route(destinationAddress: $0, networkPrefixLength: NSNumber(value: 128))
+                })
+                ipv6.excludedRoutes = excludedRoutes
                 settings.ipv6Settings = ipv6
             }
         }
@@ -277,6 +341,70 @@ final class PacketTunnelPlatformInterface: NSObject,
             throw PacketTunnelPlatformError.missingTunnelAddress
         }
         return settings
+    }
+
+    private func resolvedEndpointRoutes() -> (ipv4: [String], ipv6: [String]) {
+        guard !endpointAddresses.isEmpty else {
+            return ([], [])
+        }
+        var ipv4 = Set<String>()
+        var ipv6 = Set<String>()
+        for endpointAddress in endpointAddresses {
+            var hints = addrinfo(
+                ai_flags: AI_NUMERICHOST,
+                ai_family: AF_UNSPEC,
+                ai_socktype: SOCK_STREAM,
+                ai_protocol: IPPROTO_TCP,
+                ai_addrlen: 0,
+                ai_canonname: nil,
+                ai_addr: nil,
+                ai_next: nil
+            )
+            var result: UnsafeMutablePointer<addrinfo>?
+            let status = getaddrinfo(endpointAddress, nil, &hints, &result)
+            guard status == 0, let result else {
+                PacketTunnelLog.logger.error("Pre-resolved proxy endpoint was not numeric")
+                continue
+            }
+            defer { freeaddrinfo(result) }
+
+            var cursor: UnsafeMutablePointer<addrinfo>? = result
+            while let info = cursor {
+                let addressInfo = info.pointee
+                guard let socketAddress = addressInfo.ai_addr else {
+                    cursor = addressInfo.ai_next
+                    continue
+                }
+
+                var hostBuffer = [CChar](repeating: 0, count: Int(NI_MAXHOST))
+                let numericStatus = hostBuffer.withUnsafeMutableBufferPointer { buffer in
+                    getnameinfo(
+                        socketAddress,
+                        addressInfo.ai_addrlen,
+                        buffer.baseAddress,
+                        socklen_t(buffer.count),
+                        nil,
+                        0,
+                        NI_NUMERICHOST
+                    )
+                }
+                if numericStatus == 0, let numericAddress = hostBuffer.withUnsafeBufferPointer({ buffer in
+                    buffer.baseAddress.map { String(cString: $0) }
+                }) {
+                    if addressInfo.ai_family == AF_INET {
+                        ipv4.insert(numericAddress)
+                    } else if addressInfo.ai_family == AF_INET6 {
+                        ipv6.insert(numericAddress)
+                    }
+                }
+                cursor = addressInfo.ai_next
+            }
+        }
+
+        PacketTunnelLog.logger.notice(
+            "Proxy endpoint route exclusions resolved: ipv4=\(ipv4.count, privacy: .public) ipv6=\(ipv6.count, privacy: .public)"
+        )
+        return (ipv4.sorted(), ipv6.sorted())
     }
 
     private func apply(_ settings: NEPacketTunnelNetworkSettings?) throws {

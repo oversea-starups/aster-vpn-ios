@@ -1,4 +1,5 @@
 import Foundation
+import Darwin
 
 public struct TunnelConfiguration: Codable, Equatable {
     public static let currentSchemaVersion = 2
@@ -23,6 +24,9 @@ public struct TunnelConfiguration: Codable, Equatable {
     public let protocolKind: ProtocolKind
     public let transport: Transport
     public let tlsEnabled: Bool
+    /// Explicitly preserve the Reality subscription's certificate-compatibility
+    /// flag without weakening ordinary TLS nodes.
+    public let tlsInsecure: Bool
     public let serverName: String?
     public let websocketPath: String?
     public let websocketHeaders: [String: String]
@@ -37,6 +41,12 @@ public struct TunnelConfiguration: Codable, Equatable {
     /// Password used by the AnyTLS protocol. It is intentionally separate
     /// from `uuid` because AnyTLS credentials are not UUIDs.
     public let anyTLSPassword: String
+    /// Numeric addresses resolved by the app before the full-tunnel policy is
+    /// enabled. The original `serverAddress` remains the TLS/SNI name while
+    /// these values keep the proxy endpoint reachable outside the TUN route.
+    /// This is derived connection state and is intentionally optional for
+    /// backwards compatibility with existing App Group configurations.
+    public let resolvedServerAddresses: [String]
 
     public init(
         schemaVersion: Int = TunnelConfiguration.currentSchemaVersion,
@@ -47,6 +57,7 @@ public struct TunnelConfiguration: Codable, Equatable {
         protocolKind: ProtocolKind = .vless,
         transport: Transport = .tcp,
         tlsEnabled: Bool = true,
+        tlsInsecure: Bool = false,
         serverName: String? = nil,
         websocketPath: String? = nil,
         websocketHeaders: [String: String] = [:],
@@ -58,7 +69,8 @@ public struct TunnelConfiguration: Codable, Equatable {
         tlsALPN: [String] = [],
         vmessSecurity: String = "auto",
         vmessAlterID: Int = 0,
-        anyTLSPassword: String = ""
+        anyTLSPassword: String = "",
+        resolvedServerAddresses: [String] = []
     ) {
         self.schemaVersion = schemaVersion
         self.nodeID = nodeID
@@ -68,6 +80,7 @@ public struct TunnelConfiguration: Codable, Equatable {
         self.protocolKind = protocolKind
         self.transport = transport
         self.tlsEnabled = tlsEnabled
+        self.tlsInsecure = tlsInsecure
         self.serverName = serverName
         self.websocketPath = websocketPath
         self.websocketHeaders = websocketHeaders
@@ -80,6 +93,7 @@ public struct TunnelConfiguration: Codable, Equatable {
         self.vmessSecurity = vmessSecurity
         self.vmessAlterID = vmessAlterID
         self.anyTLSPassword = anyTLSPassword
+        self.resolvedServerAddresses = resolvedServerAddresses
     }
 
     public init(from decoder: Decoder) throws {
@@ -92,6 +106,7 @@ public struct TunnelConfiguration: Codable, Equatable {
         protocolKind = try container.decodeIfPresent(ProtocolKind.self, forKey: .protocolKind) ?? .vless
         transport = try container.decodeIfPresent(Transport.self, forKey: .transport) ?? .tcp
         tlsEnabled = try container.decodeIfPresent(Bool.self, forKey: .tlsEnabled) ?? true
+        tlsInsecure = try container.decodeIfPresent(Bool.self, forKey: .tlsInsecure) ?? false
         serverName = try container.decodeIfPresent(String.self, forKey: .serverName)
         websocketPath = try container.decodeIfPresent(String.self, forKey: .websocketPath)
         websocketHeaders = try container.decodeIfPresent([String: String].self, forKey: .websocketHeaders) ?? [:]
@@ -104,6 +119,7 @@ public struct TunnelConfiguration: Codable, Equatable {
         vmessSecurity = try container.decodeIfPresent(String.self, forKey: .vmessSecurity) ?? "auto"
         vmessAlterID = try container.decodeIfPresent(Int.self, forKey: .vmessAlterID) ?? 0
         anyTLSPassword = try container.decodeIfPresent(String.self, forKey: .anyTLSPassword) ?? ""
+        resolvedServerAddresses = try container.decodeIfPresent([String].self, forKey: .resolvedServerAddresses) ?? []
     }
 
     public func validated() throws -> TunnelConfiguration {
@@ -121,6 +137,10 @@ public struct TunnelConfiguration: Codable, Equatable {
             })
         else {
             throw TunnelConfigError.invalidServerAddress
+        }
+        guard resolvedServerAddresses.count <= 32,
+              resolvedServerAddresses.allSatisfy(Self.isValidResolvedServerAddress) else {
+            throw TunnelConfigError.invalidResolvedServerAddresses
         }
         guard (1...65_535).contains(serverPort) else {
             throw TunnelConfigError.invalidServerPort
@@ -142,6 +162,11 @@ public struct TunnelConfiguration: Codable, Equatable {
         if tlsEnabled {
             guard let serverName, !serverName.isEmpty, serverName.count <= 253 else {
                 throw TunnelConfigError.missingServerName
+            }
+        }
+        if tlsInsecure {
+            guard protocolKind == .vless, realityPublicKey != nil, tlsEnabled else {
+                throw TunnelConfigError.invalidTLSInsecure
             }
         }
         if transport == .websocket {
@@ -219,6 +244,7 @@ public struct TunnelConfiguration: Codable, Equatable {
             protocolKind: protocolKind,
             transport: transport,
             tlsEnabled: tlsEnabled,
+            tlsInsecure: tlsInsecure,
             serverName: serverName,
             websocketPath: websocketPath,
             websocketHeaders: websocketHeaders,
@@ -230,8 +256,56 @@ public struct TunnelConfiguration: Codable, Equatable {
             tlsALPN: tlsALPN,
             vmessSecurity: vmessSecurity,
             vmessAlterID: vmessAlterID,
-            anyTLSPassword: anyTLSPassword
+            anyTLSPassword: anyTLSPassword,
+            resolvedServerAddresses: resolvedServerAddresses
         )
+    }
+
+    /// Returns a copy with the latest pre-resolved endpoint set. The resolver
+    /// runs in the app while the physical interface is still available; the
+    /// packet tunnel consumes only these numeric values after full-tunnel
+    /// routing has been installed.
+    public func withResolvedServerAddresses(_ addresses: [String]) -> TunnelConfiguration {
+        TunnelConfiguration(
+            schemaVersion: schemaVersion,
+            nodeID: nodeID,
+            serverAddress: serverAddress,
+            serverPort: serverPort,
+            uuid: uuid,
+            protocolKind: protocolKind,
+            transport: transport,
+            tlsEnabled: tlsEnabled,
+            tlsInsecure: tlsInsecure,
+            serverName: serverName,
+            websocketPath: websocketPath,
+            websocketHeaders: websocketHeaders,
+            grpcServiceName: grpcServiceName,
+            flow: flow,
+            realityPublicKey: realityPublicKey,
+            realityShortID: realityShortID,
+            tlsFingerprint: tlsFingerprint,
+            tlsALPN: tlsALPN,
+            vmessSecurity: vmessSecurity,
+            vmessAlterID: vmessAlterID,
+            anyTLSPassword: anyTLSPassword,
+            resolvedServerAddresses: addresses
+        )
+    }
+
+    private static func isValidResolvedServerAddress(_ address: String) -> Bool {
+        guard !address.isEmpty,
+              address.count <= 253,
+              !address.unicodeScalars.contains(where: CharacterSet.controlCharacters.contains) else {
+            return false
+        }
+
+        var ipv4 = in_addr()
+        if address.withCString({ inet_pton(AF_INET, $0, &ipv4) }) == 1 {
+            return true
+        }
+
+        var ipv6 = in6_addr()
+        return address.withCString({ inet_pton(AF_INET6, $0, &ipv6) }) == 1
     }
 }
 
@@ -284,6 +358,7 @@ public enum TunnelConfigError: Error, LocalizedError, Equatable {
     case unsupportedSchema
     case invalidNodeID
     case invalidServerAddress
+    case invalidResolvedServerAddresses
     case invalidServerPort
     case invalidCredential
     case missingServerName
@@ -295,6 +370,7 @@ public enum TunnelConfigError: Error, LocalizedError, Equatable {
     case invalidReality
     case invalidTLSFingerprint
     case invalidTLSALPN
+    case invalidTLSInsecure
     case invalidVMessSettings
     case invalidAnyTLSSettings
 
@@ -307,9 +383,10 @@ public enum TunnelConfigError: Error, LocalizedError, Equatable {
         case .corruptConfiguration, .unsupportedSchema:
             return "The VPN configuration needs to be refreshed."
         case .invalidNodeID, .invalidServerAddress, .invalidServerPort, .invalidCredential,
+             .invalidResolvedServerAddresses,
              .missingServerName, .invalidWebSocketPath, .tooManyHeaders, .invalidHeader,
              .invalidGRPCServiceName, .invalidFlow, .invalidReality, .invalidTLSFingerprint,
-             .invalidTLSALPN,
+             .invalidTLSALPN, .invalidTLSInsecure,
              .invalidVMessSettings, .invalidAnyTLSSettings:
             return "The selected VPN location is unavailable."
         }

@@ -39,6 +39,7 @@ public struct VPNNode: Codable, Equatable, Identifiable {
             lhs.protocolKind == rhs.protocolKind &&
             lhs.transport == rhs.transport &&
             lhs.tlsEnabled == rhs.tlsEnabled &&
+            lhs.tlsInsecure == rhs.tlsInsecure &&
             lhs.serverName?.lowercased() == rhs.serverName?.lowercased() &&
             lhs.websocketPath == rhs.websocketPath &&
             lhs.websocketHeaders == rhs.websocketHeaders &&
@@ -98,9 +99,17 @@ public struct VPNNode: Codable, Equatable, Identifiable {
         let markers = [
             "剩余流量", "套餐到期", "到期时间", "有效期", "流量重置", "重置时间",
             "traffic remaining", "data remaining", "plan expiry", "subscription expiry",
-            "expires", "expiration", "valid until"
+            "expires", "expiration", "valid until",
+            // Subscription providers often append operational instructions as
+            // pseudo-nodes. They are not routable locations and must never be
+            // shown or selected by the app.
+            "更新后", "节点变少", "不能用", "客户端版本", "官网", "下载app", "下载 app",
+            "subscription update", "client version", "download app"
         ]
-        return markers.contains(where: normalized.contains)
+        return markers.contains(where: normalized.contains) ||
+            normalized.contains("🏡") || normalized.contains("家") ||
+            normalized.contains("home") || normalized.contains("http://") ||
+            normalized.contains("https://")
     }
 }
 

@@ -7,7 +7,12 @@ public enum SingBoxConfigurationBuilder {
         var outbound: [String: Any] = [
             "type": config.protocolKind.rawValue,
             "tag": "proxy",
-            "server": config.serverAddress,
+            // The app resolves the endpoint before iOS enables the exclusive
+            // full-tunnel policy. Keep the original hostname in `server_name`
+            // below for certificate/SNI validation, but dial the numeric
+            // address so sing-box never needs a circular DNS lookup for its
+            // own proxy endpoint inside the tunnel.
+            "server": config.resolvedServerAddresses.first ?? config.serverAddress,
             "server_port": config.serverPort
         ]
 
@@ -30,6 +35,11 @@ public enum SingBoxConfigurationBuilder {
                 "enabled": true,
                 "server_name": serverName
             ]
+            if config.tlsInsecure {
+                // Only VLESS Reality nodes may opt into this compatibility
+                // flag; validation rejects it for ordinary TLS/other protocols.
+                tls["insecure"] = true
+            }
             if let fingerprint = config.tlsFingerprint {
                 tls["utls"] = [
                     "enabled": true,
@@ -80,13 +90,18 @@ public enum SingBoxConfigurationBuilder {
             // Resolve names inside the tunnel. Without an explicit DNS route,
             // iOS can resolve a hostname outside the proxy while the tun
             // stack is coming up, then hand sing-box an unreachable address.
-            // Hijacking port 53 keeps DNS and application traffic on the same
-            // outbound path and mirrors the known-good Clash Meta layout.
+            // The catalog's AnyTLS/VLESS/VMess entries are TCP outbounds, so
+            // UDP DNS can silently fail even while the tunnel reports ready.
+            // Use TCP DNS and explicitly detour it through the selected proxy;
+            // the literal resolver IP avoids a bootstrap hostname dependency.
+            // Hijacking port 53 keeps app DNS requests on this same path.
             "dns": [
                 "servers": [[
-                    "type": "udp",
+                    "type": "tcp",
                     "tag": "remote-dns",
-                    "server": "1.1.1.1"
+                    "server": "1.1.1.1",
+                    "server_port": 53,
+                    "detour": "proxy"
                 ]],
                 "strategy": "prefer_ipv4"
             ],
@@ -108,10 +123,35 @@ public enum SingBoxConfigurationBuilder {
             "route": [
                 "auto_detect_interface": true,
                 "final": "proxy",
-                "rules": [[
-                    "port": 53,
-                    "action": "hijack-dns"
-                ]]
+                // AnyTLS, VLESS and VMess entries in the catalog expose a TCP
+                // data plane. iOS browsers will otherwise optimistically send
+                // HTTP/3 over UDP/443; passing that unsupported datagram to a
+                // TCP-only outbound leaves Safari waiting for QUIC retries and
+                // makes a healthy TCP tunnel look unusable. Rejecting QUIC's
+                // well-known port makes clients immediately fall back to TCP.
+                "rules": [
+                    [
+                        "port": 53,
+                        "action": "hijack-dns"
+                    ],
+                    [
+                        "protocol": "quic",
+                        "action": "reject"
+                    ],
+                    [
+                        "network": "udp",
+                        "port": 443,
+                        "action": "reject"
+                    ],
+                    [
+                        // Some exits or upstream networks close a large TLS
+                        // ClientHello before returning ServerHello. Split
+                        // the first TLS record on the proxied leg while
+                        // leaving the established stream untouched.
+                        "action": "route-options",
+                        "tls_record_fragment": true
+                    ]
+                ]
             ] as [String: Any]
         ]
 

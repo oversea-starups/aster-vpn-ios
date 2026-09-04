@@ -15,7 +15,10 @@
 - URI form: `vless://uuid@host:port?...#Display%20Name`.
 - Required: valid UUID, host, port, `encryption=none`, and `security=tls|reality`.
 - New `security=none` VLESS entries are rejected because VLESS alone does not encrypt the transport and conflicts with the product's public-network protection promise.
-- `allowInsecure` / `insecure` truthy values are rejected.
+- Ordinary VLESS TLS rejects truthy `allowInsecure` / `insecure` values. VLESS
+  Reality may preserve the feed's explicit compatibility flag as
+  `tls.insecure=true`; this exception is schema-validated and is never accepted
+  for ordinary TLS, AnyTLS, or VMess.
 - Supported transports: `tcp`, `ws`/`websocket`, `grpc`.
 - TLS: `sni`/`servername` falls back to host; optional uTLS `fp`.
 - Reality: requires `pbk`; supports `sid`, `sni`, `fp` and `flow`.
@@ -49,7 +52,7 @@
 
 - `TunnelConfiguration` schema v2 encodes VLESS/VMess/AnyTLS and transport-specific fields, including AnyTLS password and TLS ALPN.
 - Schema v1 tunnel files continue decoding as VLESS-compatible current configs.
-- Legacy current config preservation is separate from subscription admission: an existing owner-verified config is not silently deleted, while new insecure VLESS feed entries remain rejected.
+- Legacy current config preservation is separate from subscription admission: an existing owner-verified config is not silently deleted, while new insecure ordinary-VLESS feed entries remain rejected. Reality's explicit compatibility flag is admitted only when the Reality public key and TLS fields are valid.
 
 ## Verification
 

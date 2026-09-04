@@ -20,6 +20,7 @@
 		39ED187EAA77FE74746AB5E7 /* VPNNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4787FA4008F71F1F50F9B93 /* VPNNode.swift */; };
 		406905F37888657CA77A3CA4 /* PacketTunnelPlatformInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019F9B1F9B0C6AA41E99A96B /* PacketTunnelPlatformInterface.swift */; };
 		577B2C7E291728A87CBEE126 /* AsterUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277FAF0601E4CF1B4520AE72 /* AsterUITests.swift */; };
+		57CD1130DD2ABD21C681A428 /* NodeReachabilityChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4DC2DFB86FADBF872B44FAD /* NodeReachabilityChecker.swift */; };
 		57DDCC6EA1DB119468CBDE33 /* SingBoxConfigurationBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF748C525CF17B618C37C69A /* SingBoxConfigurationBuilder.swift */; };
 		71BC6F7E9E1341402F3BF168 /* NodeSubscriptionParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E5E2A58D63A2E30360DC48 /* NodeSubscriptionParser.swift */; };
 		724397DCC42F134AC4D57DE6 /* TunnelProviderMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14568A089CABD42EE6894945 /* TunnelProviderMessage.swift */; };
@@ -159,6 +160,7 @@
 		C11CF738CED603802C4400C8 /* ConnectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionViewModel.swift; sourceTree = "<group>"; };
 		CDF5B95C40E49420E3973C0D /* Aster.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Aster.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D14471986EF3717E42FA1F53 /* ConnectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionView.swift; sourceTree = "<group>"; };
+		D4DC2DFB86FADBF872B44FAD /* NodeReachabilityChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeReachabilityChecker.swift; sourceTree = "<group>"; };
 		D85951A3C0700BE58D8C5A0B /* DebugDeviceImportBootstrap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugDeviceImportBootstrap.swift; sourceTree = "<group>"; };
 		DA3FC482B24535A005369015 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		E3C4ECA08358469345A7C1D8 /* TunnelProviderMessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TunnelProviderMessageTests.swift; sourceTree = "<group>"; };
@@ -519,6 +521,7 @@
 			children = (
 				54BD3C93F56E4E05369A3A9B /* NodeCatalogPersistence.swift */,
 				AE8E0B34BD179B3C124BC7DD /* NodeCatalogStore.swift */,
+				D4DC2DFB86FADBF872B44FAD /* NodeReachabilityChecker.swift */,
 				3ED03547E4A788ADB13416C8 /* NodeSubscriptionClient.swift */,
 				91E5E2A58D63A2E30360DC48 /* NodeSubscriptionParser.swift */,
 			);
@@ -736,6 +739,7 @@
 				D05395AD6E455B42BA60AB65 /* LocationsView.swift in Sources */,
 				9EAB285CBD1786C49C48FFD2 /* NodeCatalogPersistence.swift in Sources */,
 				8D9C8BACE500062EDCD80632 /* NodeCatalogStore.swift in Sources */,
+				57CD1130DD2ABD21C681A428 /* NodeReachabilityChecker.swift in Sources */,
 				A1BAE2BAE9419D9149F78A51 /* NodeSubscriptionClient.swift in Sources */,
 				71BC6F7E9E1341402F3BF168 /* NodeSubscriptionParser.swift in Sources */,
 				747D8AA9B1ED869FB5BD6A3B /* PaywallView.swift in Sources */,

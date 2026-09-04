@@ -89,7 +89,7 @@ struct PrivacyDisclosureView: View {
 
                 Text("数据使用说明")
                     .font(.largeTitle.bold())
-                Text("Aster VPN 只处理提供账号、订阅和 VPN 服务所必需的数据。")
+                Text("ClashX VPN 只处理提供账号、订阅和 VPN 服务所必需的数据。")
                     .foregroundStyle(.secondary)
             }
 
@@ -102,7 +102,7 @@ struct PrivacyDisclosureView: View {
             disclosureCard(
                 title: "订阅与交易",
                 systemImage: "creditcard",
-                detail: "App 内订阅由 Apple 处理。服务端保存商品、交易标识、订阅状态和到期时间来核验并开通权益；Aster VPN 不接收你的银行卡资料。"
+                detail: "App 内订阅由 Apple 处理。服务端保存商品、交易标识、订阅状态和到期时间来核验并开通权益；ClashX VPN 不接收你的银行卡资料。"
             )
 
             disclosureCard(
@@ -114,7 +114,7 @@ struct PrivacyDisclosureView: View {
             disclosureCard(
                 title: "流量内容与运营日志",
                 systemImage: "eye.slash",
-                detail: "当前客户端不会把浏览内容、完整访问网址或 DNS 查询上传到账号 API，也不包含广告或第三方分析 SDK。VPN 节点会为转发流量处理数据包；API、节点和基础设施可能处理网络地址、连接时间、字节数及安全/错误信息。具体字段、处理方和保留期以完整隐私政策为准。Aster VPN 不会出售 VPN 流量数据或将其用于广告画像。"
+                detail: "当前客户端不会把浏览内容、完整访问网址或 DNS 查询上传到账号 API，也不包含广告或第三方分析 SDK。VPN 节点会为转发流量处理数据包；API、节点和基础设施可能处理网络地址、连接时间、字节数及安全/错误信息。具体字段、处理方和保留期以完整隐私政策为准。ClashX VPN 不会出售 VPN 流量数据或将其用于广告画像。"
             )
 
             legalLinks

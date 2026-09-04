@@ -14,14 +14,17 @@ struct LocationsView: View {
     @State private var selectedProductID: String? = AppConfiguration.yearlyProductID
     let canSwitchLocation: Bool
     let showsCloseButton: Bool
+    let resetToken: Int?
 
     init(
         canSwitchLocation: Bool,
         showsCloseButton: Bool = true,
-        initialSection: LocationsSection = .vip
+        initialSection: LocationsSection = .vip,
+        resetToken: Int? = nil
     ) {
         self.canSwitchLocation = canSwitchLocation
         self.showsCloseButton = showsCloseButton
+        self.resetToken = resetToken
         _selectedSection = State(initialValue: initialSection)
     }
 
@@ -56,6 +59,11 @@ struct LocationsView: View {
             }
             .task {
                 await store.refreshIfNeeded()
+                await store.checkReachabilityIfNeeded()
+            }
+            .onChange(of: resetToken) { _ in
+                guard resetToken != nil else { return }
+                selectedSection = .vip
             }
         }
     }
@@ -159,7 +167,7 @@ struct LocationsView: View {
                         .foregroundStyle(AsterTheme.warning)
                     if store.hasUpdateSource {
                         Button("Try Again") {
-                            Task { await store.refresh() }
+                            refreshLocations()
                         }
                         .font(.subheadline.weight(.semibold))
                         .disabled(store.isRefreshing)
@@ -169,18 +177,35 @@ struct LocationsView: View {
                 .asterCard()
             }
 
-            if store.nodes.isEmpty {
+            if store.isCheckingReachability {
+                checkingState
+            } else if store.reachableNodes.isEmpty {
                 emptyState
             } else {
                 VStack(spacing: 10) {
-                    ForEach(displayNodes) { node in
-                        locationRow(node)
+                    ForEach(Array(displayNodes.enumerated()), id: \.element.id) { index, node in
+                        locationRow(node, sequence: index + 1)
                     }
                 }
             }
 
             updateFooter
         }
+    }
+
+    private var checkingState: some View {
+        VStack(spacing: 13) {
+            ProgressView()
+                .tint(AsterTheme.cyan)
+            Text("Checking available lines…")
+                .font(.headline)
+            Text("Only lines with a reachable server endpoint are shown.")
+                .font(.subheadline)
+                .foregroundStyle(.white)
+                .multilineTextAlignment(.center)
+        }
+        .frame(maxWidth: .infinity)
+        .asterCard()
     }
 
     private var emptyState: some View {
@@ -196,7 +221,7 @@ struct LocationsView: View {
                 .multilineTextAlignment(.center)
             if store.hasUpdateSource {
                 Button("Refresh Locations") {
-                    Task { await store.refresh() }
+                    refreshLocations()
                 }
                 .font(.body.weight(.bold))
                 .foregroundStyle(AsterTheme.navy)
@@ -209,7 +234,7 @@ struct LocationsView: View {
         .asterCard()
     }
 
-    private func locationRow(_ node: VPNNode) -> some View {
+    private func locationRow(_ node: VPNNode, sequence: Int) -> some View {
         let isSelected = store.selectedNodeID == node.id
         return Button {
             guard canSwitchLocation else { return }
@@ -222,13 +247,16 @@ struct LocationsView: View {
                     .font(.title2)
                     .foregroundStyle(isSelected ? AsterTheme.mint : AsterTheme.cyan)
 
-                VStack(alignment: .leading, spacing: 4) {
+                Text("\(sequence)")
+                    .font(.caption.weight(.bold))
+                    .foregroundStyle(.white)
+                    .frame(width: 24, height: 24)
+                    .background(.white.opacity(0.12), in: Circle())
+
+                VStack(alignment: .leading, spacing: 0) {
                     Text(node.regionName)
                         .font(.body.weight(.semibold))
                         .lineLimit(2)
-                    Text(isSelected ? "Selected" : "Use this region")
-                        .font(.caption)
-                        .foregroundStyle(.white)
                 }
 
                 Spacer(minLength: 8)
@@ -264,14 +292,13 @@ struct LocationsView: View {
         var nodesByRegion: [String: VPNNode] = [:]
         var regionOrder: [String] = []
 
-        for node in store.nodes {
-            let region = node.regionName
-            if nodesByRegion[region] == nil {
-                regionOrder.append(region)
-                nodesByRegion[region] = node
-            }
-            if node.id == store.selectedNodeID {
-                nodesByRegion[region] = node
+        for node in store.reachableNodes {
+            // Keep separate ports/protocols visible: a region can expose
+            // multiple lines and the health check is performed per node.
+            let key = "\(node.regionName)-\(node.id)"
+            if nodesByRegion[key] == nil {
+                regionOrder.append(key)
+                nodesByRegion[key] = node
             }
         }
 
@@ -280,9 +307,9 @@ struct LocationsView: View {
 
     private var updateFooter: some View {
         HStack(spacing: 10) {
-            if store.isRefreshing {
+            if store.isRefreshing || store.isCheckingReachability {
                 ProgressView().tint(AsterTheme.cyan)
-                Text("Updating locations…")
+                Text(store.isRefreshing ? "Updating locations…" : "Checking locations…")
             } else if let lastUpdated = store.lastUpdated {
                 Image(systemName: "checkmark.circle.fill")
                     .foregroundStyle(AsterTheme.mint)
@@ -297,12 +324,19 @@ struct LocationsView: View {
 
             if store.hasUpdateSource && !store.isRefreshing {
                 Button("Refresh") {
-                    Task { await store.refresh() }
+                    refreshLocations()
                 }
                 .font(.footnote.weight(.semibold))
             }
         }
         .font(.footnote)
         .foregroundStyle(.white)
+    }
+
+    private func refreshLocations() {
+        Task {
+            await store.refresh()
+            await store.checkReachabilityIfNeeded(force: true)
+        }
     }
 }

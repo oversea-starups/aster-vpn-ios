@@ -131,7 +131,7 @@ final class StoreKitPurchaseCoordinator: ObservableObject {
                     generation: generation
                 )
                 entitlement = snapshot
-                statusMessage = "订阅已购买并同步到 Aster VPN。"
+                statusMessage = "订阅已购买并同步到 ClashX VPN。"
                 await entitlementChangedHandler()
             case .pending:
                 statusMessage = "购买正在等待 Apple 或家庭组织者批准。"

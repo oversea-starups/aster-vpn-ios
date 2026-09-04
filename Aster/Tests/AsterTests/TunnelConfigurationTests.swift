@@ -22,11 +22,64 @@ final class TunnelConfigurationTests: XCTestCase {
         let root = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
         let inbounds = try XCTUnwrap(root["inbounds"] as? [[String: Any]])
         let outbounds = try XCTUnwrap(root["outbounds"] as? [[String: Any]])
-        XCTAssertEqual(inbounds.first?["address"] as? [String], ["172.19.0.1/30"])
+        XCTAssertEqual(inbounds.first?["address"] as? [String], ["172.19.0.1/30", "fdfe:dcba:9876::1/126"])
         XCTAssertNil(inbounds.first?["inet4_address"])
         XCTAssertEqual(inbounds.first?["auto_route"] as? Bool, true)
         XCTAssertEqual(outbounds.first?["server"] as? String, "vpn.example.com")
         XCTAssertEqual((outbounds.first?["transport"] as? [String: Any])?["type"] as? String, "ws")
+
+        let dns = try XCTUnwrap(root["dns"] as? [String: Any])
+        let dnsServers = try XCTUnwrap(dns["servers"] as? [[String: Any]])
+        XCTAssertEqual(dnsServers.first?["type"] as? String, "tcp")
+        XCTAssertEqual(dnsServers.first?["server"] as? String, "1.1.1.1")
+        XCTAssertEqual(dnsServers.first?["server_port"] as? Int, 53)
+        XCTAssertEqual(dnsServers.first?["detour"] as? String, "proxy")
+
+        let route = try XCTUnwrap(root["route"] as? [String: Any])
+        let rules = try XCTUnwrap(route["rules"] as? [[String: Any]])
+        XCTAssertEqual(rules.count, 4)
+        XCTAssertEqual(rules[0]["port"] as? Int, 53)
+        XCTAssertEqual(rules[0]["action"] as? String, "hijack-dns")
+        XCTAssertEqual(rules[1]["protocol"] as? String, "quic")
+        XCTAssertEqual(rules[1]["action"] as? String, "reject")
+        XCTAssertEqual(rules[2]["network"] as? String, "udp")
+        XCTAssertEqual(rules[2]["port"] as? Int, 443)
+        XCTAssertEqual(rules[2]["action"] as? String, "reject")
+        XCTAssertEqual(rules[3]["action"] as? String, "route-options")
+        XCTAssertEqual(rules[3]["tls_record_fragment"] as? Bool, true)
+    }
+
+    func testPreResolvedEndpointIsUsedForDialWhileTLSNameIsPreserved() throws {
+        let configuration = TunnelConfiguration(
+            nodeID: "pre-resolved",
+            serverAddress: "vpn.example.com",
+            serverPort: 8443,
+            uuid: "550e8400-e29b-41d4-a716-446655440000",
+            tlsEnabled: true,
+            serverName: "vpn.example.com",
+            resolvedServerAddresses: ["203.0.113.10", "2001:db8::10"]
+        )
+
+        let outbound = try firstOutbound(configuration)
+        XCTAssertEqual(outbound["server"] as? String, "203.0.113.10")
+        let tls = try XCTUnwrap(outbound["tls"] as? [String: Any])
+        XCTAssertEqual(tls["server_name"] as? String, "vpn.example.com")
+    }
+
+    func testResolvedEndpointMustBeNumeric() {
+        let configuration = TunnelConfiguration(
+            nodeID: "invalid-pre-resolved",
+            serverAddress: "vpn.example.com",
+            serverPort: 443,
+            uuid: "550e8400-e29b-41d4-a716-446655440000",
+            tlsEnabled: true,
+            serverName: "vpn.example.com",
+            resolvedServerAddresses: ["vpn.example.com"]
+        )
+
+        XCTAssertThrowsError(try configuration.validated()) { error in
+            XCTAssertEqual(error as? TunnelConfigError, .invalidResolvedServerAddresses)
+        }
     }
 
     func testInvalidUUIDIsRejected() {
@@ -157,6 +210,41 @@ final class TunnelConfigurationTests: XCTestCase {
             (tls["reality"] as? [String: Any])?["public_key"] as? String,
             "jNXHt1yRo0vDuchQlIP6Z0ZvjT3KtzVI-T4E7RoLJS0"
         )
+    }
+
+    func testRealityInsecureCompatibilityFlagIsEmitted() throws {
+        let configuration = TunnelConfiguration(
+            nodeID: "reality-insecure-node",
+            serverAddress: "reality.example.com",
+            serverPort: 443,
+            uuid: "550e8400-e29b-41d4-a716-446655440000",
+            tlsEnabled: true,
+            tlsInsecure: true,
+            serverName: "www.bing.com",
+            realityPublicKey: "jNXHt1yRo0vDuchQlIP6Z0ZvjT3KtzVI-T4E7RoLJS0",
+            realityShortID: "0123456789abcdef",
+            tlsFingerprint: "chrome"
+        )
+
+        let outbound = try firstOutbound(configuration)
+        let tls = try XCTUnwrap(outbound["tls"] as? [String: Any])
+        XCTAssertEqual(tls["insecure"] as? Bool, true)
+    }
+
+    func testTLSInsecureFlagCannotBeUsedOutsideReality() {
+        let configuration = TunnelConfiguration(
+            nodeID: "ordinary-tls-insecure",
+            serverAddress: "vpn.example.com",
+            serverPort: 443,
+            uuid: "550e8400-e29b-41d4-a716-446655440000",
+            tlsEnabled: true,
+            tlsInsecure: true,
+            serverName: "vpn.example.com"
+        )
+
+        XCTAssertThrowsError(try configuration.validated()) { error in
+            XCTAssertEqual(error as? TunnelConfigError, .invalidTLSInsecure)
+        }
     }
 
     func testGeneratedConfigurationIsAcceptedByBundledLibbox() throws {

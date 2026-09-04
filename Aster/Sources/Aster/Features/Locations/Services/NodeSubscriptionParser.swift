@@ -100,13 +100,11 @@ struct NodeSubscriptionParser {
         guard query["encryption", default: "none"].lowercased() == "none" else {
             throw NodeSubscriptionError.unsupportedEntry
         }
-        if Self.truthy(query["allowinsecure"]) || Self.truthy(query["insecure"]) {
-            throw NodeSubscriptionError.insecureEntry
-        }
 
         let transport = try parseTransport(query["type"])
         let security = query["security", default: "none"].lowercased()
         let tlsEnabled: Bool
+        let tlsInsecure: Bool
         let realityPublicKey: String?
         switch security {
         case "", "none":
@@ -116,12 +114,19 @@ struct NodeSubscriptionParser {
             throw NodeSubscriptionError.insecureEntry
         case "tls":
             tlsEnabled = true
+            // Never weaken ordinary TLS entries. Some Reality subscriptions
+            // explicitly require this compatibility flag, handled below.
+            if Self.truthy(query["allowinsecure"]) || Self.truthy(query["insecure"]) {
+                throw NodeSubscriptionError.insecureEntry
+            }
+            tlsInsecure = false
             realityPublicKey = nil
         case "reality":
             tlsEnabled = true
             guard let publicKey = query["pbk"], !publicKey.isEmpty else {
                 throw NodeSubscriptionError.invalidEntry
             }
+            tlsInsecure = Self.truthy(query["allowinsecure"]) || Self.truthy(query["insecure"])
             realityPublicKey = publicKey
         default:
             throw NodeSubscriptionError.unsupportedEntry
@@ -155,7 +160,7 @@ struct NodeSubscriptionParser {
             transport.rawValue, security, serverName?.lowercased() ?? "",
             websocketPath ?? "", grpcServiceName ?? "", flow ?? "",
             realityPublicKey ?? "", query["sid"]?.lowercased() ?? "",
-            fingerprint ?? "", alpn.joined(separator: ",")
+            fingerprint ?? "", alpn.joined(separator: ","), tlsInsecure ? "1" : "0"
         ].joined(separator: "\u{1f}")
         let nodeID = Self.stableNodeID(canonical)
 
@@ -170,6 +175,7 @@ struct NodeSubscriptionParser {
                 protocolKind: .vless,
                 transport: transport,
                 tlsEnabled: tlsEnabled,
+                tlsInsecure: tlsInsecure,
                 serverName: serverName,
                 websocketPath: websocketPath,
                 websocketHeaders: websocketHeaders,

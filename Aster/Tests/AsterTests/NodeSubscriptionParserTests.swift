@@ -25,6 +25,17 @@ final class NodeSubscriptionParserTests: XCTestCase {
         XCTAssertEqual(result.nodes[1].configuration.flow, "xtls-rprx-vision")
     }
 
+    func testRealityInsecureFlagIsScopedAndPreserved() throws {
+        let publicKey = "jNXHt1yRo0vDuchQlIP6Z0ZvjT3KtzVI-T4E7RoLJS0"
+        let entry = "vless://550e8400-e29b-41d4-a716-446655440010@reality.example.com:443?encryption=none&security=reality&type=tcp&sni=www.bing.com&pbk=\(publicKey)&sid=0123456789abcdef&fp=chrome&insecure=1#United%20States"
+
+        let result = try parser.parse(Data(entry.utf8))
+
+        XCTAssertEqual(result.nodes.count, 1)
+        XCTAssertTrue(result.nodes[0].configuration.tlsInsecure)
+        XCTAssertEqual(result.nodes[0].configuration.realityShortID, "0123456789abcdef")
+    }
+
     func testParsesSecureAnyTLSPasswordEntry() throws {
         let entry = "anytls://p%40ssword@example.com:443?security=tls&sni=edge.example.com&fp=chrome#Singapore"
 
@@ -126,6 +137,30 @@ final class NodeSubscriptionParserTests: XCTestCase {
         XCTAssertEqual(result.nodes.count, 1)
         XCTAssertEqual(result.nodes.first?.displayName, "United States")
         XCTAssertEqual(result.discardedEntryCount, 1)
+    }
+
+    func testProviderInstructionRecordsAreDiscarded() throws {
+        let vmess: [String: Any] = [
+            "v": "2", "ps": "Hong Kong", "add": "hk.example.com", "port": 443,
+            "id": "550e8400-e29b-41d4-a716-446655440020", "net": "tcp", "tls": "tls",
+            "sni": "hk.example.com", "scy": "auto"
+        ]
+        let vmessData = try JSONSerialization.data(withJSONObject: vmess)
+        var homeInstruction = vmess
+        homeInstruction["ps"] = "🏡家：https://example.com"
+        var updateInstructionObject = vmess
+        updateInstructionObject["ps"] = "更新后节点变少不能用，请到官网重新下载app"
+        let instructionData = try JSONSerialization.data(withJSONObject: homeInstruction)
+        let updateInstructionData = try JSONSerialization.data(withJSONObject: updateInstructionObject)
+        let instruction = "vmess://\(instructionData.base64EncodedString())"
+        let updateInstruction = "vmess://\(updateInstructionData.base64EncodedString())"
+        let real = "vmess://\(vmessData.base64EncodedString())"
+
+        let result = try parser.parse(Data("\(instruction)\n\(updateInstruction)\n\(real)".utf8))
+
+        XCTAssertEqual(result.nodes.count, 1)
+        XCTAssertEqual(result.discardedEntryCount, 2)
+        XCTAssertEqual(result.nodes.first?.regionName, "Hong Kong")
     }
 
     func testProviderTierAndServerLabelsAreReducedToRegionOnly() {

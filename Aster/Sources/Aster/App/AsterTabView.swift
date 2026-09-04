@@ -20,8 +20,7 @@ struct AsterTabView: View {
                 .tag(AppTab.home)
                 .accessibilityIdentifier("homeTab")
 
-            LocationsTabView()
-                .id(locationsTabGeneration)
+            LocationsTabView(resetToken: locationsTabGeneration)
                 .tabItem {
                     Label("VIP", systemImage: "sparkles")
                 }
@@ -46,6 +45,7 @@ struct AsterTabView: View {
 
 private struct LocationsTabView: View {
     @StateObject private var vpnManager = VPNManager.shared
+    let resetToken: Int
 
     private var canSwitchLocation: Bool {
         vpnManager.status == .disconnected || vpnManager.status == .invalid
@@ -55,7 +55,8 @@ private struct LocationsTabView: View {
         LocationsView(
             canSwitchLocation: canSwitchLocation,
             showsCloseButton: false,
-            initialSection: .vip
+            initialSection: .vip,
+            resetToken: resetToken
         )
     }
 }

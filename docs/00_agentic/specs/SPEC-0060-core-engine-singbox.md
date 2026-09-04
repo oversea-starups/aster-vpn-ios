@@ -1,7 +1,7 @@
 # SPEC-0060 — Core Engine Implementation (sing-box / Libbox)
 
-> Revalidated: 2026-09-01  
-> Evidence boundary: implementation, current strict App/PacketTunnel/test-target builds and a pinned uTLS-enabled Libbox build; post-fix signed-device traffic matrix is still pending.
+> Revalidated: 2026-09-04
+> Evidence boundary: implementation, current strict App/PacketTunnel/test-target builds, a pinned gVisor/uTLS-enabled Libbox build, device logs with a successful HTTPS probe, and user-confirmed normal use; the complete signed-device traffic matrix is still pending.
 
 ## 1. User outcome
 
@@ -31,19 +31,19 @@ Libbox 的 TUN inbound 不是“无需额外处理”。在 Apple Network Extens
 
 ## 3. Current startup contract
 
-1. 从 App Group 读取并严格验证 schema v2 `TunnelConfiguration`，兼容迁移 schema v1。
+1. App 在调用 `startVPNTunnel` 前解析选定线路的 hostname，并把数值 IPv4/IPv6 地址写入 App Group；Extension 随后读取并严格验证 schema v2 `TunnelConfiguration`，兼容迁移 schema v1。全隧道启动阶段不得再对代理 hostname 做 DNS。
 2. 使用 App Group 内独立 base/working 目录调用 `LibboxSetup`，关闭 debug 日志。
 3. 用 `LibboxCheckConfig` 预检结构化 JSON；schema 或编译能力不匹配时可恢复地失败，不进入 core startup。
 4. 创建带 Apple platform interface 的 `LibboxCommandServer`。
 5. `service.start()` 后调用 `startOrReloadService`，并始终传入非空 `LibboxOverrideOptions`；当前绑定会解引用该参数，传 `nil` 会导致 Extension 进程崩溃。
-6. 仅当上述步骤同步成功后把 `dataPlaneReady` 设为 true；任一步失败都关闭 service 并把错误返回系统。
+6. 仅当上述步骤同步成功后把 provider-local readiness 返回为 true；App 在系统 `.connected` 后还必须完成匿名 HTTPS 2xx/3xx data-plane probe，才能将用户状态显示为 Protected。任一步启动失败都关闭 service 并把错误返回系统。
 
 当前最小 TUN JSON 使用 sing-box 1.12+ 的 `address` 字段：
 
 ```json
 {
   "log": { "level": "error" },
-  "inbounds": [
+    "inbounds": [
     {
       "type": "tun",
       "tag": "tun-in",
@@ -66,7 +66,7 @@ Libbox 的 TUN inbound 不是“无需额外处理”。在 Apple Network Extens
 }
 ```
 
-已移除的 `inet4_address` 不得重新引入。单元回归会同时检查字段结构并用 `LibboxCheckConfig` 验证带 `chrome` uTLS fingerprint 的配置；当前完整 arm64 测试 bundle 已编译链接，仍须在签名设备/健康 arm64 XCTest 环境实际执行。
+已移除的 `inet4_address` 不得重新引入。实际 Network Extension settings 还会把代理服务器解析后的 IPv4 `/32`、IPv6 `/128` 加入 excluded routes，防止全隧道默认路由递归代理端点。单元回归会同时检查字段结构并用 `LibboxCheckConfig` 验证带 `chrome` uTLS fingerprint 的配置；当前完整 arm64 测试 bundle 已编译链接，仍须在签名设备/健康 arm64 XCTest 环境实际执行。
 
 ## 4. Security, resource and distribution constraints
 

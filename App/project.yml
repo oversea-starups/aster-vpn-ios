@@ -41,7 +41,7 @@ targets:
         AsterPacketTunnelBundleIdentifier: $(ASTER_PACKET_TUNNEL_BUNDLE_ID)
         AsterPacketTunnelTransportAvailable: $(ASTER_PACKET_TUNNEL_TRANSPORT_AVAILABLE)
         AsterKeychainAccessGroup: $(ASTER_KEYCHAIN_ACCESS_GROUP)
-        CFBundleDisplayName: Aster VPN
+        CFBundleDisplayName: ClashX VPN
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         UILaunchScreen: {}
@@ -91,7 +91,7 @@ targets:
     info:
       path: AsterPacketTunnel/Info.plist
       properties:
-        CFBundleDisplayName: Aster VPN Tunnel
+        CFBundleDisplayName: ClashX VPN Tunnel
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         AsterKeychainAccessGroup: $(ASTER_KEYCHAIN_ACCESS_GROUP)

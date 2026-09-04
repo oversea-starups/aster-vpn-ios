@@ -1,4 +1,4 @@
-# Aster VPN App Store creative handoff
+# ClashX VPN App Store creative handoff
 
 Date: 2026-09-01
 

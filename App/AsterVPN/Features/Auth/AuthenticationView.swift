@@ -126,7 +126,7 @@ struct AuthenticationView: View {
                     }
                 }
             }
-            .navigationTitle("Aster VPN")
+            .navigationTitle("ClashX VPN")
             .toolbar {
                 if allowsDismissal {
                     ToolbarItem(placement: .cancellationAction) {

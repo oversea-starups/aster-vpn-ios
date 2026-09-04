@@ -8,6 +8,8 @@ final class NodeCatalogStore: ObservableObject {
     @Published private(set) var selectedNodeID: String?
     @Published private(set) var lastUpdated: Date?
     @Published private(set) var isRefreshing = false
+    @Published private(set) var isCheckingReachability = false
+    @Published private(set) var reachableNodeIDs: Set<String>?
     @Published private(set) var userMessage: String?
     @Published private(set) var lastDiscardedEntryCount = 0
 
@@ -18,6 +20,7 @@ final class NodeCatalogStore: ObservableObject {
     private let now: () -> Date
     private let loadSelectedConfiguration: () throws -> TunnelConfiguration
     private let saveSelectedConfiguration: (TunnelConfiguration) throws -> Void
+    private let reachabilityChecker: any NodeReachabilityChecking
     private let refreshInterval: TimeInterval
     private var restoreMessage: String? = nil
 
@@ -29,7 +32,8 @@ final class NodeCatalogStore: ObservableObject {
         now: @escaping () -> Date = Date.init,
         refreshInterval: TimeInterval = 6 * 60 * 60,
         loadSelectedConfiguration: @escaping () throws -> TunnelConfiguration = TunnelConfigManager.loadConfig,
-        saveSelectedConfiguration: @escaping (TunnelConfiguration) throws -> Void = TunnelConfigManager.saveConfig
+        saveSelectedConfiguration: @escaping (TunnelConfiguration) throws -> Void = TunnelConfigManager.saveConfig,
+        reachabilityChecker: any NodeReachabilityChecking = NodeEndpointReachabilityChecker()
     ) {
         self.subscriptionURL = subscriptionURL
         self.fetcher = fetcher
@@ -39,12 +43,35 @@ final class NodeCatalogStore: ObservableObject {
         self.refreshInterval = refreshInterval
         self.loadSelectedConfiguration = loadSelectedConfiguration
         self.saveSelectedConfiguration = saveSelectedConfiguration
+        self.reachabilityChecker = reachabilityChecker
         restoreLastKnownGoodCatalog()
     }
 
     var selectedNode: VPNNode? {
         guard let selectedNodeID else { return nil }
         return nodes.first(where: { $0.id == selectedNodeID })
+    }
+
+    /// Only nodes that passed the latest endpoint preflight are exposed to the
+    /// Locations UI. A selected configuration is kept separately so an active
+    /// tunnel is not disrupted while the list is being checked.
+    var reachableNodes: [VPNNode] {
+        guard let reachableNodeIDs else { return [] }
+        return nodes.filter { reachableNodeIDs.contains($0.id) }
+    }
+
+    func checkReachabilityIfNeeded(force: Bool = false) async {
+        guard !nodes.isEmpty else {
+            reachableNodeIDs = []
+            return
+        }
+        guard force || reachableNodeIDs == nil, !isCheckingReachability else { return }
+
+        isCheckingReachability = true
+        let candidates = nodes
+        let reachable = await reachabilityChecker.reachableNodeIDs(for: candidates)
+        reachableNodeIDs = reachable
+        isCheckingReachability = false
     }
 
     /// Re-writes the selected, validated configuration before a tunnel starts.
@@ -138,6 +165,7 @@ final class NodeCatalogStore: ObservableObject {
                 let realLocations = snapshot.nodes.filter { !VPNNode.isStatusRecord($0.displayName) }
                 if !realLocations.isEmpty {
                     nodes = realLocations
+                    reachableNodeIDs = nil
                     lastUpdated = snapshot.updatedAt
                     if realLocations.count != snapshot.nodes.count {
                         let sanitized = NodeCatalogSnapshot(updatedAt: snapshot.updatedAt, nodes: realLocations)
@@ -207,6 +235,7 @@ final class NodeCatalogStore: ObservableObject {
             let snapshot = try JSONDecoder().decode(NodeCatalogSnapshot.self, from: data).validated()
             try persistence.save(snapshot)
             nodes = snapshot.nodes
+            reachableNodeIDs = nil
             lastUpdated = snapshot.updatedAt
         } catch {
             if restoreMessage == nil {
@@ -248,6 +277,7 @@ final class NodeCatalogStore: ObservableObject {
         try saveSelectedConfiguration(selected.configuration)
 
         nodes = snapshot.nodes
+        reachableNodeIDs = nil
         selectedNodeID = selected.id
         lastUpdated = installedAt
         lastDiscardedEntryCount = result.discardedEntryCount

@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
-  "updatedAt": 810012317.767323,
+  "updatedAt": 1788355200.0,
   "nodes": [
     {
-      "id": "node-d0bd3d1cd0e298bef7eadd2f",
+      "id": "node-c1d830f0921b1873b8d71052",
       "displayName": "United States",
       "configuration": {
         "schemaVersion": 2,
-        "nodeID": "node-d0bd3d1cd0e298bef7eadd2f",
+        "nodeID": "node-c1d830f0921b1873b8d71052",
         "serverAddress": "anyus01.huyan.world",
         "serverPort": 443,
         "uuid": "00000000-0000-0000-0000-000000000000",
@@ -15,60 +15,20 @@
         "transport": "tcp",
         "tlsEnabled": true,
         "serverName": "vip.tszjdzhengshu.com",
-        "websocketHeaders": {},
-        "tlsALPN": [
-          "h2",
-          "http/1.1"
-        ],
-        "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9"
-      }
-    },
-    {
-      "id": "node-18c65150539e844344e69581",
-      "displayName": "Hong Kong",
-      "configuration": {
-        "schemaVersion": 2,
-        "nodeID": "node-18c65150539e844344e69581",
-        "serverAddress": "zhuanxian.hktsz111.xyz",
-        "serverPort": 26273,
-        "uuid": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
-        "protocolKind": "vmess",
-        "transport": "tcp",
-        "tlsEnabled": false,
-        "websocketHeaders": {},
+        "tlsFingerprint": "chrome",
         "tlsALPN": [],
-        "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": ""
-      }
-    },
-    {
-      "id": "node-7b3d6ee3ebc1717aa8f91b78",
-      "displayName": "Hong Kong",
-      "configuration": {
-        "schemaVersion": 2,
-        "nodeID": "node-7b3d6ee3ebc1717aa8f91b78",
-        "serverAddress": "zhuanxian.hktsz111.xyz",
-        "serverPort": 27284,
-        "uuid": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
-        "protocolKind": "vmess",
-        "transport": "tcp",
-        "tlsEnabled": false,
+        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
         "websocketHeaders": {},
-        "tlsALPN": [],
         "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": ""
+        "vmessAlterID": 0
       }
     },
     {
-      "id": "node-3488eb1d7410c31a1483de94",
+      "id": "node-ad3ae0bda5fed97ceef9723e",
       "displayName": "Hong Kong",
       "configuration": {
         "schemaVersion": 2,
-        "nodeID": "node-3488eb1d7410c31a1483de94",
+        "nodeID": "node-ad3ae0bda5fed97ceef9723e",
         "serverAddress": "any01hk.tingmo.world",
         "serverPort": 31033,
         "uuid": "00000000-0000-0000-0000-000000000000",
@@ -76,22 +36,62 @@
         "transport": "tcp",
         "tlsEnabled": true,
         "serverName": "vip.tszjdzhengshu.com",
+        "tlsFingerprint": "chrome",
+        "tlsALPN": [],
+        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
         "websocketHeaders": {},
-        "tlsALPN": [
-          "h2",
-          "http/1.1"
-        ],
         "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9"
+        "vmessAlterID": 0
       }
     },
     {
-      "id": "node-a835811c338df735f3e90106",
+      "id": "node-3805502f9d0e9286908182a8",
+      "displayName": "Hong Kong",
+      "configuration": {
+        "schemaVersion": 2,
+        "nodeID": "node-3805502f9d0e9286908182a8",
+        "serverAddress": "straight.hktsz111.xyz",
+        "serverPort": 443,
+        "uuid": "00000000-0000-0000-0000-000000000000",
+        "protocolKind": "anytls",
+        "transport": "tcp",
+        "tlsEnabled": true,
+        "serverName": "vip.tszjdzhengshu.com",
+        "tlsFingerprint": "chrome",
+        "tlsALPN": [],
+        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
+        "websocketHeaders": {},
+        "vmessSecurity": "auto",
+        "vmessAlterID": 0
+      }
+    },
+    {
+      "id": "node-da574cc3a5888dacfe6817fd",
+      "displayName": "Hong Kong",
+      "configuration": {
+        "schemaVersion": 2,
+        "nodeID": "node-da574cc3a5888dacfe6817fd",
+        "serverAddress": "straight.hktsz111.xyz",
+        "serverPort": 4438,
+        "uuid": "00000000-0000-0000-0000-000000000000",
+        "protocolKind": "anytls",
+        "transport": "tcp",
+        "tlsEnabled": true,
+        "serverName": "vip.tszjdzhengshu.com",
+        "tlsFingerprint": "chrome",
+        "tlsALPN": [],
+        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
+        "websocketHeaders": {},
+        "vmessSecurity": "auto",
+        "vmessAlterID": 0
+      }
+    },
+    {
+      "id": "node-5fdc944f2348da30eeae7a3c",
       "displayName": "United States",
       "configuration": {
         "schemaVersion": 2,
-        "nodeID": "node-a835811c338df735f3e90106",
+        "nodeID": "node-5fdc944f2348da30eeae7a3c",
         "serverAddress": "anyus01.huyan.world",
         "serverPort": 8443,
         "uuid": "00000000-0000-0000-0000-000000000000",
@@ -99,22 +99,20 @@
         "transport": "tcp",
         "tlsEnabled": true,
         "serverName": "vip.tszjdzhengshu.com",
+        "tlsFingerprint": "chrome",
+        "tlsALPN": [],
+        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
         "websocketHeaders": {},
-        "tlsALPN": [
-          "h2",
-          "http/1.1"
-        ],
         "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9"
+        "vmessAlterID": 0
       }
     },
     {
-      "id": "node-2bd2a6699782a08d521b1a3e",
+      "id": "node-7f5261c5a260205fb2d113fc",
       "displayName": "United States",
       "configuration": {
         "schemaVersion": 2,
-        "nodeID": "node-2bd2a6699782a08d521b1a3e",
+        "nodeID": "node-7f5261c5a260205fb2d113fc",
         "serverAddress": "mg1.huyan.world",
         "serverPort": 31031,
         "uuid": "00000000-0000-0000-0000-000000000000",
@@ -122,22 +120,20 @@
         "transport": "tcp",
         "tlsEnabled": true,
         "serverName": "vip.tszjdzhengshu.com",
+        "tlsFingerprint": "chrome",
+        "tlsALPN": [],
+        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
         "websocketHeaders": {},
-        "tlsALPN": [
-          "h2",
-          "http/1.1"
-        ],
         "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9"
+        "vmessAlterID": 0
       }
     },
     {
-      "id": "node-9e0446fff636caf7aa9086fc",
+      "id": "node-bf2cc6e5305be5cebbf10e04",
       "displayName": "United States",
       "configuration": {
         "schemaVersion": 2,
-        "nodeID": "node-9e0446fff636caf7aa9086fc",
+        "nodeID": "node-bf2cc6e5305be5cebbf10e04",
         "serverAddress": "mg1.huyan.world",
         "serverPort": 31032,
         "uuid": "00000000-0000-0000-0000-000000000000",
@@ -145,28 +141,27 @@
         "transport": "tcp",
         "tlsEnabled": true,
         "serverName": "vip.tszjdzhengshu.com",
+        "tlsFingerprint": "chrome",
+        "tlsALPN": [],
+        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
         "websocketHeaders": {},
-        "tlsALPN": [
-          "h2",
-          "http/1.1"
-        ],
         "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9"
+        "vmessAlterID": 0
       }
     },
     {
-      "id": "node-cec4531ea8d1ba6ca796b5ad",
+      "id": "node-a4c04ecae733b6aba132c04e",
       "displayName": "Japan",
       "configuration": {
         "schemaVersion": 2,
-        "nodeID": "node-cec4531ea8d1ba6ca796b5ad",
+        "nodeID": "node-a4c04ecae733b6aba132c04e",
         "serverAddress": "jpvl.quanjuluyou2.world",
         "serverPort": 11927,
         "uuid": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
         "protocolKind": "vless",
         "transport": "tcp",
         "tlsEnabled": true,
+        "tlsInsecure": true,
         "serverName": "www.bing.com",
         "websocketHeaders": {},
         "flow": "xtls-rprx-vision",
@@ -180,17 +175,18 @@
       }
     },
     {
-      "id": "node-5df83cc08d7d423cb95b902f",
+      "id": "node-3592e6a1da633b57bb8ea9c1",
       "displayName": "Japan",
       "configuration": {
         "schemaVersion": 2,
-        "nodeID": "node-5df83cc08d7d423cb95b902f",
+        "nodeID": "node-3592e6a1da633b57bb8ea9c1",
         "serverAddress": "jpvl.quanjuluyou2.world",
         "serverPort": 11926,
         "uuid": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
         "protocolKind": "vless",
         "transport": "tcp",
         "tlsEnabled": true,
+        "tlsInsecure": true,
         "serverName": "www.bing.com",
         "websocketHeaders": {},
         "flow": "xtls-rprx-vision",
@@ -204,11 +200,11 @@
       }
     },
     {
-      "id": "node-853df3d3ce788eb923dd4a42",
+      "id": "node-1a23c26b76571b17317a914a",
       "displayName": "Hong Kong",
       "configuration": {
         "schemaVersion": 2,
-        "nodeID": "node-853df3d3ce788eb923dd4a42",
+        "nodeID": "node-1a23c26b76571b17317a914a",
         "serverAddress": "hkany.liubaicafe.world",
         "serverPort": 34190,
         "uuid": "00000000-0000-0000-0000-000000000000",
@@ -216,22 +212,20 @@
         "transport": "tcp",
         "tlsEnabled": true,
         "serverName": "a2-profession.tszjdzhengshu.com",
+        "tlsFingerprint": "chrome",
+        "tlsALPN": [],
+        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
         "websocketHeaders": {},
-        "tlsALPN": [
-          "h2",
-          "http/1.1"
-        ],
         "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9"
+        "vmessAlterID": 0
       }
     },
     {
-      "id": "node-a39b95c63de01d7d475ec4c8",
+      "id": "node-015394b48a36a1e045064897",
       "displayName": "Hong Kong",
       "configuration": {
         "schemaVersion": 2,
-        "nodeID": "node-a39b95c63de01d7d475ec4c8",
+        "nodeID": "node-015394b48a36a1e045064897",
         "serverAddress": "hkany.liubaicafe.world",
         "serverPort": 34191,
         "uuid": "00000000-0000-0000-0000-000000000000",
@@ -239,22 +233,20 @@
         "transport": "tcp",
         "tlsEnabled": true,
         "serverName": "a2-profession.tszjdzhengshu.com",
+        "tlsFingerprint": "chrome",
+        "tlsALPN": [],
+        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
         "websocketHeaders": {},
-        "tlsALPN": [
-          "h2",
-          "http/1.1"
-        ],
         "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9"
+        "vmessAlterID": 0
       }
     },
     {
-      "id": "node-ddd1c1baca4d940d52ea4e33",
+      "id": "node-ba89898bd858b9b06d2aa2b1",
       "displayName": "Hong Kong",
       "configuration": {
         "schemaVersion": 2,
-        "nodeID": "node-ddd1c1baca4d940d52ea4e33",
+        "nodeID": "node-ba89898bd858b9b06d2aa2b1",
         "serverAddress": "hkany.liubaicafe.world",
         "serverPort": 34192,
         "uuid": "00000000-0000-0000-0000-000000000000",
@@ -262,79 +254,20 @@
         "transport": "tcp",
         "tlsEnabled": true,
         "serverName": "a2-profession.tszjdzhengshu.com",
-        "websocketHeaders": {},
-        "tlsALPN": [
-          "h2",
-          "http/1.1"
-        ],
-        "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9"
-      }
-    },
-    {
-      "id": "node-cd9f5382abd523a42d2f442c",
-      "displayName": "Hong Kong",
-      "configuration": {
-        "schemaVersion": 2,
-        "nodeID": "node-cd9f5382abd523a42d2f442c",
-        "serverAddress": "hk.liubaicafe.world",
-        "serverPort": 35661,
-        "uuid": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
-        "protocolKind": "vmess",
-        "transport": "tcp",
-        "tlsEnabled": false,
-        "websocketHeaders": {},
+        "tlsFingerprint": "chrome",
         "tlsALPN": [],
-        "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": ""
-      }
-    },
-    {
-      "id": "node-9c58f00606c1758b18b60ab6",
-      "displayName": "Hong Kong",
-      "configuration": {
-        "schemaVersion": 2,
-        "nodeID": "node-9c58f00606c1758b18b60ab6",
-        "serverAddress": "hk.liubaicafe.world",
-        "serverPort": 35662,
-        "uuid": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
-        "protocolKind": "vmess",
-        "transport": "tcp",
-        "tlsEnabled": false,
+        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
         "websocketHeaders": {},
-        "tlsALPN": [],
         "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": ""
+        "vmessAlterID": 0
       }
     },
     {
-      "id": "node-7e6b6d540fdff1a9ebd7b4e6",
-      "displayName": "Hong Kong",
-      "configuration": {
-        "schemaVersion": 2,
-        "nodeID": "node-7e6b6d540fdff1a9ebd7b4e6",
-        "serverAddress": "hk.liubaicafe.world",
-        "serverPort": 35663,
-        "uuid": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
-        "protocolKind": "vmess",
-        "transport": "tcp",
-        "tlsEnabled": false,
-        "websocketHeaders": {},
-        "tlsALPN": [],
-        "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": ""
-      }
-    },
-    {
-      "id": "node-740c7e2d6a4420d814fa8930",
+      "id": "node-84b591c5f055678fa7c581fd",
       "displayName": "United States",
       "configuration": {
         "schemaVersion": 2,
-        "nodeID": "node-740c7e2d6a4420d814fa8930",
+        "nodeID": "node-84b591c5f055678fa7c581fd",
         "serverAddress": "mgany.us99svip.xyz",
         "serverPort": 41901,
         "uuid": "00000000-0000-0000-0000-000000000000",
@@ -342,22 +275,20 @@
         "transport": "tcp",
         "tlsEnabled": true,
         "serverName": "a2-profession.tszjdzhengshu.com",
+        "tlsFingerprint": "chrome",
+        "tlsALPN": [],
+        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
         "websocketHeaders": {},
-        "tlsALPN": [
-          "h2",
-          "http/1.1"
-        ],
         "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9"
+        "vmessAlterID": 0
       }
     },
     {
-      "id": "node-70be418a26a24c4310468567",
+      "id": "node-eabd1557ea667941baded12f",
       "displayName": "United States",
       "configuration": {
         "schemaVersion": 2,
-        "nodeID": "node-70be418a26a24c4310468567",
+        "nodeID": "node-eabd1557ea667941baded12f",
         "serverAddress": "mgany.us99svip.xyz",
         "serverPort": 41902,
         "uuid": "00000000-0000-0000-0000-000000000000",
@@ -365,60 +296,20 @@
         "transport": "tcp",
         "tlsEnabled": true,
         "serverName": "a2-profession.tszjdzhengshu.com",
-        "websocketHeaders": {},
-        "tlsALPN": [
-          "h2",
-          "http/1.1"
-        ],
-        "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9"
-      }
-    },
-    {
-      "id": "node-bd75e057991b104ec5ddcd36",
-      "displayName": "United States",
-      "configuration": {
-        "schemaVersion": 2,
-        "nodeID": "node-bd75e057991b104ec5ddcd36",
-        "serverAddress": "mv.us99svip.xyz",
-        "serverPort": 33221,
-        "uuid": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
-        "protocolKind": "vmess",
-        "transport": "tcp",
-        "tlsEnabled": false,
-        "websocketHeaders": {},
+        "tlsFingerprint": "chrome",
         "tlsALPN": [],
-        "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": ""
-      }
-    },
-    {
-      "id": "node-ad05f7be1290333a080b61dc",
-      "displayName": "United States",
-      "configuration": {
-        "schemaVersion": 2,
-        "nodeID": "node-ad05f7be1290333a080b61dc",
-        "serverAddress": "mv.us99svip.xyz",
-        "serverPort": 33223,
-        "uuid": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
-        "protocolKind": "vmess",
-        "transport": "tcp",
-        "tlsEnabled": false,
+        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
         "websocketHeaders": {},
-        "tlsALPN": [],
         "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": ""
+        "vmessAlterID": 0
       }
     },
     {
-      "id": "node-78b98977adc2175e63f7aba6",
+      "id": "node-02cf2ec13c8c4abbf0025122",
       "displayName": "Japan",
       "configuration": {
         "schemaVersion": 2,
-        "nodeID": "node-78b98977adc2175e63f7aba6",
+        "nodeID": "node-02cf2ec13c8c4abbf0025122",
         "serverAddress": "jpand.mandu.world",
         "serverPort": 51901,
         "uuid": "00000000-0000-0000-0000-000000000000",
@@ -426,22 +317,20 @@
         "transport": "tcp",
         "tlsEnabled": true,
         "serverName": "a2-profession.tszjdzhengshu.com",
+        "tlsFingerprint": "chrome",
+        "tlsALPN": [],
+        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
         "websocketHeaders": {},
-        "tlsALPN": [
-          "h2",
-          "http/1.1"
-        ],
         "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9"
+        "vmessAlterID": 0
       }
     },
     {
-      "id": "node-22aad5d42153f3b4af46df7d",
+      "id": "node-045faccfc272a0b0b4a6be46",
       "displayName": "Japan",
       "configuration": {
         "schemaVersion": 2,
-        "nodeID": "node-22aad5d42153f3b4af46df7d",
+        "nodeID": "node-045faccfc272a0b0b4a6be46",
         "serverAddress": "jpand.mandu.world",
         "serverPort": 51902,
         "uuid": "00000000-0000-0000-0000-000000000000",
@@ -449,60 +338,20 @@
         "transport": "tcp",
         "tlsEnabled": true,
         "serverName": "a2-profession.tszjdzhengshu.com",
-        "websocketHeaders": {},
-        "tlsALPN": [
-          "h2",
-          "http/1.1"
-        ],
-        "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9"
-      }
-    },
-    {
-      "id": "node-706ffb30dcef3179983c6845",
-      "displayName": "Japan",
-      "configuration": {
-        "schemaVersion": 2,
-        "nodeID": "node-706ffb30dcef3179983c6845",
-        "serverAddress": "jp.mandu.world",
-        "serverPort": 33241,
-        "uuid": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
-        "protocolKind": "vmess",
-        "transport": "tcp",
-        "tlsEnabled": false,
-        "websocketHeaders": {},
+        "tlsFingerprint": "chrome",
         "tlsALPN": [],
-        "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": ""
-      }
-    },
-    {
-      "id": "node-404e051d27aca533bfdc6679",
-      "displayName": "Japan",
-      "configuration": {
-        "schemaVersion": 2,
-        "nodeID": "node-404e051d27aca533bfdc6679",
-        "serverAddress": "jp.mandu.world",
-        "serverPort": 33242,
-        "uuid": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
-        "protocolKind": "vmess",
-        "transport": "tcp",
-        "tlsEnabled": false,
+        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
         "websocketHeaders": {},
-        "tlsALPN": [],
         "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": ""
+        "vmessAlterID": 0
       }
     },
     {
-      "id": "node-818bd4132952ccecf435622a",
+      "id": "node-bf8688fc28478cd3eb8a3329",
       "displayName": "Taiwan",
       "configuration": {
         "schemaVersion": 2,
-        "nodeID": "node-818bd4132952ccecf435622a",
+        "nodeID": "node-bf8688fc28478cd3eb8a3329",
         "serverAddress": "anytw.yuandoucafe.world",
         "serverPort": 41404,
         "uuid": "00000000-0000-0000-0000-000000000000",
@@ -510,22 +359,20 @@
         "transport": "tcp",
         "tlsEnabled": true,
         "serverName": "a3-profession.tszjdzhengshu.com",
+        "tlsFingerprint": "chrome",
+        "tlsALPN": [],
+        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
         "websocketHeaders": {},
-        "tlsALPN": [
-          "h2",
-          "http/1.1"
-        ],
         "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9"
+        "vmessAlterID": 0
       }
     },
     {
-      "id": "node-8bfeae80081453a1a82c03c3",
+      "id": "node-169c2981cfff3304723541ae",
       "displayName": "Taiwan",
       "configuration": {
         "schemaVersion": 2,
-        "nodeID": "node-8bfeae80081453a1a82c03c3",
+        "nodeID": "node-169c2981cfff3304723541ae",
         "serverAddress": "anytw.yuandoucafe.world",
         "serverPort": 41405,
         "uuid": "00000000-0000-0000-0000-000000000000",
@@ -533,60 +380,20 @@
         "transport": "tcp",
         "tlsEnabled": true,
         "serverName": "a3-profession.tszjdzhengshu.com",
-        "websocketHeaders": {},
-        "tlsALPN": [
-          "h2",
-          "http/1.1"
-        ],
-        "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9"
-      }
-    },
-    {
-      "id": "node-59bb1ac18081d30d809c77ac",
-      "displayName": "Taiwan",
-      "configuration": {
-        "schemaVersion": 2,
-        "nodeID": "node-59bb1ac18081d30d809c77ac",
-        "serverAddress": "tw.yuandoucafe.world",
-        "serverPort": 36571,
-        "uuid": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
-        "protocolKind": "vmess",
-        "transport": "tcp",
-        "tlsEnabled": false,
-        "websocketHeaders": {},
+        "tlsFingerprint": "chrome",
         "tlsALPN": [],
-        "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": ""
-      }
-    },
-    {
-      "id": "node-e12796688e6fc9ba53dd0fae",
-      "displayName": "Taiwan",
-      "configuration": {
-        "schemaVersion": 2,
-        "nodeID": "node-e12796688e6fc9ba53dd0fae",
-        "serverAddress": "tw.yuandoucafe.world",
-        "serverPort": 36572,
-        "uuid": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
-        "protocolKind": "vmess",
-        "transport": "tcp",
-        "tlsEnabled": false,
+        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
         "websocketHeaders": {},
-        "tlsALPN": [],
         "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": ""
+        "vmessAlterID": 0
       }
     },
     {
-      "id": "node-b2c903f896a6e06e2297b9b8",
+      "id": "node-6e4995afc8ae3196c15d87d9",
       "displayName": "Singapore",
       "configuration": {
         "schemaVersion": 2,
-        "nodeID": "node-b2c903f896a6e06e2297b9b8",
+        "nodeID": "node-6e4995afc8ae3196c15d87d9",
         "serverAddress": "sganyyy.yuwencafe.world",
         "serverPort": 41491,
         "uuid": "00000000-0000-0000-0000-000000000000",
@@ -594,22 +401,20 @@
         "transport": "tcp",
         "tlsEnabled": true,
         "serverName": "a3-profession.tszjdzhengshu.com",
+        "tlsFingerprint": "chrome",
+        "tlsALPN": [],
+        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
         "websocketHeaders": {},
-        "tlsALPN": [
-          "h2",
-          "http/1.1"
-        ],
         "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9"
+        "vmessAlterID": 0
       }
     },
     {
-      "id": "node-58dbb7ec563ecad4e9656bb6",
+      "id": "node-61ac044cfc221b3b643fe4c2",
       "displayName": "Singapore",
       "configuration": {
         "schemaVersion": 2,
-        "nodeID": "node-58dbb7ec563ecad4e9656bb6",
+        "nodeID": "node-61ac044cfc221b3b643fe4c2",
         "serverAddress": "sganyyy.yuwencafe.world",
         "serverPort": 41492,
         "uuid": "00000000-0000-0000-0000-000000000000",
@@ -617,60 +422,20 @@
         "transport": "tcp",
         "tlsEnabled": true,
         "serverName": "a3-profession.tszjdzhengshu.com",
-        "websocketHeaders": {},
-        "tlsALPN": [
-          "h2",
-          "http/1.1"
-        ],
-        "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9"
-      }
-    },
-    {
-      "id": "node-9bdf53c125703933629dfb35",
-      "displayName": "Singapore",
-      "configuration": {
-        "schemaVersion": 2,
-        "nodeID": "node-9bdf53c125703933629dfb35",
-        "serverAddress": "sgg.yuwencafe.world",
-        "serverPort": 35464,
-        "uuid": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
-        "protocolKind": "vmess",
-        "transport": "tcp",
-        "tlsEnabled": false,
-        "websocketHeaders": {},
+        "tlsFingerprint": "chrome",
         "tlsALPN": [],
-        "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": ""
-      }
-    },
-    {
-      "id": "node-9ca7fa9c56d2db7a845d233f",
-      "displayName": "Singapore",
-      "configuration": {
-        "schemaVersion": 2,
-        "nodeID": "node-9ca7fa9c56d2db7a845d233f",
-        "serverAddress": "sgg.yuwencafe.world",
-        "serverPort": 35465,
-        "uuid": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
-        "protocolKind": "vmess",
-        "transport": "tcp",
-        "tlsEnabled": false,
+        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
         "websocketHeaders": {},
-        "tlsALPN": [],
         "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": ""
+        "vmessAlterID": 0
       }
     },
     {
-      "id": "node-542a63c0ad10369cb49871e9",
+      "id": "node-e75e4489eb3efc711627b0a7",
       "displayName": "Hong Kong",
       "configuration": {
         "schemaVersion": 2,
-        "nodeID": "node-542a63c0ad10369cb49871e9",
+        "nodeID": "node-e75e4489eb3efc711627b0a7",
         "serverAddress": "hkt2500.hkt001.top",
         "serverPort": 12455,
         "uuid": "00000000-0000-0000-0000-000000000000",
@@ -678,22 +443,20 @@
         "transport": "tcp",
         "tlsEnabled": true,
         "serverName": "a1-jichu.tszjdzhengshu.com",
+        "tlsFingerprint": "chrome",
+        "tlsALPN": [],
+        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
         "websocketHeaders": {},
-        "tlsALPN": [
-          "h2",
-          "http/1.1"
-        ],
         "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9"
+        "vmessAlterID": 0
       }
     },
     {
-      "id": "node-ebb1836e5ecc05c2895e9f0e",
+      "id": "node-543db125392f6f7071a5328b",
       "displayName": "Hong Kong",
       "configuration": {
         "schemaVersion": 2,
-        "nodeID": "node-ebb1836e5ecc05c2895e9f0e",
+        "nodeID": "node-543db125392f6f7071a5328b",
         "serverAddress": "hkt2500.hkt001.top",
         "serverPort": 12237,
         "uuid": "00000000-0000-0000-0000-000000000000",
@@ -701,14 +464,12 @@
         "transport": "tcp",
         "tlsEnabled": true,
         "serverName": "a1-jichu.tszjdzhengshu.com",
+        "tlsFingerprint": "chrome",
+        "tlsALPN": [],
+        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
         "websocketHeaders": {},
-        "tlsALPN": [
-          "h2",
-          "http/1.1"
-        ],
         "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9"
+        "vmessAlterID": 0
       }
     },
     {
@@ -724,18 +485,19 @@
         "transport": "tcp",
         "tlsEnabled": false,
         "websocketHeaders": {},
-        "tlsALPN": [],
+        "tlsFingerprint": "chrome",
         "vmessSecurity": "auto",
         "vmessAlterID": 0,
+        "tlsALPN": [],
         "anyTLSPassword": ""
       }
     },
     {
-      "id": "node-c577ae073a12fbf1697a4ff3",
+      "id": "node-6c9f9e01b6cee93c60bde38c",
       "displayName": "Taiwan",
       "configuration": {
         "schemaVersion": 2,
-        "nodeID": "node-c577ae073a12fbf1697a4ff3",
+        "nodeID": "node-6c9f9e01b6cee93c60bde38c",
         "serverAddress": "twany.8twtsz.top",
         "serverPort": 42133,
         "uuid": "00000000-0000-0000-0000-000000000000",
@@ -743,22 +505,20 @@
         "transport": "tcp",
         "tlsEnabled": true,
         "serverName": "g2-jichu.tszjdzhengshu.com",
+        "tlsFingerprint": "chrome",
+        "tlsALPN": [],
+        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
         "websocketHeaders": {},
-        "tlsALPN": [
-          "h2",
-          "http/1.1"
-        ],
         "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9"
+        "vmessAlterID": 0
       }
     },
     {
-      "id": "node-e6be9923f21a3ec5c6a6ffdc",
+      "id": "node-dfc542567d12b75754f3018f",
       "displayName": "Taiwan",
       "configuration": {
         "schemaVersion": 2,
-        "nodeID": "node-e6be9923f21a3ec5c6a6ffdc",
+        "nodeID": "node-dfc542567d12b75754f3018f",
         "serverAddress": "twany.8twtsz.top",
         "serverPort": 42134,
         "uuid": "00000000-0000-0000-0000-000000000000",
@@ -766,14 +526,12 @@
         "transport": "tcp",
         "tlsEnabled": true,
         "serverName": "g2-jichu.tszjdzhengshu.com",
+        "tlsFingerprint": "chrome",
+        "tlsALPN": [],
+        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
         "websocketHeaders": {},
-        "tlsALPN": [
-          "h2",
-          "http/1.1"
-        ],
         "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9"
+        "vmessAlterID": 0
       }
     },
     {
@@ -789,18 +547,19 @@
         "transport": "tcp",
         "tlsEnabled": false,
         "websocketHeaders": {},
-        "tlsALPN": [],
+        "tlsFingerprint": "chrome",
         "vmessSecurity": "auto",
         "vmessAlterID": 0,
+        "tlsALPN": [],
         "anyTLSPassword": ""
       }
     },
     {
-      "id": "node-b5f3276d58cec4098948dc5a",
+      "id": "node-9bc50113bc2339702990c929",
       "displayName": "Hong Kong",
       "configuration": {
         "schemaVersion": 2,
-        "nodeID": "node-b5f3276d58cec4098948dc5a",
+        "nodeID": "node-9bc50113bc2339702990c929",
         "serverAddress": "hkany.tsz777hkt.top",
         "serverPort": 44137,
         "uuid": "00000000-0000-0000-0000-000000000000",
@@ -808,22 +567,20 @@
         "transport": "tcp",
         "tlsEnabled": true,
         "serverName": "g2-jichu.tszjdzhengshu.com",
+        "tlsFingerprint": "chrome",
+        "tlsALPN": [],
+        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
         "websocketHeaders": {},
-        "tlsALPN": [
-          "h2",
-          "http/1.1"
-        ],
         "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9"
+        "vmessAlterID": 0
       }
     },
     {
-      "id": "node-c81bd8b3d5b6d6869e9ad3ec",
+      "id": "node-1f1538dff2464cd7ea22b55b",
       "displayName": "Hong Kong",
       "configuration": {
         "schemaVersion": 2,
-        "nodeID": "node-c81bd8b3d5b6d6869e9ad3ec",
+        "nodeID": "node-1f1538dff2464cd7ea22b55b",
         "serverAddress": "hkany.tsz777hkt.top",
         "serverPort": 44138,
         "uuid": "00000000-0000-0000-0000-000000000000",
@@ -831,14 +588,12 @@
         "transport": "tcp",
         "tlsEnabled": true,
         "serverName": "g2-jichu.tszjdzhengshu.com",
+        "tlsFingerprint": "chrome",
+        "tlsALPN": [],
+        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
         "websocketHeaders": {},
-        "tlsALPN": [
-          "h2",
-          "http/1.1"
-        ],
         "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9"
+        "vmessAlterID": 0
       }
     },
     {
@@ -854,18 +609,19 @@
         "transport": "tcp",
         "tlsEnabled": false,
         "websocketHeaders": {},
-        "tlsALPN": [],
+        "tlsFingerprint": "chrome",
         "vmessSecurity": "auto",
         "vmessAlterID": 0,
+        "tlsALPN": [],
         "anyTLSPassword": ""
       }
     },
     {
-      "id": "node-5d4506cbbfae37ddc714f5a8",
+      "id": "node-7107f04246346d908b0367b4",
       "displayName": "Japan",
       "configuration": {
         "schemaVersion": 2,
-        "nodeID": "node-5d4506cbbfae37ddc714f5a8",
+        "nodeID": "node-7107f04246346d908b0367b4",
         "serverAddress": "jpany.tsz999jp.top",
         "serverPort": 28198,
         "uuid": "00000000-0000-0000-0000-000000000000",
@@ -873,22 +629,20 @@
         "transport": "tcp",
         "tlsEnabled": true,
         "serverName": "g2-jichu.tszjdzhengshu.com",
+        "tlsFingerprint": "chrome",
+        "tlsALPN": [],
+        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
         "websocketHeaders": {},
-        "tlsALPN": [
-          "h2",
-          "http/1.1"
-        ],
         "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9"
+        "vmessAlterID": 0
       }
     },
     {
-      "id": "node-8f12093f43af6f99c215928b",
+      "id": "node-bf6bd3f38ce57e4d269c6c30",
       "displayName": "Japan",
       "configuration": {
         "schemaVersion": 2,
-        "nodeID": "node-8f12093f43af6f99c215928b",
+        "nodeID": "node-bf6bd3f38ce57e4d269c6c30",
         "serverAddress": "jpany.tsz999jp.top",
         "serverPort": 28199,
         "uuid": "00000000-0000-0000-0000-000000000000",
@@ -896,22 +650,20 @@
         "transport": "tcp",
         "tlsEnabled": true,
         "serverName": "g2-jichu.tszjdzhengshu.com",
+        "tlsFingerprint": "chrome",
+        "tlsALPN": [],
+        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
         "websocketHeaders": {},
-        "tlsALPN": [
-          "h2",
-          "http/1.1"
-        ],
         "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9"
+        "vmessAlterID": 0
       }
     },
     {
-      "id": "node-bcdd13018778d70af34f65d0",
+      "id": "node-3eeea22f17f7eaeb713ec5e9",
       "displayName": "United States",
       "configuration": {
         "schemaVersion": 2,
-        "nodeID": "node-bcdd13018778d70af34f65d0",
+        "nodeID": "node-3eeea22f17f7eaeb713ec5e9",
         "serverAddress": "usany.tsz999us.top",
         "serverPort": 35351,
         "uuid": "00000000-0000-0000-0000-000000000000",
@@ -919,22 +671,20 @@
         "transport": "tcp",
         "tlsEnabled": true,
         "serverName": "g2-jichu.tszjdzhengshu.com",
+        "tlsFingerprint": "chrome",
+        "tlsALPN": [],
+        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
         "websocketHeaders": {},
-        "tlsALPN": [
-          "h2",
-          "http/1.1"
-        ],
         "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9"
+        "vmessAlterID": 0
       }
     },
     {
-      "id": "node-cae7a61440b937a127d8d03d",
+      "id": "node-8b57ebb252f293afc35906dd",
       "displayName": "United States",
       "configuration": {
         "schemaVersion": 2,
-        "nodeID": "node-cae7a61440b937a127d8d03d",
+        "nodeID": "node-8b57ebb252f293afc35906dd",
         "serverAddress": "usany.tsz999us.top",
         "serverPort": 35352,
         "uuid": "00000000-0000-0000-0000-000000000000",
@@ -942,22 +692,20 @@
         "transport": "tcp",
         "tlsEnabled": true,
         "serverName": "g2-jichu.tszjdzhengshu.com",
+        "tlsFingerprint": "chrome",
+        "tlsALPN": [],
+        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
         "websocketHeaders": {},
-        "tlsALPN": [
-          "h2",
-          "http/1.1"
-        ],
         "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9"
+        "vmessAlterID": 0
       }
     },
     {
-      "id": "node-455d9ffea74676bfb1147494",
+      "id": "node-8272dbc07799b157955308b7",
       "displayName": "United States",
       "configuration": {
         "schemaVersion": 2,
-        "nodeID": "node-455d9ffea74676bfb1147494",
+        "nodeID": "node-8272dbc07799b157955308b7",
         "serverAddress": "22usany.tsz999us.top",
         "serverPort": 45355,
         "uuid": "00000000-0000-0000-0000-000000000000",
@@ -965,22 +713,20 @@
         "transport": "tcp",
         "tlsEnabled": true,
         "serverName": "g2-jichu.tszjdzhengshu.com",
+        "tlsFingerprint": "chrome",
+        "tlsALPN": [],
+        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
         "websocketHeaders": {},
-        "tlsALPN": [
-          "h2",
-          "http/1.1"
-        ],
         "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9"
+        "vmessAlterID": 0
       }
     },
     {
-      "id": "node-ee3b1df46672d75a04de8b57",
+      "id": "node-1106c77c6a1fdce88098add0",
       "displayName": "United States",
       "configuration": {
         "schemaVersion": 2,
-        "nodeID": "node-ee3b1df46672d75a04de8b57",
+        "nodeID": "node-1106c77c6a1fdce88098add0",
         "serverAddress": "22usany.tsz999us.top",
         "serverPort": 45356,
         "uuid": "00000000-0000-0000-0000-000000000000",
@@ -988,22 +734,20 @@
         "transport": "tcp",
         "tlsEnabled": true,
         "serverName": "g2-jichu.tszjdzhengshu.com",
+        "tlsFingerprint": "chrome",
+        "tlsALPN": [],
+        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
         "websocketHeaders": {},
-        "tlsALPN": [
-          "h2",
-          "http/1.1"
-        ],
         "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9"
+        "vmessAlterID": 0
       }
     },
     {
-      "id": "node-3b18e83c48a5b8daddcb3010",
+      "id": "node-b40927a4ef3aa8581f878c05",
       "displayName": "Singapore",
       "configuration": {
         "schemaVersion": 2,
-        "nodeID": "node-3b18e83c48a5b8daddcb3010",
+        "nodeID": "node-b40927a4ef3aa8581f878c05",
         "serverAddress": "sgany.jiuheju.world",
         "serverPort": 12464,
         "uuid": "00000000-0000-0000-0000-000000000000",
@@ -1011,22 +755,20 @@
         "transport": "tcp",
         "tlsEnabled": true,
         "serverName": "g2-jichu.tszjdzhengshu.com",
+        "tlsFingerprint": "chrome",
+        "tlsALPN": [],
+        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
         "websocketHeaders": {},
-        "tlsALPN": [
-          "h2",
-          "http/1.1"
-        ],
         "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9"
+        "vmessAlterID": 0
       }
     },
     {
-      "id": "node-91c5d73616ffdfba4fa32049",
+      "id": "node-503f2efc3c9bdcaa001b3abc",
       "displayName": "Singapore",
       "configuration": {
         "schemaVersion": 2,
-        "nodeID": "node-91c5d73616ffdfba4fa32049",
+        "nodeID": "node-503f2efc3c9bdcaa001b3abc",
         "serverAddress": "sgany.jiuheju.world",
         "serverPort": 12465,
         "uuid": "00000000-0000-0000-0000-000000000000",
@@ -1034,14 +776,12 @@
         "transport": "tcp",
         "tlsEnabled": true,
         "serverName": "g2-jichu.tszjdzhengshu.com",
+        "tlsFingerprint": "chrome",
+        "tlsALPN": [],
+        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9",
         "websocketHeaders": {},
-        "tlsALPN": [
-          "h2",
-          "http/1.1"
-        ],
         "vmessSecurity": "auto",
-        "vmessAlterID": 0,
-        "anyTLSPassword": "604659a8-1d0f-4bc5-adca-b48918b2e2b9"
+        "vmessAlterID": 0
       }
     }
   ]

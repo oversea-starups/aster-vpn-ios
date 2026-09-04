@@ -185,7 +185,7 @@ final class VPNManager: ObservableObject {
             reference: configuration.credentialReference
         )
         candidate.protocolConfiguration = tunnelProtocol
-        candidate.localizedDescription = "Aster VPN"
+        candidate.localizedDescription = "ClashX VPN"
         candidate.isEnabled = true
         do {
             try await save(candidate)

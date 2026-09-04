@@ -1,7 +1,7 @@
 # Aster VPN Architecture
 
-> Last verified: 2026-09-02
-> Evidence cutoff: current workspace, generated Xcode project, current strict App/Extension/test-target builds, release guards, SSV verifier tests, and signed VIP UI package startup on Thomson’s iPhone
+> Last verified: 2026-09-04
+> Evidence cutoff: current workspace, generated Xcode project, current strict App/Extension/test-target builds, release guards, SSV verifier tests, signed full-tunnel package startup, successful HTTPS data-plane probe and user-confirmed normal use on Thomson’s iPhone
 
 ## System Context
 
@@ -35,7 +35,8 @@ flowchart LR
     NE --> EXT
     EXT --> LIB["Libbox / sing-box"]
     LIB --> TUN["Apple TUN platform interface"]
-    EXT -. "readiness.v1" .-> VPN
+    EXT -. "readiness.v1 · local engine" .-> VPN
+    VPN --> PROBE["Anonymous HTTPS data-plane probe"]
     LIB --> NODE["Selected VPN node"]
 ```
 
@@ -48,7 +49,7 @@ flowchart LR
 | Locations | Restore bundled/cache catalog, optionally fetch, parse, install last-known-good, select one node | `node_catalog.json`, `tunnel_config.json` | Bundle/build verified; live tunnel and future feed switching pending |
 | Account | Pro status/expiration, upgrade/restore, privacy and legal entry points | StoreKit system state | Build-verified; StoreKit sandbox pending |
 | Subscription | Load real StoreKit products/eligibility, buy, restore, observe entitlement | StoreKit system state | Build-verified; sandbox pending |
-| `VPNManager` | Manage provider preferences/session/status and readiness | System VPN preferences | Build-verified; owner reports existing-line connection |
+| `VPNManager` | Manage provider preferences/session/status, local readiness and anonymous HTTPS data-plane verification | System VPN preferences | Build-verified; remote exit/DNS still device-pending |
 | Shared config | Version, validate and atomically persist current node config | `tunnel_config.json` | Build/unit-bundle verified |
 | Packet Tunnel | Build sing-box config, start/stop Libbox, apply TUN settings and report readiness | None | Build-verified; full device matrix pending |
 | Libbox | Bundled sing-box mobile core | XCFramework binary | Linked; provenance/reproducibility unresolved |
@@ -57,12 +58,13 @@ flowchart LR
 
 1. 首发版本从 App Bundle 读取审核后的 `node_catalog.json` 并写入 App Group；`AsterNodeSubscriptionURL` 仅在未来启用远端更新时接受公开 HTTPS 地址。
 2. `URLSessionNodeSubscriptionClient` uses an ephemeral session, no cache/cookies, bounded timeouts, 1 MB limit, HTTP 200 and same-host HTTPS redirects.
-3. `NodeSubscriptionParser` accepts plain/Base64 lines and a maximum of 200 supported VLESS/VMess/AnyTLS entries. It rejects invalid/duplicate fields, insecure flags, unsupported transport, new VLESS without TLS/Reality and AnyTLS without TLS.
+3. `NodeSubscriptionParser` accepts plain/Base64 lines and a maximum of 200 supported VLESS/VMess/AnyTLS entries. It rejects invalid/duplicate fields, ordinary TLS/AnyTLS insecure flags, unsupported transport, new VLESS without TLS/Reality and AnyTLS without TLS; `insecure=1` is preserved only for VLESS Reality because that feed explicitly requires it. Provider status/instruction pseudo-nodes are discarded at the parser boundary.
 4. Each node becomes a validated `VPNNode`; the opaque stable ID is derived from normalized connection fields and does not contain the UUID.
 5. A complete verified snapshot is atomically installed as `node_catalog.json`. Any fetch/parse/save failure preserves the previous snapshot and surfaces a user-recoverable message.
 6. Selection writes only the chosen `TunnelConfiguration` to `tunnel_config.json`. The Extension never reads the remote feed or business catalog.
 7. Refresh occurs when stale (6 hours), on foreground and on manual request. A timestamp in the future does not suppress refresh.
 8. A previously selected valid config missing from a new feed remains as “Current Location”; this preserves the owner's already-working route until a deliberate migration policy exists.
+9. When Locations is opened, `NodeEndpointReachabilityChecker` performs a bounded, content-free endpoint preflight per node (TLS nodes must complete server hello; plaintext nodes must complete TCP) and the UI exposes only endpoints that answer. Rows contain only a stable sequence number and normalized location; protocol and port remain internal to the selected configuration. This is a presentation filter, not protocol authentication or Internet-egress proof; the selected tunnel still must pass `VPNManager`'s anonymous HTTPS data-plane probe.
 
 ### Schemas
 
@@ -76,11 +78,11 @@ flowchart LR
 1. App restores StoreKit entitlement. Pro users can connect; free users can use a one-time ten-minute protected-usage allowance. The allowance starts only after readiness, accumulates only while Protected, pauses on disconnect, and then guides the user to upgrade.
 2. The user chooses a location while disconnected. Catalog selection persists the exact validated current config.
 3. `VPNManager` requires a valid `tunnel_config.json`, then calls `startVPNTunnel()`.
-4. Extension builds structured sing-box JSON, starts Libbox and applies Apple network settings through the platform interface.
-5. System `.connected` alone is insufficient. The App probes `readiness.v1` for up to five seconds.
-6. Only a ready connection displays Protected. Disconnect and lost readiness stop the session; failures surface a recoverable message.
+4. Before starting the extension, the App resolves the selected proxy hostname while the physical interface is still available and stores numeric IPv4/IPv6 answers in the App Group config. The Extension builds structured sing-box JSON, dials the numeric answer (while retaining the original hostname for TLS/SNI), starts Libbox and applies Apple network settings through the platform interface. The App profile requests a full tunnel (`includeAllNetworks=true`, `excludeLocalNetworks=false`, `enforceRoutes=true`); the platform consumes only the pre-resolved addresses to exclude the proxy's IPv4 /32 and IPv6 /128 routes, never performing DNS during full-tunnel bootstrap. DNS is a TCP request to `1.1.1.1:53` with a sing-box `proxy` detour, and port-53 traffic is hijacked into that resolver. Because the bundled protocol exits are TCP-only, UDP/443 is rejected at the TUN route boundary so browser HTTP/3/QUIC attempts fall back promptly to TCP.
+5. System `.connected` alone is insufficient. The App probes `readiness.v1` for local engine readiness, then performs an anonymous HTTPS request to a neutral 2xx/3xx endpoint through the tunnel.
+6. Only a successful data-plane probe displays Protected. Disconnect and lost readiness stop the session; failures surface a recoverable message and do not start free-usage accounting.
 
-`dataPlaneReady` proves local engine/settings startup, not remote handshake, DNS or Internet exit. A non-sensitive traffic-ready probe and signed device evidence remain required.
+The provider's `dataPlaneReady` flag proves local engine/settings startup. The App-side HTTPS probe verifies that a real packet can traverse the selected protocol and reach the Internet, but DNS leak, exit-IP, network-switch and sustained multi-line behavior still require signed-device evidence.
 
 ## Monetization Boundary
 
