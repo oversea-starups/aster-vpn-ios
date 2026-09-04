@@ -118,7 +118,7 @@
 ## ADR-0020: TCP-only exits reject browser QUIC
 
 - **Decision:** 对 TCP-only 的 AnyTLS/VLESS/VMess 出口，在 sing-box TUN route 中拒绝 UDP/443。iOS Safari 会优先尝试 HTTP/3/QUIC；若将该 datagram 交给不支持 UDP 的出口，浏览器会等待重试并造成网页不可用，快速拒绝可让其按标准回落 TCP。
-- **Evidence:** Thomson iPhone 日志中 tunnel/interface/HTTPS probe 均成功，但 Safari 的 UDP/443 QUIC 连接在 `utun6` 上连续 PTO 后失败；同一页面的 TCP fallback 长时间未完成 TLS server hello。修复包仍需重新安装后做真实网页回归。
+- **Evidence:** Thomson iPhone 日志中 tunnel/interface/HTTPS probe 均成功，但 Safari 的 UDP/443 QUIC 连接在 `utun6` 上连续 PTO 后失败；同一页面的 TCP fallback 长时间未完成 TLS server hello。后续全隧道包已重新安装，用户确认当前包可正常使用；独立多站点、多线路和 DNS/出口矩阵仍需记录。
 
 ## ADR-0022: DNS must use a TCP proxy detour
 

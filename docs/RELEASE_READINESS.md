@@ -1,6 +1,6 @@
 # Release Readiness — Aster VPN
 
-> Reviewed: 2026-09-01  
+> Reviewed: 2026-09-04
 > Decision: **Not ready for App Store submission**
 
 ## Evidence Summary
@@ -12,9 +12,9 @@
 | iOS automated suite | 59 methods (50 unit, 9 UI); latest `AsterTests` and `AsterUITests` targets each exit 0 | Existing unit `.xcresult`: 44 pass + 1 named x86_64 Libbox skip, 0 failures/unexpected; new parser/region/cache/recovery and Account/tab/control cases await runtime; post-fix UI runtime still CoreSimulator-blocked |
 | Monetization | StoreKit products, purchase, restore and verified entitlement; no third-party ad SDK in the App Store binary | Build-verified; ASC sandbox pending |
 | SSV verifier | 12/12 Node tests, syntax check, official registry audit 0, non-root container smoke | Local test-verified; deployment/live callback pending |
-| Locations | Bundled 49-node catalog, optional HTTPS client for future updates, VLESS/VMess/AnyTLS parser, status-record filtering, region-only labels, schema v2, last-known-good cache and selection | Bundle/build-verified; live tunnel and future feed switching pending |
+| Locations | Bundled 37-node catalog (AnyTLS 32, VLESS Reality 2, VMess 3), optional HTTPS client for future updates, VLESS/VMess/AnyTLS parser, status-record filtering, region-only labels, schema v2, last-known-good cache and selection | Bundle/build-verified; latest tunnel use user-confirmed; live future-feed switching and multi-line matrix pending |
 | StoreKit/paywall | Dynamic products/prices/trial eligibility, purchase, restore, verified entitlement and truthful copy | Build-verified; ASC sandbox pending |
-| VPN | Apple TUN/Libbox bridge and readiness contract build; private KVC removed; public Libbox fd binding source/symbol guarded; post-change PacketTunnel compile/link passed | Owner's prior connection predates bridge change; device regression/network matrix missing |
+| VPN | Apple TUN/Libbox bridge and readiness contract build; private KVC removed; public Libbox fd binding source/symbol guarded; post-change PacketTunnel compile/link, signed install, tunnel startup and HTTPS data-plane probe passed | Latest device package normal use is user-confirmed; independent DNS/exit/network matrix and release archive remain pending |
 | Copy | English product surfaces contain no TODO/FIXME/mock/placeholder/coming-soon/not-implemented markers; no fake price/latency/recommendation | Static/build-verified; final runtime/localization review pending |
 | Privacy | Account/Settings and Paywall legal links; VPN routing and on-device configuration are described in user-facing language; no ad SDK in the App Store binary; ASC App Privacy labels published | Static/build-verified; final Archive privacy report still pending |
 | Release config | Test IDs, missing values, unsafe URLs, userinfo, private/reserved hosts rejected | Guard verified; production values absent |
